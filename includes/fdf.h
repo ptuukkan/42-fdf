@@ -31,6 +31,10 @@ typedef struct	s_map
 	int	height;
 	int	**altitude;
 	int	zoom;
+	int	x0;
+	int	x1;
+	int	y0;
+	int	y1;
 }				t_map;
 
 typedef struct	s_mlx
@@ -65,5 +69,6 @@ typedef struct	s_fdf
 }				t_fdf;
 
 void			read_map(char *file, t_fdf *fdf);
+void			draw_map(t_fdf *fdf);
 
 #endif

@@ -30,13 +30,6 @@ void	print_int_array(int **arr, int width, int height)
 	}
 }
 
-int	ft_abs(int a)
-{
-	if (a < 0)
-		return (-a);
-	return (a);
-}
-
 int	close_window(int keycode, void *param)
 {
 	(void)param;
@@ -56,80 +49,6 @@ int	get_endian(void)
 		return (0);
 	else
 		return (1);
-}
-void	img_pixel_put(t_fdf *fdf, int x, int y)
-{
-	int	pos;
-
-	pos = fdf->img.line_size * y + x * 4;
-	if (x < WIN_HEIGHT && y < WIN_WIDTH)
-	{
-		fdf->img.img_data[pos++] = fdf->img.color.blue;
-		fdf->img.img_data[pos++] = fdf->img.color.green;
-		fdf->img.img_data[pos++] = fdf->img.color.red;
-	}
-}
-
-void	draw_line(t_fdf *fdf, int start_x, int start_y, int end_x, int end_y)
-{
-	int	dx;
-	int	dy;
-	int	d;
-	int	s;
-
-	dx = end_x - start_x;
-	dy = end_y - start_y;
-	s = 0;
-	if (ft_abs(dx) > ft_abs(dy))
-	{
-		if (end_y > start_y)
-			s = 1;
-		else if (start_y > end_y)
-			s = -1;
-		d = 2 * dy - dx;
-		while (start_x != end_x)
-		{
-			img_pixel_put(fdf, start_x, start_y);
-			if (d > 0)
-			{
-				start_y += s;
-				d = d - 2 * dx;
-			}
-			d = d + 2 * dy;
-			start_x++;
-		}
-	}
-	else
-	{
-		if (end_x > start_x)
-			s = 1;
-		else if (start_x > end_x)
-			s = -1;
-		d = 2 * dx - dy;
-		while (start_y != end_y)
-		{
-			img_pixel_put(fdf, start_x, start_y);
-			if (d > 0)
-			{
-				start_x += s;
-				d = d - 2 * dy;
-			}
-			d = d + 2 * dx;
-			start_y++;
-		}
-	}
-
-}
-
-void	draw_map(t_fdf *fdf)
-{
-	int	w = 0;
-	int	h = 0;
-
-	while (w < (fdf->map.width - 1))
-	{
-		draw_line(fdf, (w - h) * cos(0.523599), (w + h) * sin(0.523599) - fdf->map.altitude[h][w])
-	}
 }
 
 int	main(int argc, char **argv)
