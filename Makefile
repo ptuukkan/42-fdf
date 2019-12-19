@@ -13,22 +13,25 @@
 NAME = fdf
 LIB = libft.a
 SRCDIR = srcs
-SRCS = main.c
+SRCS = main.c read_map.c
 
 OBJDIR = objects
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 INC = includes/
 
-GCC = gcc -Werror -Wextra -Wall
+GCC = gcc -g
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	$(GCC) $(OBJS) -o $(NAME) -lmlx -framework OpenGL -framework AppKit
+$(NAME): $(OBJS) libft/$(LIB)
+	$(GCC) $(OBJS) -o $(NAME) libft/$(LIB) -lmlx -framework OpenGL -framework AppKit
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INC)/fdf.h
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	$(GCC) -c $< -o $@ -I $(INC)
+	$(GCC) -c $< -o $@ -I $(INC) -I libft/$(INC)
+
+libft/$(LIB):
+	make -C libft/
 
 clean:
 		/bin/rm -f $(OBJS)
@@ -37,6 +40,7 @@ clean:
 
 fclean : clean
 		/bin/rm -f $(NAME)
+		make -C libft/ fclean
 
 re: fclean all
 

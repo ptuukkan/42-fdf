@@ -13,9 +13,57 @@
 #ifndef FDF_H
 # define FDF_H
 
-# include "mlx.h"
+# include <mlx.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include "keys.h"
+# include <stdint.h>
+# include <fcntl.h>
+# include "libft.h"
+# include <math.h>
+
+# define WIN_WIDTH 1280
+# define WIN_HEIGHT 720
+
+typedef struct	s_map
+{
+	int	width;
+	int	height;
+	int	**altitude;
+	int	zoom;
+}				t_map;
+
+typedef struct	s_mlx
+{
+	void	*mlx_ptr;
+	void	*win_ptr;
+	void	*img_ptr;
+}				t_mlx;
+
+typedef struct	s_color
+{
+	int	red;
+	int	green;
+	int	blue;
+}				t_color;
+
+typedef struct	s_img
+{
+	t_color	color;
+	char	*img_data;
+	int		line_size;
+	int		total_size;
+	int		bpp;
+	int		endian;
+}				t_img;
+
+typedef struct	s_fdf
+{
+	t_map	map;
+	t_mlx	mlx;
+	t_img	img;
+}				t_fdf;
+
+void			read_map(char *file, t_fdf *fdf);
 
 #endif
