@@ -27,14 +27,16 @@
 
 typedef struct	s_map
 {
-	int	width;
-	int	height;
-	int	**altitude;
-	int	zoom;
-	int	x0;
-	int	x1;
-	int	y0;
-	int	y1;
+	int		width;
+	int		height;
+	int		**altitude;
+	int		zoom;
+	int		x0;
+	int		x1;
+	int		y0;
+	int		y1;
+	double	x_angle;
+	double	y_angle;
 }				t_map;
 
 typedef struct	s_mlx
@@ -70,5 +72,7 @@ typedef struct	s_fdf
 
 void			read_map(char *file, t_fdf *fdf);
 void			draw_map(t_fdf *fdf);
+void			draw_line(t_fdf *fdf);
+void			calculate_xy(t_fdf *fdf, int x, int y, int direction);
 
 #endif

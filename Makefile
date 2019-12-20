@@ -13,7 +13,7 @@
 NAME = fdf
 LIB = libft.a
 SRCDIR = srcs
-SRCS = main.c read_map.c
+SRCS = main.c read_map.c draw_map.c draw_line.c
 
 OBJDIR = objects
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)

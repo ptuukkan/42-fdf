@@ -52,6 +52,8 @@ void	read_map_info(t_map *map, char *file)
 	lines = 0;
 	while (get_next_line(fd, &line))
 	{
+		if (line == NULL)
+			ft_exiterror("Cannot read file", 2, 2);
 		if (lines == 0)
 			line_length = count_numbers(line);
 		else if (count_numbers(line) != line_length)

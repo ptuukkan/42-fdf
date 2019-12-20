@@ -12,104 +12,71 @@
 
 #include "fdf.h"
 
-static void	img_pixel_put(t_fdf *fdf, int x, int y)
+void	calculate_xy(t_fdf *fdf, int x, int y, int direction)
 {
-	int	pos;
+	int	nx;
+	int	ny;
 
-	pos = fdf->img.line_size * y + x * 4;
-	if (x >= 0 && y >= 0 && x < WIN_HEIGHT && y < WIN_WIDTH)
+	fdf->map.x_angle = cos(0.46373398);
+	fdf->map.y_angle = sin(0.46373398);
+
+	nx = x - fdf->map.width / 2;
+	ny = y - fdf->map.height / 2;
+
+
+	fdf->map.x0 = ((nx - ny) * fdf->map.zoom) * fdf->map.x_angle;
+	fdf->map.y0 = ((nx + ny) * fdf->map.zoom) * fdf->map.y_angle - fdf->map.altitude[y][x];
+	fdf->map.x1 = (((nx + direction) - (ny + (direction == 0))) * fdf->map.zoom) * fdf->map.x_angle;
+	fdf->map.y1 = (((nx + direction) + (ny + (direction == 0))) * fdf->map.zoom) * fdf->map.y_angle -\
+	fdf->map.altitude[y + (direction == 0)][x + direction];
+	/*
+	fdf->map.x0 = ((nx - ny) * fdf->map.zoom) * fdf->map.x_angle;
+	fdf->map.y0 = ((nx + ny) * fdf->map.zoom) * fdf->map.y_angle;
+	fdf->map.y0 -= fdf->map.altitude[y][x];
+	if (direction == 1)
 	{
-		fdf->img.img_data[pos++] = fdf->img.color.blue;
-		fdf->img.img_data[pos++] = fdf->img.color.green;
-		fdf->img.img_data[pos++] = fdf->img.color.red;
+		fdf->map.x1 = (((nx + 1) - ny) * fdf->map.zoom) * fdf->map.x_angle;
+		fdf->map.y1 = (((nx + 1) + ny) * fdf->map.zoom) * fdf->map.y_angle;
+		fdf->map.y1 -= fdf->map.altitude[y][x + 1];
 	}
-}
-
-static void	draw_run_over_rise(t_fdf *fdf, int dx, int dy)
-{
-	int	d;
-	int	s;
-
-	s = 0;
-	if (fdf->map.y1 > fdf->map.y0)
-		s = 1;
-	else if (fdf->map.y0 > fdf->map.y1)
-		s = -1;
-	d = 2 * dy - dx;
-	while (fdf->map.x0 != fdf->map.x1)
-	{
-		img_pixel_put(fdf, fdf->map.x0, fdf->map.y0);
-		if (d > 0)
-		{
-			fdf->map.y0 += s;
-			d = d - 2 * dx;
-		}
-		d = d + 2 * dy;
-		fdf->map.x0 += 1;
-	}
-}
-
-static void	draw_rise_over_run(t_fdf *fdf, int dx, int dy)
-{
-	int	d;
-	int	s;
-
-	s = 0:
-	if (fdf->map.x1 > fdf->map.x0)
-		s = 1;
-	else if (fdf->map.x0 > fdf->map.x1)
-		s = -1;
-	d = 2 * dx - dy;
-	while (fdf->map.y0 != fdf->map.y1)
-	{
-		img_pixel_put(fdf, fdf->map.x0, fdf->map.y0);
-		if (d > 0)
-		{
-			fdf->map.x0 += s;
-			d = d - 2 * dy;
-		}
-		d = d + 2 * dx;
-		fdf->map.y0 += 1;
-	}
-}
-
-static void	draw_line(t_fdf *fdf)
-{
-	int	dx;
-	int	dy;
-
-	dx = x1 - x0;
-	dy = y1 - y0;
-	if (ft_abs(dx) > ft_abs(dy))
-		draw_run_over_rise(fdf, dx ,dy);
 	else
-		draw_rise_over_run(fdf, dx, dy);
+	{
+		fdf->map.x1 = ((nx - (ny + 1)) * fdf->map.zoom) * fdf->map.x_angle;
+		fdf->map.y1 = ((nx + (ny + 1)) * fdf->map.zoom) * fdf->map.y_angle;
+		fdf->map.y1 -= fdf->map.altitude[y + 1][x];
+	}
+	*/
+	fdf->map.x0 += WIN_WIDTH / 2;
+	fdf->map.x1 += WIN_WIDTH / 2;
+	fdf->map.y0 += WIN_HEIGHT / 2;
+	fdf->map.y1 += WIN_HEIGHT / 2;
+
+
 }
 
 void		draw_map(t_fdf *fdf)
 {
-	int	w;
-	int	h = 0;
+	int	x;
+	int	y;
 
-	while (h < fdf->map.height)
+	y = 0;
+	while (y < fdf->map.height)
 	{
-		w = 0;
-		while (w < fdf->map.width)
+		x = 0;
+		while (x < fdf->map.width)
 		{
-			if (w < (fdf->map.width - 1))
+			if (x < (fdf->map.width - 1))
 			{
-				draw_line(fdf, (w - h) * cos(0.523599), (w + h) * sin(0.523599)\
-				- fdf->map.altitude[h][w], (w + 1 - h) * cos(0.523599), (w + h) *\
-				sin(0.523599) - fdf->map.altitude[h][w + 1]);
+				calculate_xy(fdf, x, y, 1);
+				draw_line(fdf);
 			}
-			if (h < (fdf->map.height - 1))
+			if (y < (fdf->map.height - 1))
 			{
-				draw_line(fdf, (w - h) * cos(0.523599), (w + h) * sin(0.523599)\
-				- fdf->map.altitude[h][w], (w - h) * cos(0.523599), (w + 1 + h) *\
-				sin(0.523599) - fdf->map.altitude[h + 1][w]);
+				calculate_xy(fdf, x, y, 0);
+				draw_line(fdf);
 			}
-			w++;
+			x++;
 		}
-		h++;
+		y++;
 	}
 }
