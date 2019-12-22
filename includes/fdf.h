@@ -31,6 +31,7 @@ typedef struct	s_map
 	int		height;
 	int		**altitude;
 	int		zoom;
+	float	alt_mul;
 	int		x0;
 	int		x1;
 	int		y0;
