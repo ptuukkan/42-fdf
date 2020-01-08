@@ -30,36 +30,6 @@ void	print_int_array(int **arr, int width, int height)
 	}
 }
 
-int	close_window(int keycode, t_fdf *fdf)
-{
-	printf("%x\n", keycode);
-	if (keycode == ESC || keycode == 0xff1b)
-		exit(0);
-	if (keycode == 0x6a)
-	{
-		fdf->map.zoom -= 1;
-		fdf->map.alt_mul = fdf->map.zoom / 20.0f;
-		draw_map(fdf);
-	}
-	if (keycode == 0x6b)
-	{
-		fdf->map.zoom += 1;
-		fdf->map.alt_mul = fdf->map.zoom / 20.0f;
-		draw_map(fdf);
-	}
-	if (keycode == 0x6e)
-	{
-		fdf->map.alt_mul += 1;
-		draw_map(fdf);
-	}
-	if (keycode == 0x6d)
-	{
-		fdf->map.alt_mul -= 1;
-		draw_map(fdf);
-	}
-	return (0);
-}
-
 int	get_endian(void)
 {
 	unsigned int	i;
@@ -71,6 +41,23 @@ int	get_endian(void)
 		return (0);
 	else
 		return (1);
+}
+
+void	reset_map(t_fdf *fdf)
+{
+	if (fdf->map.width > fdf->map.height)
+		fdf->map.zoom = WIN_WIDTH / fdf->map.width - fdf->map.width;
+	else
+		fdf->map.zoom = WIN_HEIGHT / fdf->map.height - fdf->map.height;
+	fdf->map.alt_mul = fdf->map.zoom / 20;
+	fdf->img.color.blue = 0x00;
+	fdf->img.color.green = 0xFF;
+	fdf->img.color.red = 0x28;
+	fdf->img.line_size = WIN_WIDTH * 4;
+	fdf->map.isometric = 1;
+	fdf->line.x_angle = 0;
+	fdf->line.y_angle = 0;
+	fdf->line.z_angle = 0;
 }
 
 int	main(int argc, char **argv)
@@ -85,15 +72,9 @@ int	main(int argc, char **argv)
 		ft_exiterror("MLX initialization failed", 6, 2);
 	if (!(fdf.mlx.win_ptr = mlx_new_window(fdf.mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "FdF")))
 		ft_exiterror("Window creation failed", 7, 2);
-	fdf.img.line_size = WIN_WIDTH * 4;
-	fdf.img.total_size = WIN_WIDTH * 4 * WIN_HEIGHT;
-	fdf.img.color.blue = 0x00;
-	fdf.img.color.green = 0xFF;
-	fdf.img.color.red = 0x28;
-	fdf.map.zoom = 20;
-	fdf.map.alt_mul = 1;
+	reset_map(&fdf);
 	draw_map(&fdf);
-	mlx_key_hook(fdf.mlx.win_ptr, close_window, &fdf);
+	mlx_hook(fdf.mlx.win_ptr, 2, (1L<<0), key_events, &fdf);
 	mlx_loop(fdf.mlx.mlx_ptr);
 	return (0);
 }

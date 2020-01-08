@@ -13,6 +13,21 @@
 #ifndef KEYS_H
 # define KEYS_H
 
-# define ESC 0x35
+# define M_ESC 0x35
+# define L_ESC 0xff1b
+# define L_LEFT 0xff51
+# define L_UP 0xff52
+# define L_RIGHT 0xff53
+# define L_DOWN 0xff54
+# define L_Q 0x71
+# define L_W 0x77
+# define L_E 0x65
+# define L_A 0x61
+# define L_S 0x73
+# define L_D 0x64
+# define L_J 0x6a
+# define L_K 0x6b
+# define L_M 0x6d
+# define L_N 0x6e
 
 #endif

@@ -32,24 +32,24 @@ static void	draw_run_over_rise(t_fdf *fdf, int dx, int dy)
 	int	sx;
 
 	sy = 0;
-	if (fdf->map.y1 > fdf->map.y0)
+	if (fdf->line.y1 > fdf->line.y0)
 		sy = 1;
-	else if (fdf->map.y0 > fdf->map.y1)
+	else if (fdf->line.y0 > fdf->line.y1)
 		sy = -1;
 	d = 2 * dy - dx;
 	sx = 1;
-	if (fdf->map.x1 < fdf->map.x0)
+	if (fdf->line.x1 < fdf->line.x0)
 		sx = -1;
-	while (fdf->map.x0 != fdf->map.x1)
+	while (fdf->line.x0 != fdf->line.x1)
 	{
-		img_pixel_put(fdf, fdf->map.x0, fdf->map.y0);
+		img_pixel_put(fdf, fdf->line.x0, fdf->line.y0);
 		if (d > 0)
 		{
-			fdf->map.y0 += sy;
+			fdf->line.y0 += sy;
 			d = d - 2 * dx;
 		}
 		d = d + 2 * dy;
-		fdf->map.x0 += sx;
+		fdf->line.x0 += sx;
 	}
 }
 
@@ -60,24 +60,24 @@ static void	draw_rise_over_run(t_fdf *fdf, int dx, int dy)
 	int	sx;
 
 	sx = 0;
-	if (fdf->map.x1 > fdf->map.x0)
+	if (fdf->line.x1 > fdf->line.x0)
 		sx = 1;
-	else if (fdf->map.x0 > fdf->map.x1)
+	else if (fdf->line.x0 > fdf->line.x1)
 		sx = -1;
 	d = 2 * dx - dy;
 	sy = 1;
-	if (fdf->map.y1 < fdf->map.y0)
+	if (fdf->line.y1 < fdf->line.y0)
 		sy = -1;
-	while (fdf->map.y0 != fdf->map.y1)
+	while (fdf->line.y0 != fdf->line.y1)
 	{
-		img_pixel_put(fdf, fdf->map.x0, fdf->map.y0);
+		img_pixel_put(fdf, fdf->line.x0, fdf->line.y0);
 		if (d > 0)
 		{
-			fdf->map.x0 += sx;
+			fdf->line.x0 += sx;
 			d = d - 2 * dy;
 		}
 		d = d + 2 * dx;
-		fdf->map.y0 += sy;
+		fdf->line.y0 += sy;
 	}
 }
 
@@ -86,9 +86,9 @@ void		draw_line(t_fdf *fdf)
 	int	dx;
 	int	dy;
 
-	dx = ft_abs(fdf->map.x1 - fdf->map.x0);
-	dy = ft_abs(fdf->map.y1 - fdf->map.y0);
-	if (ft_abs(dx) > ft_abs(dy))
+	dx = ft_abs(fdf->line.x1 - fdf->line.x0);
+	dy = ft_abs(fdf->line.y1 - fdf->line.y0);
+	if (dx > dy)
 		draw_run_over_rise(fdf, dx ,dy);
 	else
 		draw_rise_over_run(fdf, dx, dy);

@@ -30,15 +30,27 @@ typedef struct	s_map
 	int		width;
 	int		height;
 	int		**altitude;
-	int		zoom;
+	float	zoom;
 	float	alt_mul;
-	int		x0;
-	int		x1;
-	int		y0;
-	int		y1;
-	double	x_angle;
-	double	y_angle;
+	int		isometric;
 }				t_map;
+
+typedef struct	s_line
+{
+	int		x0;
+	int		y0;
+	int		z0;
+	int		x1;
+	int		y1;
+	int		z1;
+	short	x_angle;
+	short	y_angle;
+	short	z_angle;
+	double	x_matrix[9];
+	double	y_matrix[9];
+	double	z_matrix[9];
+	double	matrix[9];
+}				t_line;
 
 typedef struct	s_mlx
 {
@@ -69,11 +81,13 @@ typedef struct	s_fdf
 	t_map	map;
 	t_mlx	mlx;
 	t_img	img;
+	t_line	line;
 }				t_fdf;
 
 void			read_map(char *file, t_fdf *fdf);
 void			draw_map(t_fdf *fdf);
 void			draw_line(t_fdf *fdf);
 void			calculate_xy(t_fdf *fdf, int x, int y, int direction);
+int				key_events(int key, t_fdf *fdf);
 
 #endif
