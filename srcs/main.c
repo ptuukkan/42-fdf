@@ -54,10 +54,10 @@ void	reset_map(t_fdf *fdf)
 	fdf->img.color.green = 0xFF;
 	fdf->img.color.red = 0x28;
 	fdf->img.line_size = WIN_WIDTH * 4;
-	fdf->map.isometric = 1;
-	fdf->line.x_angle = 0;
-	fdf->line.y_angle = 0;
-	fdf->line.z_angle = 0;
+	fdf->map.projection = 1;
+	fdf->line.x_angle = 35.264f;
+	fdf->line.y_angle = 45.0f;
+	fdf->line.z_angle = 0.0f;
 }
 
 int	main(int argc, char **argv)
@@ -70,7 +70,8 @@ int	main(int argc, char **argv)
 	//print_int_array(fdf.map.altitude, fdf.map.width, fdf.map.height);
 	if (!(fdf.mlx.mlx_ptr = mlx_init()))
 		ft_exiterror("MLX initialization failed", 6, 2);
-	if (!(fdf.mlx.win_ptr = mlx_new_window(fdf.mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "FdF")))
+	if (!(fdf.mlx.win_ptr = mlx_new_window(fdf.mlx.mlx_ptr, WIN_WIDTH,
+											WIN_HEIGHT, "FdF")))
 		ft_exiterror("Window creation failed", 7, 2);
 	reset_map(&fdf);
 	draw_map(&fdf);

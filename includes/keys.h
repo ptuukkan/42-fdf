@@ -29,5 +29,6 @@
 # define L_K 0x6b
 # define L_M 0x6d
 # define L_N 0x6e
+# define L_SPACE 0x20
 
 #endif

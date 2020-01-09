@@ -32,7 +32,7 @@ typedef struct	s_map
 	int		**altitude;
 	float	zoom;
 	float	alt_mul;
-	int		isometric;
+	short	projection;
 }				t_map;
 
 typedef struct	s_line
@@ -43,9 +43,9 @@ typedef struct	s_line
 	int		x1;
 	int		y1;
 	int		z1;
-	short	x_angle;
-	short	y_angle;
-	short	z_angle;
+	float	x_angle;
+	float	y_angle;
+	float	z_angle;
 	double	x_matrix[9];
 	double	y_matrix[9];
 	double	z_matrix[9];
@@ -89,5 +89,6 @@ void			draw_map(t_fdf *fdf);
 void			draw_line(t_fdf *fdf);
 void			calculate_xy(t_fdf *fdf, int x, int y, int direction);
 int				key_events(int key, t_fdf *fdf);
+void			rotate(t_fdf *fdf, float ax, float ay, float az);
 
 #endif

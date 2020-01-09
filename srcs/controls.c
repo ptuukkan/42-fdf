@@ -12,8 +12,48 @@
 
 #include "fdf.h"
 
+static int	rotate_isometric(int key, t_fdf *fdf)
+{
+	if (key == L_D)
+		fdf->line.y_angle += 90.0f;
+	if (key == L_A)
+		fdf->line.y_angle -= 90.0f;
+	if (fdf->line.y_angle == 405.0f || fdf->line.y_angle == -405.0f)
+		fdf->line.y_angle = 0.0f;
+	draw_map(fdf);
+	return (0);
+}
+
+static int	rotate_parallel(int key, t_fdf *fdf)
+{
+	if (key == L_S && fdf->line.x_angle == 0.0f)
+		fdf->line.x_angle == 90.f;
+	else if (key == L_W == fdf->line.x_angle != 0.0f)
+		fdf->line.x_angle == 0.0f;
+	else if (key == L_D == fdf->line.x_angle != 0.0f)
+		fdf->line.y_angle += 90.0f;
+	else if (key == L_A == fdf->line.x_angle != 0.0f)
+		fdf->line.y_angle -= 90.0f;
+	else if (key == L_D == fdf->line.x_angle == 0.0f)
+		fdf->line.z_angle += 90.0f;
+	else if (key == L_A == fdf->line.x_angle == 0.0f)
+		fdf->line.z_angle -= 90.0f;
+	if (fdf->line.x_angle == 360.0f || fdf->line.x_angle == -360.0f)
+		fdf->line.x_angle = 0.0f;
+	if (fdf->line.y_angle == 360.0f || fdf->line.y_angle == -360.0f)
+		fdf->line.y_angle = 0.0f;
+	if (fdf->line.z_angle == 360.0f || fdf->line.z_angle == -360.0f)
+		fdf->line.z_angle = 0.0f;
+	draw_map(fdf);
+	return (0);
+}
+
 static int	rotate_events(int key, t_fdf *fdf)
 {
+	if (fdf->map.projection == 1)
+		return (rotate_isometric(key, fdf));
+	if (fdf->map.projection == 2)
+		return (rotate_parallel(key, fdf));
 	if (key == L_W)
 		fdf->line.x_angle++;
 	else if (key == L_S)
@@ -69,19 +109,26 @@ int			key_events(int key, t_fdf *fdf)
 		exit(0);
 	if (key == L_J || key == L_K || key == L_N || key == L_M)
 		return (zoom_events(key, fdf));
-	if (key == L_LEFT || key == L_UP || key == L_RIGHT || key = L_DOWN)
+	if (key == L_LEFT || key == L_UP || key == L_RIGHT || key == L_DOWN)
 		return (rotate_events(key, fdf));
-	else if (key == 0x20)
+	else if (key == L_SPACE)
 	{
-		if (fdf->map.isometric == 1)
+		if (fdf->map.projection == 3)
+			reset_map(fdf);
+		else if (fdf->map.projection == 2)
 		{
+			fdf->map.projection == 3;
+			fdf->line.x_angle = 10.0f;
+			fdf->line.y_angle = 10.0f;
+			fdf->line.z_angle = 0.0f;
+		}
+		else if (fdf->map.projection == 1)
+		{
+			fdf->map.projection = 2;
 			fdf->line.x_angle = 0;
 			fdf->line.y_angle = 0;
 			fdf->line.z_angle = 0;
-			fdf->map.isometric = 0;
 		}
-		else
-			reset_map(fdf);
 	}
 	draw_map(fdf);
 	return (0);

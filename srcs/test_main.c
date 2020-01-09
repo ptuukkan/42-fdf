@@ -33,7 +33,7 @@ void	reset_map(t_fdf *fdf)
 	fdf->img.color.green = 0xFF;
 	fdf->img.color.red = 0x28;
 	fdf->img.line_size = WIN_WIDTH * 4;
-	fdf->map.isometric = 1;
+	fdf->map.projection = 1;
 	fdf->line.x_angle = 0;
 	fdf->line.z_angle = 0;
 	fdf->line.y_angle = 0;
@@ -123,7 +123,7 @@ void	multiply_matrix(t_fdf *fdf, double my[9], double mx[9])
 }
 
 
-
+/*
 void	rotate(t_fdf *fdf)
 {
 	rot_x(fdf);
@@ -133,6 +133,7 @@ void	rotate(t_fdf *fdf)
 	//multiply_matrix(fdf, fdf->line.y_matrix, fdf->line.x_matrix);
 	//calculate_point(fdf, 1);
 }
+*/
 
 void	plot(t_fdf *fdf, int x0, int y0, int z0, int x1, int y1, int z1)
 {
@@ -143,14 +144,14 @@ void	plot(t_fdf *fdf, int x0, int y0, int z0, int x1, int y1, int z1)
 	y1 = (y1 - fdf->map.height / 2) * fdf->map.zoom;
 	*/
 
-	
+
 	x0 = x0 * fdf->map.zoom;
 	y0 = y0 * fdf->map.zoom;
 	x1 = x1 * fdf->map.zoom;
 	y1 = y1 * fdf->map.zoom;
 	z0 = z0 * fdf->map.zoom;
 	z1 = z1 * fdf->map.zoom;
-	
+
 
 
 	fdf->line.x0 = x0;
@@ -159,13 +160,13 @@ void	plot(t_fdf *fdf, int x0, int y0, int z0, int x1, int y1, int z1)
 	fdf->line.x1 = x1;
 	fdf->line.y1 = y1;
 	fdf->line.z1 = z1;
-	rotate(fdf);
+	//rotate(fdf);
 
 
 	fdf->line.x0 += WIN_WIDTH / 2;
 	fdf->line.x1 += WIN_WIDTH / 2;
 	fdf->line.y0 += WIN_HEIGHT / 2;
-	fdf->line.y1 += WIN_HEIGHT / 2;	
+	fdf->line.y1 += WIN_HEIGHT / 2;
 }
 
 void	draw_sq(t_fdf *fdf)
@@ -173,7 +174,7 @@ void	draw_sq(t_fdf *fdf)
 	if (!(fdf->mlx.img_ptr = mlx_new_image(fdf->mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT)))
 		ft_exiterror("Image creation failed", 8, 2);
 	fdf->img.img_data = mlx_get_data_addr(fdf->mlx.img_ptr, &fdf->img.bpp, &fdf->img.line_size, &fdf->img.endian);
-	
+
 	plot(fdf, -10, 10, 10, 10, 10, 10);
 	draw_line(fdf);
 	plot(fdf, -10, 10, 10, -10, -10, 10);
@@ -192,7 +193,7 @@ void	draw_sq(t_fdf *fdf)
 	plot(fdf, -10, -10, -10, 10, -10, -10);
 	draw_line(fdf);
 
-	
+
 	plot(fdf, -10, 10, 10, -10, 10, -10);
 	draw_line(fdf);
 	plot(fdf, 10, 10, 10, 10, 10, -10);
@@ -214,7 +215,7 @@ void	draw_sq(t_fdf *fdf)
 int	key_events(int keycode, t_fdf *fdf)
 {
 	printf("%x\n", keycode);
-	if (keycode == ESC || keycode == 0xff1b)
+	if (keycode == M_ESC || keycode == L_ESC)
 		exit(0);
 	else if (keycode == 0x6a)
 	{
@@ -252,11 +253,11 @@ int	key_events(int keycode, t_fdf *fdf)
 		fdf->line.x_angle = 0;
 	else if (keycode == 0x20)
 	{
-		if (fdf->map.isometric == 1)
+		if (fdf->map.projection == 1)
 		{
 			fdf->line.x_angle = 0;
 			fdf->line.z_angle = 0;
-			fdf->map.isometric = 0;
+			fdf->map.projection = 0;
 		}
 		else
 			reset_map(fdf);
