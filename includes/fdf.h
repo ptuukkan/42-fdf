@@ -35,6 +35,14 @@ typedef struct	s_map
 	short	projection;
 }				t_map;
 
+typedef struct	s_quat
+{
+	float	w;
+	float	x;
+	float	y;
+	float	z;
+}				t_quat;
+
 typedef struct	s_line
 {
 	int		x0;
@@ -93,5 +101,6 @@ int				key_events(int key, t_fdf *fdf);
 void			rotate(t_fdf *fdf, float ax, float ay, float az);
 void			reset_map(t_fdf *fdf);
 void			draw_sq(t_fdf *fdf);
+void			quat_rotate(t_fdf *fdf);
 
 #endif

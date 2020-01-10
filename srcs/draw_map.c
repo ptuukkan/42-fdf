@@ -21,7 +21,8 @@ static void	plot(t_fdf *fdf, int x, int y, int dir)
 	fdf->line.y1 = ((y + (dir == 0)) - fdf->map.height / 2) * fdf->map.zoom;
 	fdf->line.z1 = fdf->map.altitude[(y + (dir == 0))][(x + dir)] *
 					fdf->map.alt_mul;
-	rotate(fdf, fdf->line.x_angle, fdf->line.y_angle, fdf->line.z_angle);
+	quat_rotate(fdf);
+	//rotate(fdf, fdf->line.x_angle, fdf->line.y_angle, fdf->line.z_angle);
 	fdf->line.x0 += WIN_WIDTH / 2;
 	fdf->line.x1 += WIN_WIDTH / 2;
 	fdf->line.y0 += WIN_HEIGHT / 2;
