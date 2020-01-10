@@ -13,7 +13,7 @@
 NAME = fdf
 LIB = libft.a
 SRCDIR = srcs
-SRCS = read_map.c draw_map.c draw_line.c
+SRCS = read_map.c draw_map.c draw_line.c controls.c rotations.c test.c
 
 OBJDIR = objects
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
@@ -24,13 +24,12 @@ GCC = gcc -g
 all: $(NAME)
 
 $(NAME): $(OBJS) libft/$(LIB)
-	$(GCC) srcs/main.c $(OBJS) -o $(NAME) libft/$(LIB) -lmlx -lXext -lX11 -lm -I $(INC) -I libft/$(INC)
-	#-framework OpenGL -framework AppKit
-
+	$(GCC) srcs/main.c $(OBJS) -o $(NAME) libft/$(LIB) -lmlx -I $(INC) -I libft/$(INC) -framework OpenGL -framework AppKit
+#-lXext -lX11  -lm
 test: $(OBJS) libft/$(LIB)
 	$(GCC) srcs/test_main.c $(OBJS) -o test_fdf libft/$(LIB) -lmlx -lXext -lX11 -lm -I $(INC) -I libft/$(INC)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(INC)/fdf.h
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(INC)/fdf.h $(INC)/keys.h
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(GCC) -c $< -o $@ -I $(INC) -I libft/$(INC)
 

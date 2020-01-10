@@ -14,6 +14,22 @@
 # define KEYS_H
 
 # define M_ESC 0x35
+# define M_LEFT 0x7b
+# define M_UP 0x7e
+# define M_RIGHT 0x7c
+# define M_DOWN 0x7d
+# define M_Q 0xc
+# define M_W 0xd
+# define M_E (0X0E)
+# define M_R 0xf
+# define M_A 0x0
+# define M_S 0x1
+# define M_D 0x2
+# define M_J 0x26
+# define M_K 0x28
+# define M_M 0x2e
+# define M_N 0x2d
+# define M_SPACE 0x31
 # define L_ESC 0xff1b
 # define L_LEFT 0xff51
 # define L_UP 0xff52

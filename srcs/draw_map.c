@@ -34,6 +34,8 @@ void		draw_map(t_fdf *fdf)
 	int	x;
 	int	y;
 
+	if (fdf->test)
+		return (draw_sq(fdf));
 	y = 0;
 	if (!(fdf->mlx.img_ptr = mlx_new_image(fdf->mlx.mlx_ptr, WIN_WIDTH,
 											WIN_HEIGHT)))
@@ -55,5 +57,11 @@ void		draw_map(t_fdf *fdf)
 	}
 	mlx_put_image_to_window(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr,
 							fdf->mlx.img_ptr, 0, 0);
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 10, 0xFFFFFF, "x degrees:");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 120, 10, 0xFFFFFF, ft_itoa(fdf->line.x_angle));
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 25, 0xFFFFFF, "y degrees:");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 120, 25, 0xFFFFFF, ft_itoa(fdf->line.y_angle));
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 40, 0xFFFFFF, "z degrees:");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 120, 40, 0xFFFFFF, ft_itoa(fdf->line.z_angle));
 	mlx_destroy_image(fdf->mlx.mlx_ptr, fdf->mlx.img_ptr);
 }

@@ -12,33 +12,8 @@
 
 #include "fdf.h"
 
-int	get_endian(void)
-{
-	unsigned int	i;
-	unsigned char	*c;
 
-	i = 1;
-	c = (unsigned char *)&i;
-	if (*c)
-		return (0);
-	else
-		return (1);
-}
-
-void	reset_map(t_fdf *fdf)
-{
-	fdf->map.zoom = 20;
-	fdf->map.alt_mul = fdf->map.zoom / 20;
-	fdf->img.color.blue = 0x00;
-	fdf->img.color.green = 0xFF;
-	fdf->img.color.red = 0x28;
-	fdf->img.line_size = WIN_WIDTH * 4;
-	fdf->map.projection = 1;
-	fdf->line.x_angle = 0;
-	fdf->line.z_angle = 0;
-	fdf->line.y_angle = 0;
-}
-
+/*
 void	rot_x(t_fdf *fdf)
 {
 	double	x_rad;
@@ -123,7 +98,7 @@ void	multiply_matrix(t_fdf *fdf, double my[9], double mx[9])
 }
 
 
-/*
+
 void	rotate(t_fdf *fdf)
 {
 	rot_x(fdf);
@@ -135,7 +110,7 @@ void	rotate(t_fdf *fdf)
 }
 */
 
-void	plot(t_fdf *fdf, int x0, int y0, int z0, int x1, int y1, int z1)
+void	plot_sq(t_fdf *fdf, int x0, int y0, int z0, int x1, int y1, int z1)
 {
 	/*
 	x0 = (x0 - fdf->map.width / 2) * fdf->map.zoom;
@@ -160,7 +135,7 @@ void	plot(t_fdf *fdf, int x0, int y0, int z0, int x1, int y1, int z1)
 	fdf->line.x1 = x1;
 	fdf->line.y1 = y1;
 	fdf->line.z1 = z1;
-	//rotate(fdf);
+	rotate(fdf, fdf->line.x_angle, fdf->line.y_angle, fdf->line.z_angle);
 
 
 	fdf->line.x0 += WIN_WIDTH / 2;
@@ -175,109 +150,41 @@ void	draw_sq(t_fdf *fdf)
 		ft_exiterror("Image creation failed", 8, 2);
 	fdf->img.img_data = mlx_get_data_addr(fdf->mlx.img_ptr, &fdf->img.bpp, &fdf->img.line_size, &fdf->img.endian);
 
-	plot(fdf, -10, 10, 10, 10, 10, 10);
+	plot_sq(fdf, -10, 10, 10, 10, 10, 10);
 	draw_line(fdf);
-	plot(fdf, -10, 10, 10, -10, -10, 10);
+	plot_sq(fdf, -10, 10, 10, -10, -10, 10);
 	draw_line(fdf);
-	plot(fdf, 10, 10, 10, 10, -10, 10);
+	plot_sq(fdf, 10, 10, 10, 10, -10, 10);
 	draw_line(fdf);
-	plot(fdf, -10, -10, 10, 10, -10, 10);
-	draw_line(fdf);
-
-	plot(fdf, -10, 10, -10, 10, 10, -10);
-	draw_line(fdf);
-	plot(fdf, -10, 10, -10, -10, -10, -10);
-	draw_line(fdf);
-	plot(fdf, 10, 10, -10, 10, -10, -10);
-	draw_line(fdf);
-	plot(fdf, -10, -10, -10, 10, -10, -10);
+	plot_sq(fdf, -10, -10, 10, 10, -10, 10);
 	draw_line(fdf);
 
+	plot_sq(fdf, -10, 10, -10, 10, 10, -10);
+	draw_line(fdf);
+	plot_sq(fdf, -10, 10, -10, -10, -10, -10);
+	draw_line(fdf);
+	plot_sq(fdf, 10, 10, -10, 10, -10, -10);
+	draw_line(fdf);
+	plot_sq(fdf, -10, -10, -10, 10, -10, -10);
+	draw_line(fdf);
 
-	plot(fdf, -10, 10, 10, -10, 10, -10);
+
+	plot_sq(fdf, -10, 10, 10, -10, 10, -10);
 	draw_line(fdf);
-	plot(fdf, 10, 10, 10, 10, 10, -10);
+	plot_sq(fdf, 10, 10, 10, 10, 10, -10);
 	draw_line(fdf);
-	plot(fdf, -10, -10, 10, -10, -10, -10);
+	plot_sq(fdf, -10, -10, 10, -10, -10, -10);
 	draw_line(fdf);
-	plot(fdf, 10, -10, 10, 10, -10, -10);
+	plot_sq(fdf, 10, -10, 10, 10, -10, -10);
 	draw_line(fdf);
 
 
 	mlx_put_image_to_window(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, fdf->mlx.img_ptr, 0, 0);
 	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 10, 0xFFFFFF, "x degrees:");
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 80, 10, 0xFFFFFF, ft_itoa(fdf->line.x_angle));
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 20, 0xFFFFFF, "y degrees:");
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 80, 20, 0xFFFFFF, ft_itoa(fdf->line.y_angle));
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 120, 10, 0xFFFFFF, ft_itoa(fdf->line.x_angle));
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 25, 0xFFFFFF, "y degrees:");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 120, 25, 0xFFFFFF, ft_itoa(fdf->line.y_angle));
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 40, 0xFFFFFF, "z degrees:");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 120, 40, 0xFFFFFF, ft_itoa(fdf->line.z_angle));
 	mlx_destroy_image(fdf->mlx.mlx_ptr, fdf->mlx.img_ptr);
-}
-
-int	key_events(int keycode, t_fdf *fdf)
-{
-	printf("%x\n", keycode);
-	if (keycode == M_ESC || keycode == L_ESC)
-		exit(0);
-	else if (keycode == 0x6a)
-	{
-		if (fdf->map.zoom > 1.0)
-		{
-			fdf->map.zoom *= 0.9;
-			fdf->map.alt_mul *= 0.9;
-		}
-	}
-	else if (keycode == 0x6b)
-	{
-		fdf->map.zoom *= 1.1;
-		fdf->map.alt_mul *= 1.1;
-	}
-	else if (keycode == 0x6d)
-		fdf->map.alt_mul *= 1.1;
-	else if (keycode == 0x6e)
-	{
-		if (fdf->map.alt_mul > 1.0)
-			fdf->map.alt_mul *= 0.9;
-	}
-	else if (keycode == 0x72)
-		reset_map(fdf);
-	else if (keycode == 0xff51)
-		fdf->line.y_angle--;
-	else if (keycode == 0xff52)
-		fdf->line.x_angle++;
-	else if (keycode == 0xff53)
-		fdf->line.y_angle++;
-	else if (keycode == 0xff54)
-		fdf->line.x_angle--;
-	if (fdf->line.y_angle == 360 || fdf->line.y_angle == -360)
-		fdf->line.y_angle = 0;
-	if (fdf->line.x_angle == 360 || fdf->line.x_angle == -360)
-		fdf->line.x_angle = 0;
-	else if (keycode == 0x20)
-	{
-		if (fdf->map.projection == 1)
-		{
-			fdf->line.x_angle = 0;
-			fdf->line.z_angle = 0;
-			fdf->map.projection = 0;
-		}
-		else
-			reset_map(fdf);
-	}
-	draw_sq(fdf);
-	return (0);
-}
-
-int	main(void)
-{
-	t_fdf	fdf;
-
-	if (!(fdf.mlx.mlx_ptr = mlx_init()))
-		ft_exiterror("MLX initialization failed", 6, 2);
-	if (!(fdf.mlx.win_ptr = mlx_new_window(fdf.mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "FdF")))
-		ft_exiterror("Window creation failed", 7, 2);
-	fdf.map.height = 2;
-	fdf.map.width = 2;
-	reset_map(&fdf);
-	draw_sq(&fdf);
-	mlx_hook(fdf.mlx.win_ptr, 2, (1L<<0), key_events, &fdf);
-	mlx_loop(fdf.mlx.mlx_ptr);
 }

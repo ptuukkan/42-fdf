@@ -82,6 +82,7 @@ typedef struct	s_fdf
 	t_mlx	mlx;
 	t_img	img;
 	t_line	line;
+	int		test;
 }				t_fdf;
 
 void			read_map(char *file, t_fdf *fdf);
@@ -90,5 +91,7 @@ void			draw_line(t_fdf *fdf);
 void			calculate_xy(t_fdf *fdf, int x, int y, int direction);
 int				key_events(int key, t_fdf *fdf);
 void			rotate(t_fdf *fdf, float ax, float ay, float az);
+void			reset_map(t_fdf *fdf);
+void			draw_sq(t_fdf *fdf);
 
 #endif

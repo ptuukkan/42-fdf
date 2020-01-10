@@ -58,6 +58,7 @@ void	reset_map(t_fdf *fdf)
 	fdf->line.x_angle = 35.264f;
 	fdf->line.y_angle = 45.0f;
 	fdf->line.z_angle = 0.0f;
+	fdf->test = 0;
 }
 
 int	main(int argc, char **argv)
