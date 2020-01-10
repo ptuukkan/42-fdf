@@ -15,11 +15,11 @@
 static int	rotate_isometric(int key, t_fdf *fdf)
 {
 	if (key == L_D || key == M_D)
-		fdf->line.y_angle += 90.0f;
+		fdf->line.z_angle += 90.0f;
 	if (key == L_A || key == M_D)
-		fdf->line.y_angle -= 90.0f;
-	if (fdf->line.y_angle == 405.0f || fdf->line.y_angle == -405.0f)
-		fdf->line.y_angle = 45.0f;
+		fdf->line.z_angle -= 90.0f;
+	if (fdf->line.z_angle == 405.0f || fdf->line.z_angle == -405.0f)
+		fdf->line.z_angle = 45.0f;
 	draw_map(fdf);
 	return (0);
 }
@@ -50,8 +50,8 @@ static int	rotate_parallel(int key, t_fdf *fdf)
 
 static int	rotate_events(int key, t_fdf *fdf)
 {
-	//if (fdf->map.projection == 1)
-	//	return (rotate_isometric(key, fdf));
+	if (fdf->map.projection == 1)
+		return (rotate_isometric(key, fdf));
 	if (fdf->map.projection == 2)
 		return (rotate_parallel(key, fdf));
 	if (key == L_W || key == M_W)
@@ -59,9 +59,9 @@ static int	rotate_events(int key, t_fdf *fdf)
 	else if (key == L_S || key == M_S)
 		fdf->line.x_angle -= 1.0f;
 	else if (key == L_D || key == M_D)
-		fdf->line.y_angle += 1.0f;
+		fdf->line.z_angle += 1.0f;
 	else if (key == L_A || key == M_A)
-		fdf->line.y_angle -= 1.0f;
+		fdf->line.z_angle -= 1.0f;
 	else if (key == L_E || key == 0xe)
 		fdf->line.z_angle += 1.0f;
 	else if (key == L_Q || key == M_Q)
@@ -121,8 +121,8 @@ int			key_events(int key, t_fdf *fdf)
 		else if (fdf->map.projection == 2)
 		{
 			fdf->map.projection = 3;
-			fdf->line.x_angle = 10.0f;
-			fdf->line.y_angle = 10.0f;
+			fdf->line.x_angle = -70.0f;
+			fdf->line.y_angle = 0.0f;
 			fdf->line.z_angle = 0.0f;
 		}
 		else if (fdf->map.projection == 1)
@@ -133,9 +133,9 @@ int			key_events(int key, t_fdf *fdf)
 			fdf->line.z_angle = 0.0f;
 		}
 	}
-	else if (key == M_R)
+	else if (key == M_R || key == L_R)
 		reset_map(fdf);
-	else if (key == 0x11)
+	else if (key == 0x11 || key == 0x74)
 	{
 		fdf->map.projection = 4;
 		fdf->test = 1;

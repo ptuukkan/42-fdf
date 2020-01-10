@@ -55,9 +55,9 @@ void	reset_map(t_fdf *fdf)
 	fdf->img.color.red = 0x28;
 	fdf->img.line_size = WIN_WIDTH * 4;
 	fdf->map.projection = 1;
-	fdf->line.x_angle = 35.264f;
-	fdf->line.y_angle = 45.0f;
-	fdf->line.z_angle = 0.0f;
+	fdf->line.x_angle = -54.736f;
+	fdf->line.y_angle = 0.0f;
+	fdf->line.z_angle = 45.0f;
 	fdf->test = 0;
 }
 
