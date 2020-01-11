@@ -38,6 +38,7 @@
 # define L_Q 0x71
 # define L_W 0x77
 # define L_E 0x65
+# define L_R 0x72
 # define L_A 0x61
 # define L_S 0x73
 # define L_D 0x64

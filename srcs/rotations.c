@@ -62,7 +62,12 @@ void		rotate(t_fdf *fdf, float ax, float ay, float az)
 	ax = ax * (3.14 / 180);
 	ay = ay * (3.14 / 180);
 	az = az * (3.14 / 180);
+	
+	
+	
 	rotate_z(fdf, az);
 	rotate_y(fdf, ay);
 	rotate_x(fdf, ax);
+	
+	
 }
