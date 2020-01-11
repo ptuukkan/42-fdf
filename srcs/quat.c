@@ -61,11 +61,16 @@ t_quat	*quat_multiply(t_quat *q1, t_quat *q2)
 	return (q);
 }
 
-void	quat_conjugate(t_quat *q)
+void	quat_inverse(t_quat *q)
 {
-	q->x = -q->x;
-	q->y = -q->y;
-	q->z = -q->z;
+	double	norm;
+
+	norm = sqrt(q->w * q->w + q->x * q->x + q->y * q->y + q->z * q->z);
+	norm *= norm;
+	q->w /= norm;
+	q->x = -q->x / norm;
+	q->y = -q->y / norm;
+	q->z = -q->z / norm;
 }
 
 void	vec_to_quat(t_quat *p, int x, int y, int z)
@@ -103,7 +108,7 @@ void	quat_rotate(t_fdf *fdf)
 	vec_to_quat(p1, fdf->line.x1, fdf->line.y1, fdf->line.z1);
 	p0 = quat_multiply(q, p0);
 	p1 = quat_multiply(q, p1);
-	quat_conjugate(q);
+	quat_inverse(q);
 	p0 = quat_multiply(p0, q);
 	p1 = quat_multiply(p1, q);
 	quat_to_vec(p0, p1, fdf);
