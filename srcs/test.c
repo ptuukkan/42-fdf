@@ -135,7 +135,8 @@ void	plot_sq(t_fdf *fdf, int x0, int y0, int z0, int x1, int y1, int z1)
 	fdf->line.x1 = x1;
 	fdf->line.y1 = y1;
 	fdf->line.z1 = z1;
-	rotate(fdf, fdf->line.x_angle, fdf->line.y_angle, fdf->line.z_angle);
+	quat_rotate(fdf);
+	//rotate(fdf, fdf->line.x_angle, fdf->line.y_angle, fdf->line.z_angle);
 
 
 	fdf->line.x0 += WIN_WIDTH / 2;
