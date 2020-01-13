@@ -50,15 +50,13 @@ void	reset_map(t_fdf *fdf)
 	else
 		fdf->map.zoom = WIN_HEIGHT / fdf->map.height - fdf->map.height;
 	fdf->map.alt_mul = fdf->map.zoom / 20;
-	fdf->img.color.blue = 0x00;
-	fdf->img.color.green = 0xFF;
-	fdf->img.color.red = 0x28;
 	fdf->img.line_size = WIN_WIDTH * 4;
 	fdf->map.projection = 1;
 	set_angles(fdf, -54.736f, 0.0f, 45.0f);
 	fdf->test = 0;
 	fdf->map.x_offset = 0;
 	fdf->map.y_offset = 0;
+	init_color(fdf);
 }
 
 int	main(int argc, char **argv)

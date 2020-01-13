@@ -21,15 +21,20 @@ static void	plot(t_fdf *fdf, int x, int y, int dir)
 	fdf->line.y1 = ((y + (dir == 0)) - fdf->map.height / 2) * fdf->map.zoom;
 	fdf->line.z1 = fdf->map.altitude[(y + (dir == 0))][(x + dir)] *
 					fdf->map.alt_mul;
+	fdf->line.color_start = get_color(fdf->img.color_start, fdf->img.color_end,
+					percent(fdf->map.bottom * fdf->map.alt_mul, 
+							fdf->line.z0, fdf->map.peak * fdf->map.alt_mul));
+	fdf->line.color_end = get_color(fdf->img.color_start, fdf->img.color_end,
+					percent(fdf->map.bottom * fdf->map.alt_mul,
+							fdf->line.z1, fdf->map.peak * fdf->map.alt_mul));
+	//printf("Start color: r: %hhu g: %hhu b: %hhu\n", fdf->line.color_start.red, fdf->line.color_start.green, fdf->line.color_start.blue);
+	//printf("Start color: r: %hhu g: %hhu b: %hhu\n\n", fdf->line.color_end.red, fdf->line.color_end.green, fdf->line.color_end.blue);
 	rotate(fdf, fdf->line.x_angle, fdf->line.y_angle, fdf->line.z_angle);
 	fdf->line.x0 = fdf->line.x0 + WIN_WIDTH / 2 + fdf->map.x_offset;
 	fdf->line.x1 = fdf->line.x1 + WIN_WIDTH / 2 + fdf->map.x_offset;
 	fdf->line.y0 = fdf->line.y0 + WIN_HEIGHT / 2 + fdf->map.y_offset;
 	fdf->line.y1 = fdf->line.y1 + WIN_HEIGHT / 2 + fdf->map.y_offset;
-	fdf->line.color_start = get_color(fdf->img.color_start, fdf->img.color_end,
-					percent(fdf->map.bottom, fdf->line.z0, fdf->map.peak));
-	fdf->line.color_end = get_color(fdf->img.color_start, fdf->img.color_end,
-					percent(fdf->map.bottom, fdf->line.z1, fdf->map.peak));
+
 	draw_line(fdf);
 }
 

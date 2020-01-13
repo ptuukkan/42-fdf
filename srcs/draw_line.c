@@ -26,6 +26,7 @@ static void	img_pixel_put(t_fdf *fdf, int x, int y, int dir)
 		else
 			color = get_color(fdf->line.color_start, fdf->line.color_end,
 					percent(fdf->line.y0, y, fdf->line.y1));
+		//printf("color: r: %d g: %d b: %d\n", color.red, color.green, color.blue);
 		fdf->img.img_data[pos++] = color.blue;
 		fdf->img.img_data[pos++] = color.green;
 		fdf->img.img_data[pos++] = color.red;
@@ -100,6 +101,7 @@ void		draw_line(t_fdf *fdf)
 
 	dx = ft_abs(fdf->line.x1 - fdf->line.x0);
 	dy = ft_abs(fdf->line.y1 - fdf->line.y0);
+	//printf("\n");
 	if (dx > dy)
 		draw_run_over_rise(fdf, dx ,dy);
 	else

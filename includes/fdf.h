@@ -16,7 +16,7 @@
 # include <mlx.h>
 # include <stdlib.h>
 # include <stdio.h>
-# include "keys_mac.h"
+# include "keys_linux.h"
 # include <stdint.h>
 # include <fcntl.h>
 # include "libft.h"
@@ -24,6 +24,14 @@
 
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
+
+
+typedef struct	s_color
+{
+	int	red;
+	int	green;
+	int	blue;
+}				t_color;
 
 typedef struct	s_map
 {
@@ -70,13 +78,6 @@ typedef struct	s_mlx
 	void	*img_ptr;
 }				t_mlx;
 
-typedef struct	s_color
-{
-	unsigned char	red;
-	unsigned char	green;
-	unsigned char	blue;
-}				t_color;
-
 typedef struct	s_img
 {
 	t_color	color_start;
@@ -110,5 +111,6 @@ void			quat_rotate(t_fdf *fdf);
 void			set_angles(t_fdf *fdf, float ax, float ay, float az);
 t_color			get_color(t_color color_start, t_color color_end, double perc);
 float			percent(int start, int current, int end);
+void			init_color(t_fdf *fdf);
 
 #endif
