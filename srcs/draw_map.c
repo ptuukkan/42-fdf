@@ -26,6 +26,10 @@ static void	plot(t_fdf *fdf, int x, int y, int dir)
 	fdf->line.x1 = fdf->line.x1 + WIN_WIDTH / 2 + fdf->map.x_offset;
 	fdf->line.y0 = fdf->line.y0 + WIN_HEIGHT / 2 + fdf->map.y_offset;
 	fdf->line.y1 = fdf->line.y1 + WIN_HEIGHT / 2 + fdf->map.y_offset;
+	fdf->line.color_start = get_color(fdf->img.color_start, fdf->img.color_end,
+					percent(fdf->map.bottom, fdf->line.z0, fdf->map.peak));
+	fdf->line.color_end = get_color(fdf->img.color_start, fdf->img.color_end,
+					percent(fdf->map.bottom, fdf->line.z1, fdf->map.peak));
 	draw_line(fdf);
 }
 

@@ -55,9 +55,12 @@ typedef struct	s_line
 	int		x1;
 	int		y1;
 	int		z1;
+	int		p;
 	float	x_angle;
 	float	y_angle;
 	float	z_angle;
+	t_color	color_start;
+	t_color	color_end;
 }				t_line;
 
 typedef struct	s_mlx
@@ -76,8 +79,8 @@ typedef struct	s_color
 
 typedef struct	s_img
 {
-	t_color	start;
-	t_color	end;
+	t_color	color_start;
+	t_color	color_end;
 	char	*img_data;
 	int		line_size;
 	int		total_size;
@@ -105,5 +108,7 @@ void			reset_map(t_fdf *fdf);
 void			draw_sq(t_fdf *fdf);
 void			quat_rotate(t_fdf *fdf);
 void			set_angles(t_fdf *fdf, float ax, float ay, float az);
+t_color			get_color(t_color color_start, t_color color_end, double perc);
+float			percent(int start, int current, int end);
 
 #endif

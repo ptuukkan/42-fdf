@@ -12,12 +12,30 @@
 
 #include "fdf.h"
 
-void	set_color(t_fdf *fdf)
+float	percent(int start, int current, int end)
 {
-	fdf->img.start.red = 0x57;
-	fdf->img.start.green = 0x34;
-	fdf->img.start.blue = 0x0;
-	fdf->img.end.red = 0xFF;
-	fdf->img.end.green = 0xE0;
-	fdf->img.end.blue = 0xC9;
+	if (current == end)
+		return (1.0f);
+	else
+		return ((float)current / ((float)end - (float)start));
+}
+
+t_color	get_color(t_color color_start, t_color color_end, double perc)
+{
+	t_color	new;
+
+	new.red = color_start.red + perc * (color_end.red - color_start.red);
+	new.green = color_start.green + perc * (color_end.green - color_start.green);
+	new.blue = color_start.blue + perc * (color_end.blue - color_start.blue);
+	return (new);
+}
+
+void	init_color(t_fdf *fdf)
+{
+	fdf->img.color_start.red = 0x57;
+	fdf->img.color_start.green = 0x34;
+	fdf->img.color_start.blue = 0x0;
+	fdf->img.color_end.red = 0xFF;
+	fdf->img.color_end.green = 0xE0;
+	fdf->img.color_end.blue = 0xC9;
 }

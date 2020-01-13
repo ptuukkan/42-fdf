@@ -12,16 +12,23 @@
 
 #include "fdf.h"
 
-static void	img_pixel_put(t_fdf *fdf, int x, int y)
+static void	img_pixel_put(t_fdf *fdf, int x, int y, int dir)
 {
-	int	pos;
+	int		pos;
+	t_color	color;
 
 	pos = fdf->img.line_size * y + x * 4;
 	if (x >= 0 && y >= 0 && x < WIN_WIDTH && y < WIN_HEIGHT)
 	{
-		fdf->img.img_data[pos++] = fdf->img.color.blue;
-		fdf->img.img_data[pos++] = fdf->img.color.green;
-		fdf->img.img_data[pos++] = fdf->img.color.red;
+		if (dir == 1)
+			color = get_color(fdf->line.color_start, fdf->line.color_end,
+					percent(fdf->line.x0, x, fdf->line.x1));
+		else
+			color = get_color(fdf->line.color_start, fdf->line.color_end,
+					percent(fdf->line.y0, y, fdf->line.y1));
+		fdf->img.img_data[pos++] = color.blue;
+		fdf->img.img_data[pos++] = color.green;
+		fdf->img.img_data[pos++] = color.red;
 		fdf->img.img_data[pos] = 0;
 	}
 }
@@ -41,18 +48,19 @@ static void	draw_run_over_rise(t_fdf *fdf, int dx, int dy)
 	sx = 1;
 	if (fdf->line.x1 < fdf->line.x0)
 		sx = -1;
-	while (fdf->line.x0 != fdf->line.x1)
+	fdf->line.p = fdf->line.x0;
+	while (fdf->line.p != fdf->line.x1)
 	{
-		img_pixel_put(fdf, fdf->line.x0, fdf->line.y0);
+		img_pixel_put(fdf, fdf->line.p, fdf->line.y0, 1);
 		if (d > 0)
 		{
 			fdf->line.y0 += sy;
 			d = d - 2 * dx;
 		}
 		d = d + 2 * dy;
-		fdf->line.x0 += sx;
+		fdf->line.p += sx;
 	}
-	img_pixel_put(fdf, fdf->line.x0, fdf->line.y0);
+	img_pixel_put(fdf, fdf->line.p, fdf->line.y0, 1);
 }
 
 static void	draw_rise_over_run(t_fdf *fdf, int dx, int dy)
@@ -70,18 +78,19 @@ static void	draw_rise_over_run(t_fdf *fdf, int dx, int dy)
 	sy = 1;
 	if (fdf->line.y1 < fdf->line.y0)
 		sy = -1;
-	while (fdf->line.y0 != fdf->line.y1)
+	fdf->line.p = fdf->line.y0;
+	while (fdf->line.p != fdf->line.y1)
 	{
-		img_pixel_put(fdf, fdf->line.x0, fdf->line.y0);
+		img_pixel_put(fdf, fdf->line.x0, fdf->line.p, 0);
 		if (d > 0)
 		{
 			fdf->line.x0 += sx;
 			d = d - 2 * dy;
 		}
 		d = d + 2 * dx;
-		fdf->line.y0 += sy;
+		fdf->line.p += sy;
 	}
-	img_pixel_put(fdf, fdf->line.x0, fdf->line.y0);
+	img_pixel_put(fdf, fdf->line.x0, fdf->line.p, 0);
 }
 
 void		draw_line(t_fdf *fdf)
