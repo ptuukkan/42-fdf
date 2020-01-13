@@ -14,9 +14,9 @@
 
 static int	rotate_isometric(int key, t_fdf *fdf)
 {
-	if (key == L_D || key == M_D)
+	if (key == KEY_D)
 		fdf->line.z_angle += 90.0f;
-	if (key == L_A || key == M_D)
+	if (key == KEY_A)
 		fdf->line.z_angle -= 90.0f;
 	if (fdf->line.z_angle == 405.0f || fdf->line.z_angle == -405.0f)
 		fdf->line.z_angle = 45.0f;
@@ -26,17 +26,17 @@ static int	rotate_isometric(int key, t_fdf *fdf)
 
 static int	rotate_parallel(int key, t_fdf *fdf)
 {
-	if ((key == L_S || key == M_S) && fdf->line.x_angle == 0.0f)
+	if (key == KEY_S && fdf->line.x_angle == 0.0f)
 		fdf->line.x_angle = -90.f;
-	else if ((key == L_W || key == M_W) && fdf->line.x_angle != 0.0f)
+	else if (key == KEY_W && fdf->line.x_angle != 0.0f)
 		fdf->line.x_angle = 0.0f;
-	else if ((key == L_D || key == M_D) && fdf->line.x_angle != 0.0f)
+	else if (key == KEY_D && fdf->line.x_angle != 0.0f)
 		fdf->line.z_angle += 90.0f;
-	else if ((key == L_A || key == M_A) && fdf->line.x_angle != 0.0f)
+	else if (key == KEY_A && fdf->line.x_angle != 0.0f)
 		fdf->line.z_angle -= 90.0f;
-	else if ((key == L_D || key == M_D) && fdf->line.x_angle == 0.0f)
+	else if (key == KEY_D && fdf->line.x_angle == 0.0f)
 		fdf->line.z_angle += 90.0f;
-	else if ((key == L_A || key == M_A) && fdf->line.x_angle == 0.0f)
+	else if (key == KEY_A && fdf->line.x_angle == 0.0f)
 		fdf->line.z_angle -= 90.0f;
 	if (fdf->line.x_angle == 360.0f || fdf->line.x_angle == -360.0f)
 		fdf->line.x_angle = 0.0f;
@@ -54,18 +54,18 @@ static int	rotate_events(int key, t_fdf *fdf)
 		return (rotate_isometric(key, fdf));
 	if (fdf->map.projection == 2)
 		return (rotate_parallel(key, fdf));
-	if (key == L_W || key == M_W)
+	if (key == KEY_W)
 		fdf->line.x_angle += 1.0f;
-	else if (key == L_S || key == M_S)
+	else if (key == KEY_S)
 		fdf->line.x_angle -= 1.0f;
-	else if (key == L_D || key == M_D)
+	else if (key == KEY_D)
 		fdf->line.z_angle += 1.0f;
-	else if (key == L_A || key == M_A)
+	else if (key == KEY_A)
 		fdf->line.z_angle -= 1.0f;
-	else if (key == L_E || key == 0xe)
-		fdf->line.z_angle += 1.0f;
-	else if (key == L_Q || key == M_Q)
-		fdf->line.z_angle -= 1.0f;
+	else if (key == KEY_E)
+		fdf->line.y_angle += 1.0f;
+	else if (key == KEY_Q)
+		fdf->line.y_angle -= 1.0f;
 	if (fdf->line.x_angle == 360.0f || fdf->line.x_angle == -360.0f)
 		fdf->line.x_angle = 0.0f;
 	if (fdf->line.y_angle == 360.0f || fdf->line.y_angle == -360.0f)
@@ -76,9 +76,9 @@ static int	rotate_events(int key, t_fdf *fdf)
 	return (0);
 }
 
-static int	zoom_events(int key, t_fdf *fdf)
+static int	scale_events(int key, t_fdf *fdf)
 {
-	if (key == L_J || key == M_J)
+	if (key == KEY_J)
 	{
 		if (fdf->map.zoom > 1.0)
 		{
@@ -86,17 +86,17 @@ static int	zoom_events(int key, t_fdf *fdf)
 			fdf->map.alt_mul *= 0.9;
 		}
 	}
-	else if (key == L_K || key == M_K)
+	else if (key == KEY_K)
 	{
 		fdf->map.zoom *= 1.1;
 		fdf->map.alt_mul *= 1.1;
 	}
-	else if (key == L_N || key == M_N)
+	else if (key == KEY_N)
 	{
 		if (fdf->map.alt_mul > 1.0)
 			fdf->map.alt_mul *= 0.9;
 	}
-	else if (key == L_M || key == M_M)
+	else if (key == KEY_M)
 		fdf->map.alt_mul *= 1.1;
 	draw_map(fdf);
 	return (0);
@@ -105,16 +105,14 @@ static int	zoom_events(int key, t_fdf *fdf)
 int			key_events(int key, t_fdf *fdf)
 {
 	printf("%x\n", key);
-	if (key == M_ESC || key == L_ESC)
+	if (key == KEY_ESC)
 		exit(0);
-	if (key == L_J || key == L_K || key == L_N || key == L_M ||
-		key == M_J || key == M_K || key == M_N || key == M_M)
-		return (zoom_events(key, fdf));
-	if (key == L_A || key == L_W || key == L_D || key == L_S ||
-		key == M_A || key == M_W || key == M_D || key == M_S ||
-		key == M_Q || key == 0xe || key == L_Q || key == L_E)
+	if (key == KEY_J || key == KEY_K || key == KEY_N || key == KEY_M)
+		return (scale_events(key, fdf));
+	if (key == KEY_A || key == KEY_W || key == KEY_D || key == KEY_S ||
+		key == KEY_Q || key == KEY_E)
 		return (rotate_events(key, fdf));
-	else if (key == L_SPACE || key == M_SPACE)
+	else if (key == KEY_SPACE)
 	{
 		if (fdf->map.projection == 3)
 			reset_map(fdf);
@@ -133,7 +131,7 @@ int			key_events(int key, t_fdf *fdf)
 			fdf->line.z_angle = 0.0f;
 		}
 	}
-	else if (key == M_R || key == L_R)
+	else if (key == KEY_R)
 		reset_map(fdf);
 	else if (key == 0x11 || key == 0x74)
 	{

@@ -16,7 +16,7 @@
 # include <mlx.h>
 # include <stdlib.h>
 # include <stdio.h>
-# include "keys.h"
+# include "keys_mac.h"
 # include <stdint.h>
 # include <fcntl.h>
 # include "libft.h"
