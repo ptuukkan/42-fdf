@@ -65,6 +65,8 @@ int	main(int argc, char **argv)
 {
 	t_fdf	fdf;
 
+	fdf.img.bpp = 4;
+	fdf.img.endian = get_endian();
 	if (argc != 2)
 		ft_exiterror("usaage.", 5, 1);
 	read_map(argv[1], &fdf);

@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-int		count_numbers(char *line)
+static int	count_numbers(char *line)
 {
 	int	numbers;
 	int	i;
@@ -40,7 +40,7 @@ int		count_numbers(char *line)
 	return (numbers);
 }
 
-void	read_map_info(t_map *map, char *file)
+static void	read_map_info(t_map *map, char *file)
 {
 	int		fd;
 	int		lines;
@@ -66,7 +66,7 @@ void	read_map_info(t_map *map, char *file)
 	close(fd);
 }
 
-int		get_next_number(char **line, int *number)
+static int	get_next_number(char **line, int *number)
 {
 	int	found;
 
@@ -84,7 +84,7 @@ int		get_next_number(char **line, int *number)
 	return (0);
 }
 
-void	read_altitude(int *arr, char *line)
+static void	read_altitude(t_fdf *fdf, int *arr, char *line)
 {
 	int		i;
 	int		number;
@@ -93,16 +93,22 @@ void	read_altitude(int *arr, char *line)
 	while (get_next_number(&line, &number))
 	{
 		arr[i] = number;
+		if (number > fdf->map.peak)
+			fdf->map.peak = number;
+		if (number < fdf->map.bottom)
+			fdf->map.bottom = number;
 		i++;
 	}
 }
 
-void	read_map(char *file, t_fdf *fdf)
+void		read_map(char *file, t_fdf *fdf)
 {
 	int		fd;
 	char	*line;
 	int		i;
 
+	fdf->map.peak = 0;
+	fdf->map.bottom = 0;
 	read_map_info(&fdf->map, file);
 	if (!(fdf->map.altitude = (int **)ft_memalloc(sizeof(int *) *\
 		fdf->map.height)))
@@ -115,7 +121,7 @@ void	read_map(char *file, t_fdf *fdf)
 		if (!(fdf->map.altitude[i] = (int *)ft_memalloc(sizeof(int) *\
 			fdf->map.width)))
 			ft_exiterror("Memory allocation error", 5, 2);
-		read_altitude(fdf->map.altitude[i], line);
+		read_altitude(fdf, fdf->map.altitude[i], line);
 		ft_strdel(&line);
 		i++;
 	}

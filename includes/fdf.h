@@ -30,6 +30,8 @@ typedef struct	s_map
 	int		width;
 	int		height;
 	int		**altitude;
+	int		peak;
+	int		bottom;
 	float	zoom;
 	float	alt_mul;
 	short	projection;
@@ -67,14 +69,15 @@ typedef struct	s_mlx
 
 typedef struct	s_color
 {
-	int	red;
-	int	green;
-	int	blue;
+	unsigned char	red;
+	unsigned char	green;
+	unsigned char	blue;
 }				t_color;
 
 typedef struct	s_img
 {
-	t_color	color;
+	t_color	start;
+	t_color	end;
 	char	*img_data;
 	int		line_size;
 	int		total_size;

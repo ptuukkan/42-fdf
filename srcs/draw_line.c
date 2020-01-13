@@ -22,6 +22,7 @@ static void	img_pixel_put(t_fdf *fdf, int x, int y)
 		fdf->img.img_data[pos++] = fdf->img.color.blue;
 		fdf->img.img_data[pos++] = fdf->img.color.green;
 		fdf->img.img_data[pos++] = fdf->img.color.red;
+		fdf->img.img_data[pos] = 0;
 	}
 }
 

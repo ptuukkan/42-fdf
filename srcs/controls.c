@@ -36,11 +36,8 @@ static int	scale_events(int key, t_fdf *fdf)
 {
 	if (key == KEY_J)
 	{
-		if (fdf->map.zoom > 1.0)
-		{
-			fdf->map.zoom *= 0.9;
-			fdf->map.alt_mul *= 0.9;
-		}
+		fdf->map.zoom *= 0.9;
+		fdf->map.alt_mul *= 0.9;
 	}
 	else if (key == KEY_K)
 	{
@@ -49,11 +46,10 @@ static int	scale_events(int key, t_fdf *fdf)
 	}
 	else if (key == KEY_N)
 	{
-		if (fdf->map.alt_mul > 1.0)
-			fdf->map.alt_mul *= 0.9;
+		fdf->map.alt_mul -= 1;
 	}
 	else if (key == KEY_M)
-		fdf->map.alt_mul *= 1.1;
+		fdf->map.alt_mul += 1;
 	draw_map(fdf);
 	return (0);
 }
