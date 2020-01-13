@@ -13,7 +13,8 @@
 NAME = fdf
 LIB = libft.a
 SRCDIR = srcs
-SRCS = read_map.c draw_map.c draw_line.c controls.c rotations.c test.c quat.c main.c
+SRCS = read_map.c draw_map.c draw_line.c controls.c rotations.c test.c \
+		quat.c main.c rotate_controls.c
 
 OBJDIR = objects
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)

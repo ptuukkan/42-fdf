@@ -19,12 +19,12 @@ static void	rotate_x(t_fdf *fdf, float ax)
 
 	y = fdf->line.y0;
 	z = fdf->line.z0;
-	fdf->line.y0 = y * cos(ax) + z * sin(ax);
-	fdf->line.z0 = -y * sin(ax) + z * cos(ax);
+	fdf->line.y0 = 0.5 + (y * cos(ax) + z * sin(ax));
+	fdf->line.z0 = 0.5 + (-y * sin(ax) + z * cos(ax));
 	y = fdf->line.y1;
 	z = fdf->line.z1;
-	fdf->line.y1 = y * cos(ax) + z * sin(ax);
-	fdf->line.z1 = -y * sin(ax) + z * cos(ax);
+	fdf->line.y1 = 0.5 + (y * cos(ax) + z * sin(ax));
+	fdf->line.z1 = 0.5 + (-y * sin(ax) + z * cos(ax));
 }
 
 static void	rotate_y(t_fdf *fdf, float ay)
@@ -34,12 +34,12 @@ static void	rotate_y(t_fdf *fdf, float ay)
 
 	x = fdf->line.x0;
 	z = fdf->line.z0;
-	fdf->line.x0 = x * cos(ay) + z * sin(ay);
-	fdf->line.z0 = -x * sin(ay) + z * cos(ay);
+	fdf->line.x0 = 0.5 + (x * cos(ay) + z * sin(ay));
+	fdf->line.z0 = 0.5 + (-x * sin(ay) + z * cos(ay));
 	x = fdf->line.x1;
 	z = fdf->line.z1;
-	fdf->line.x1 = x * cos(ay) + z * sin(ay);
-	fdf->line.z1 = -x * sin(ay) + z * cos(ay);
+	fdf->line.x1 = 0.5 + (x * cos(ay) + z * sin(ay));
+	fdf->line.z1 = 0.5 + (-x * sin(ay) + z * cos(ay));
 }
 
 static void	rotate_z(t_fdf *fdf, float az)
@@ -49,12 +49,19 @@ static void	rotate_z(t_fdf *fdf, float az)
 
 	x = fdf->line.x0;
 	y = fdf->line.y0;
-	fdf->line.x0 = x * cos(az) - y * sin(az);
-	fdf->line.y0 = x * sin(az) + y * cos(az);
+	fdf->line.x0 = 0.5 + (x * cos(az) - y * sin(az));
+	fdf->line.y0 = 0.5 + (x * sin(az) + y * cos(az));
 	x = fdf->line.x1;
 	y = fdf->line.y1;
-	fdf->line.x1 = x * cos(az) - y * sin(az);
-	fdf->line.y1 = x * sin(az) + y * cos(az);
+	fdf->line.x1 = 0.5 + (x * cos(az) - y * sin(az));
+	fdf->line.y1 = 0.5 + (x * sin(az) + y * cos(az));
+}
+
+void		set_angles(t_fdf *fdf, float ax, float ay, float az)
+{
+	fdf->line.x_angle = ax;
+	fdf->line.y_angle = ay;
+	fdf->line.z_angle = az;
 }
 
 void		rotate(t_fdf *fdf, float ax, float ay, float az)

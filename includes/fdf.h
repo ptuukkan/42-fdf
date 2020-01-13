@@ -33,6 +33,8 @@ typedef struct	s_map
 	float	zoom;
 	float	alt_mul;
 	short	projection;
+	int		x_offset;
+	int		y_offset;
 }				t_map;
 
 typedef struct	s_quat
@@ -54,10 +56,6 @@ typedef struct	s_line
 	float	x_angle;
 	float	y_angle;
 	float	z_angle;
-	double	x_matrix[9];
-	double	y_matrix[9];
-	double	z_matrix[9];
-	double	matrix[9];
 }				t_line;
 
 typedef struct	s_mlx
@@ -98,9 +96,11 @@ void			draw_map(t_fdf *fdf);
 void			draw_line(t_fdf *fdf);
 void			calculate_xy(t_fdf *fdf, int x, int y, int direction);
 int				key_events(int key, t_fdf *fdf);
+int				rotate_events(int key, t_fdf *fdf);
 void			rotate(t_fdf *fdf, float ax, float ay, float az);
 void			reset_map(t_fdf *fdf);
 void			draw_sq(t_fdf *fdf);
 void			quat_rotate(t_fdf *fdf);
+void			set_angles(t_fdf *fdf, float ax, float ay, float az);
 
 #endif

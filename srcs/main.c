@@ -55,10 +55,10 @@ void	reset_map(t_fdf *fdf)
 	fdf->img.color.red = 0x28;
 	fdf->img.line_size = WIN_WIDTH * 4;
 	fdf->map.projection = 1;
-	fdf->line.x_angle = -54.736f;
-	fdf->line.y_angle = 0.0f;
-	fdf->line.z_angle = 45.0f;
+	set_angles(fdf, -54.736f, 0.0f, 45.0f);
 	fdf->test = 0;
+	fdf->map.x_offset = 0;
+	fdf->map.y_offset = 0;
 }
 
 int	main(int argc, char **argv)

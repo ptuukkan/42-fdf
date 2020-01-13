@@ -21,13 +21,21 @@ static void	plot(t_fdf *fdf, int x, int y, int dir)
 	fdf->line.y1 = ((y + (dir == 0)) - fdf->map.height / 2) * fdf->map.zoom;
 	fdf->line.z1 = fdf->map.altitude[(y + (dir == 0))][(x + dir)] *
 					fdf->map.alt_mul;
-	//quat_rotate(fdf);
 	rotate(fdf, fdf->line.x_angle, fdf->line.y_angle, fdf->line.z_angle);
-	fdf->line.x0 += WIN_WIDTH / 2;
-	fdf->line.x1 += WIN_WIDTH / 2;
-	fdf->line.y0 += WIN_HEIGHT / 2;
-	fdf->line.y1 += WIN_HEIGHT / 2;
+	fdf->line.x0 = fdf->line.x0 + WIN_WIDTH / 2 + fdf->map.x_offset;
+	fdf->line.x1 = fdf->line.x1 + WIN_WIDTH / 2 + fdf->map.x_offset;
+	fdf->line.y0 = fdf->line.y0 + WIN_HEIGHT / 2 + fdf->map.y_offset;
+	fdf->line.y1 = fdf->line.y1 + WIN_HEIGHT / 2 + fdf->map.y_offset;
 	draw_line(fdf);
+}
+
+static void	create_new_image(t_fdf *fdf)
+{
+	if (!(fdf->mlx.img_ptr = mlx_new_image(fdf->mlx.mlx_ptr, WIN_WIDTH,
+											WIN_HEIGHT)))
+		ft_exiterror("Image creation failed", 8, 2);
+	fdf->img.img_data = mlx_get_data_addr(fdf->mlx.img_ptr, &fdf->img.bpp,
+										&fdf->img.line_size, &fdf->img.endian);
 }
 
 void		draw_map(t_fdf *fdf)
@@ -37,12 +45,8 @@ void		draw_map(t_fdf *fdf)
 
 	if (fdf->test)
 		return (draw_sq(fdf));
+	create_new_image(fdf);
 	y = 0;
-	if (!(fdf->mlx.img_ptr = mlx_new_image(fdf->mlx.mlx_ptr, WIN_WIDTH,
-											WIN_HEIGHT)))
-		ft_exiterror("Image creation failed", 8, 2);
-	fdf->img.img_data = mlx_get_data_addr(fdf->mlx.img_ptr, &fdf->img.bpp,
-										&fdf->img.line_size, &fdf->img.endian);
 	while (y < fdf->map.height)
 	{
 		x = 0;
