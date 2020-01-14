@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_map.c                                         :+:      :+:    :+:   */
+/*   read_file.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ptuukkan <ptuukkan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -84,7 +84,7 @@ static int	get_next_number(char **line, int *number)
 	return (0);
 }
 
-static void	read_altitude(t_fdf *fdf, int *arr, char *line)
+static void	read_vertices(t_fdf *fdf, t_vec4 *vertices, char *line, int y)
 {
 	int		i;
 	int		number;
@@ -92,7 +92,10 @@ static void	read_altitude(t_fdf *fdf, int *arr, char *line)
 	i = 0;
 	while (get_next_number(&line, &number))
 	{
-		arr[i] = number;
+		vertices[i].x = (double)i;
+		vertices[i].y = (double)y;
+		vertices[i].z = (double)number;
+		vertices[i].w = 1.0;
 		if (number > fdf->map.peak)
 			fdf->map.peak = number;
 		if (number < fdf->map.bottom)
@@ -101,7 +104,7 @@ static void	read_altitude(t_fdf *fdf, int *arr, char *line)
 	}
 }
 
-void		read_map(char *file, t_fdf *fdf)
+void		read_file(char *file, t_fdf *fdf)
 {
 	int		fd;
 	char	*line;
@@ -110,7 +113,7 @@ void		read_map(char *file, t_fdf *fdf)
 	fdf->map.peak = 0;
 	fdf->map.bottom = 0;
 	read_map_info(&fdf->map, file);
-	if (!(fdf->map.altitude = (int **)ft_memalloc(sizeof(int *) *\
+	if (!(fdf->map.vertices = (t_vec4 **)ft_memalloc(sizeof(t_vec4 *) *\
 		fdf->map.height)))
 		ft_exiterror("Memory allocation error", 5, 2);
 	if ((fd = open(file, O_RDONLY)) == -1)
@@ -118,10 +121,10 @@ void		read_map(char *file, t_fdf *fdf)
 	i = 0;
 	while (get_next_line(fd, &line))
 	{
-		if (!(fdf->map.altitude[i] = (int *)ft_memalloc(sizeof(int) *\
+		if (!(fdf->map.vertices[i] = (int *)ft_memalloc(sizeof(t_vec4) *\
 			fdf->map.width)))
 			ft_exiterror("Memory allocation error", 5, 2);
-		read_altitude(fdf, fdf->map.altitude[i], line);
+		read_vertices(fdf, fdf->map.vertices[i], line, i);
 		ft_strdel(&line);
 		i++;
 	}

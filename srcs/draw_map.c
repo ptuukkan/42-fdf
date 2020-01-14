@@ -29,6 +29,7 @@ static void	plot(t_fdf *fdf, int x, int y, int dir)
 							fdf->line.z1, fdf->map.peak * fdf->map.alt_mul));
 	//printf("Start color: r: %hhu g: %hhu b: %hhu\n", fdf->line.color_start.red, fdf->line.color_start.green, fdf->line.color_start.blue);
 	//printf("Start color: r: %hhu g: %hhu b: %hhu\n\n", fdf->line.color_end.red, fdf->line.color_end.green, fdf->line.color_end.blue);
+	//quat_rotate(fdf);
 	rotate(fdf, fdf->line.x_angle, fdf->line.y_angle, fdf->line.z_angle);
 	fdf->line.x0 = fdf->line.x0 + WIN_WIDTH / 2 + fdf->map.x_offset;
 	fdf->line.x1 = fdf->line.x1 + WIN_WIDTH / 2 + fdf->map.x_offset;

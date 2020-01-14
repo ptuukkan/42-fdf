@@ -25,6 +25,19 @@
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
 
+typedef struct	s_vec4
+{
+	double	x;
+	double	y;
+	double	z;
+	double	w;
+	t_color	color;
+}				t_vec4;
+
+typedef struct	s_mat4
+{
+	double	m[16];
+}				t_mat4;
 
 typedef struct	s_color
 {
@@ -38,6 +51,7 @@ typedef struct	s_map
 	int		width;
 	int		height;
 	int		**altitude;
+	t_vec4	**vertices;
 	int		peak;
 	int		bottom;
 	float	zoom;
@@ -98,7 +112,7 @@ typedef struct	s_fdf
 	int		test;
 }				t_fdf;
 
-void			read_map(char *file, t_fdf *fdf);
+void			read_file(char *file, t_fdf *fdf);
 void			draw_map(t_fdf *fdf);
 void			draw_line(t_fdf *fdf);
 void			calculate_xy(t_fdf *fdf, int x, int y, int direction);

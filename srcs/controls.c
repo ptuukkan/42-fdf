@@ -89,7 +89,7 @@ int			key_events(int key, t_fdf *fdf)
 	{
 		fdf->map.projection = 4;
 		fdf->test = 1;
-		set_angles(fdf, -70.0f, 0.0f, 0.0f);
+		set_angles(fdf, 0.0f, 0.0f, 0.0f);
 	}
 	draw_map(fdf);
 	return (0);

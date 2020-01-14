@@ -13,6 +13,22 @@
 #include "fdf.h"
 
 
+void	perspective(t_fdf *fdf)
+{
+	int	z;
+
+	z = fdf->line.z0 / 100;
+	//fdf->line.z0 = fdf->line.z0 * (0.1 + 100) / (0.1 - 100);
+	//fdf->line.z0 = fdf->line.z0 + 2 * 0.1 * 100 / (0.1 - 100);
+	//fdf->line.z1 = fdf->line.z1 * (0.1 + 100) / (0.1 - 100);
+	//fdf->line.z1 = fdf->line.z1 + 2 * 0.1 * 100 / (0.1 - 100);
+	fdf->line.x0 = fdf->line.x0 / z;
+	fdf->line.y0 = fdf->line.y0 / z;
+	z = fdf->line.z1 / 100;
+	fdf->line.x1 = fdf->line.x1 / z;
+	fdf->line.y1 = fdf->line.y1 / z;
+}
+
 /*
 void	rot_x(t_fdf *fdf)
 {
@@ -135,14 +151,16 @@ void	plot_sq(t_fdf *fdf, int x0, int y0, int z0, int x1, int y1, int z1)
 	fdf->line.x1 = x1;
 	fdf->line.y1 = y1;
 	fdf->line.z1 = z1;
-	quat_rotate(fdf);
-	//rotate(fdf, fdf->line.x_angle, fdf->line.y_angle, fdf->line.z_angle);
+	//quat_rotate(fdf);
+	rotate(fdf, fdf->line.x_angle, fdf->line.y_angle, fdf->line.z_angle);
+	perspective(fdf);
 
+	//printf("%d, %d, %d - %d, %d, %d\n", x0, y0, z0, x1, y1, z1);
 
-	fdf->line.x0 += WIN_WIDTH / 2;
-	fdf->line.x1 += WIN_WIDTH / 2;
-	fdf->line.y0 += WIN_HEIGHT / 2;
-	fdf->line.y1 += WIN_HEIGHT / 2;
+	fdf->line.x0 += WIN_WIDTH / 2 + fdf->map.x_offset;
+	fdf->line.x1 += WIN_WIDTH / 2 + fdf->map.x_offset;
+	fdf->line.y0 += WIN_HEIGHT / 2 + fdf->map.y_offset;
+	fdf->line.y1 += WIN_HEIGHT / 2 + fdf->map.y_offset;
 }
 
 void	draw_sq(t_fdf *fdf)
@@ -160,23 +178,23 @@ void	draw_sq(t_fdf *fdf)
 	plot_sq(fdf, -10, -10, 10, 10, -10, 10);
 	draw_line(fdf);
 
-	plot_sq(fdf, -10, 10, -10, 10, 10, -10);
+	plot_sq(fdf, -10, 10, 20, 10, 10, 20);
 	draw_line(fdf);
-	plot_sq(fdf, -10, 10, -10, -10, -10, -10);
+	plot_sq(fdf, -10, 10, 20, -10, -10, 20);
 	draw_line(fdf);
-	plot_sq(fdf, 10, 10, -10, 10, -10, -10);
+	plot_sq(fdf, 10, 10, 20, 10, -10, 20);
 	draw_line(fdf);
-	plot_sq(fdf, -10, -10, -10, 10, -10, -10);
+	plot_sq(fdf, -10, -10, 20, 10, -10, 20);
 	draw_line(fdf);
 
 
-	plot_sq(fdf, -10, 10, 10, -10, 10, -10);
+	plot_sq(fdf, -10, 10, 10, -10, 10, 20);
 	draw_line(fdf);
-	plot_sq(fdf, 10, 10, 10, 10, 10, -10);
+	plot_sq(fdf, 10, 10, 10, 10, 10, 20);
 	draw_line(fdf);
-	plot_sq(fdf, -10, -10, 10, -10, -10, -10);
+	plot_sq(fdf, -10, -10, 10, -10, -10, 20);
 	draw_line(fdf);
-	plot_sq(fdf, 10, -10, 10, 10, -10, -10);
+	plot_sq(fdf, 10, -10, 10, 10, -10, 20);
 	draw_line(fdf);
 
 

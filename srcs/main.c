@@ -67,13 +67,14 @@ int	main(int argc, char **argv)
 	fdf.img.endian = get_endian();
 	if (argc != 2)
 		ft_exiterror("usaage.", 5, 1);
-	read_map(argv[1], &fdf);
+	read_file(argv[1], &fdf);
 	//print_int_array(fdf.map.altitude, fdf.map.width, fdf.map.height);
 	if (!(fdf.mlx.mlx_ptr = mlx_init()))
 		ft_exiterror("MLX initialization failed", 6, 2);
 	if (!(fdf.mlx.win_ptr = mlx_new_window(fdf.mlx.mlx_ptr, WIN_WIDTH,
 											WIN_HEIGHT, "FdF")))
 		ft_exiterror("Window creation failed", 7, 2);
+	translate(&fdf, fdf.map.width / 2.0, fdf.map.height / 2.0, 0);
 	reset_map(&fdf);
 	draw_map(&fdf);
 	mlx_hook(fdf.mlx.win_ptr, 2, (1L<<0), key_events, &fdf);
