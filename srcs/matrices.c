@@ -190,18 +190,9 @@ void			translate(t_fdf *fdf, double trans_x, double trans_y, double trans_z)
 
 void			build_mvp_matrix(t_fdf *fdf)
 {
-	//fdf->map.mvp = multiply_matrix(&fdf->map.projection, &fdf->map.moving);
-	//fdf->map.mvp = multiply_matrix(&fdf->map.mvp, &fdf->map.rotation);
-	//fdf->map.mvp = multiply_matrix(&fdf->map.mvp, &fdf->map.scaling);
-	//fdf->map.mvp = multiply_matrix(&fdf->map.projection, &fdf->map.scaling);
-	//fdf->map.mvp = fdf->map.scaling;
-	//fdf->map.mvp = multiply_matrix(&fdf->map.scaling, &fdf->map.rotation);
-	//fdf->map.mvp = multiply_matrix(&fdf->map.mvp, );
-
-	fdf->map.mvp = fdf->map.moving;
+	fdf->map.mvp = multiply_matrix(&fdf->map.projection, &fdf->map.moving);
 	fdf->map.mvp = multiply_matrix(&fdf->map.mvp, &fdf->map.rotation);
 	fdf->map.mvp = multiply_matrix(&fdf->map.mvp, &fdf->map.scaling);
-
 }
 
 t_mat4			new_ortho_matrix(t_fdf *fdf)
@@ -233,6 +224,11 @@ t_mat4			new_ortho_matrix(t_fdf *fdf)
 
 void			construct_matrices(t_fdf *fdf)
 {
+	t_mat4	mt;
+	t_mat4	ms;
+
+	mt = new_translation_matrix(WIN_WIDTH / 2.0, WIN_HEIGHT / 2.0, 0.0);
+	ms = new_scaling_matrix(100, 100, 1);
 	fdf->map.rotation = new_rotation_matrix(fdf->line.x_angle * (M_PI / 180),
 			fdf->line.y_angle * (M_PI / 180), fdf->line.z_angle * (M_PI / 180));
 	fdf->map.moving = new_translation_matrix(fdf->map.x_offset,
@@ -240,32 +236,24 @@ void			construct_matrices(t_fdf *fdf)
 	fdf->map.scaling = new_scaling_matrix(fdf->map.zoom, fdf->map.zoom,
 			fdf->map.zoom);
 	fdf->map.projection = new_ortho_matrix(fdf);
+	fdf->map.viewport = multiply_matrix(&mt, &ms);
 }
 
-t_vec4			viewport_transform(t_fdf *fdf, t_vec4 *v)
+t_vec3			viewport_transform(t_fdf *fdf, t_vec4 *v)
 {
-	t_mat4	ms;
-	t_mat4	mt;
 	t_vec4	new;
-	t_mat4	m;
+	t_vec3	new_v3;
 
 	new.x = v->x;
 	new.y = v->y;
 	new.z = v->z;
 	new.w = v->w;
 	multiply_vertex(&fdf->map.mvp, &new);
-	multiply_vertex(&fdf->map.projection, &new);
-	ms = new_scaling_matrix(100, 100, 1);
-	print_matrix(ms);
-	//multiply_vertex(&m, &new);
-	mt = new_translation_matrix(WIN_WIDTH / 2.0, WIN_HEIGHT / 2.0, 0.0);
-	print_matrix(mt);
-	m = multiply_matrix(&mt, &ms);
-	print_matrix(m);
-	multiply_vertex(&m, &new);
+	multiply_vertex(&fdf->map.viewport, &new);
 	//printf("x: %f y: %f z: %f w: %f\n", new.x, new.y, new.z, new.w);
 
-	new.x = (int)(new.x + 0.5);
-	new.y = (int)(new.y + 0.5);
-	return (new);
+	new_v3.x = (int)(new.x + 0.5);
+	new_v3.y = (int)(new.y + 0.5);
+	new_v3.z = (int)(new.z + 0.5);
+	return (new_v3);
 }

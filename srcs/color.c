@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-float	percent(int start, int current, int end)
+double	percent(int start, int current, int end)
 {
 	double perc;
 	if (current == end)

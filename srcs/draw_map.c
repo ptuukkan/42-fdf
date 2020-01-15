@@ -12,31 +12,20 @@
 
 #include "fdf.h"
 
-static void	plot(t_fdf *fdf, int x, int y, int dir)
+static void	plot(t_fdf *fdf, int x, int y)
 {
-	fdf->line.x0 = (x - fdf->map.width / 2) * fdf->map.zoom;
-	fdf->line.y0 = (y - fdf->map.height / 2) * fdf->map.zoom;
-	fdf->line.z0 = fdf->map.altitude[y][x] * fdf->map.alt_mul;
-	fdf->line.x1 = ((x + dir) - fdf->map.width / 2) * fdf->map.zoom;
-	fdf->line.y1 = ((y + (dir == 0)) - fdf->map.height / 2) * fdf->map.zoom;
-	fdf->line.z1 = fdf->map.altitude[(y + (dir == 0))][(x + dir)] *
-					fdf->map.alt_mul;
+	t_vec3	a;
+
+	a = viewport_transform(fdf, &fdf->map.vertices[y][x]);
+	a.color = get_color(fdf->img.color_start, fdf->img.color_end,
+						percent(fdf->map.bott))
+
 	fdf->line.color_start = get_color(fdf->img.color_start, fdf->img.color_end,
 					percent(fdf->map.bottom * fdf->map.alt_mul,
 							fdf->line.z0, fdf->map.peak * fdf->map.alt_mul));
 	fdf->line.color_end = get_color(fdf->img.color_start, fdf->img.color_end,
 					percent(fdf->map.bottom * fdf->map.alt_mul,
 							fdf->line.z1, fdf->map.peak * fdf->map.alt_mul));
-	//printf("Start color: r: %hhu g: %hhu b: %hhu\n", fdf->line.color_start.red, fdf->line.color_start.green, fdf->line.color_start.blue);
-	//printf("Start color: r: %hhu g: %hhu b: %hhu\n\n", fdf->line.color_end.red, fdf->line.color_end.green, fdf->line.color_end.blue);
-	//quat_rotate(fdf);
-	rotate(fdf, fdf->line.x_angle, fdf->line.y_angle, fdf->line.z_angle);
-	fdf->line.x0 = fdf->line.x0 + WIN_WIDTH / 2 + fdf->map.x_offset;
-	fdf->line.x1 = fdf->line.x1 + WIN_WIDTH / 2 + fdf->map.x_offset;
-	fdf->line.y0 = fdf->line.y0 + WIN_HEIGHT / 2 + fdf->map.y_offset;
-	fdf->line.y1 = fdf->line.y1 + WIN_HEIGHT / 2 + fdf->map.y_offset;
-
-	//draw_line(fdf);
 }
 
 static void	create_new_image(t_fdf *fdf)
@@ -50,21 +39,6 @@ static void	create_new_image(t_fdf *fdf)
 
 void		draw_map(t_fdf *fdf)
 {
-	create_new_image(fdf);
-
-	build_mvp_matrix(fdf);
-
-	draw_line(fdf, viewport_transform(fdf, &fdf->map.vertices[0][0]), viewport_transform(fdf, &fdf->map.vertices[0][1]));
-	draw_line(fdf, viewport_transform(fdf, &fdf->map.vertices[0][0]), viewport_transform(fdf, &fdf->map.vertices[1][0]));
-	draw_line(fdf, viewport_transform(fdf, &fdf->map.vertices[0][1]), viewport_transform(fdf, &fdf->map.vertices[1][1]));
-	draw_line(fdf, viewport_transform(fdf, &fdf->map.vertices[1][0]), viewport_transform(fdf, &fdf->map.vertices[1][1]));
-	//print_vertices(fdf);
-	mlx_put_image_to_window(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr,
-							fdf->mlx.img_ptr, 0, 0);
-	mlx_destroy_image(fdf->mlx.mlx_ptr, fdf->mlx.img_ptr);
-
-
-	/*
 	int	x;
 	int	y;
 
@@ -77,10 +51,7 @@ void		draw_map(t_fdf *fdf)
 		x = 0;
 		while (x < fdf->map.width)
 		{
-			if (x < (fdf->map.width - 1))
-				plot(fdf, x, y, 1);
-			if (y < (fdf->map.height - 1))
-				plot(fdf, x, y, 0);
+			plot(fdf, x, y);
 			x++;
 		}
 		y++;
@@ -94,5 +65,4 @@ void		draw_map(t_fdf *fdf)
 	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 40, 0xFFFFFF, "z degrees:");
 	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 120, 40, 0xFFFFFF, ft_itoa(fdf->line.z_angle));
 	mlx_destroy_image(fdf->mlx.mlx_ptr, fdf->mlx.img_ptr);
-	*/
 }

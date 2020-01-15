@@ -38,8 +38,15 @@ typedef struct	s_vec4
 	double	y;
 	double	z;
 	double	w;
-	t_color	color;
 }				t_vec4;
+
+typedef struct	s_vec3
+{
+	int		x;
+	int		y;
+	int		z;
+	t_color	color;
+}				t_vec3;
 
 typedef struct	s_mat4
 {
@@ -69,6 +76,7 @@ typedef struct	s_map
 	t_mat4	moving;
 	t_mat4	projection;
 	t_mat4	mvp;
+	t_mat4	viewport;
 }				t_map;
 
 typedef struct	s_quat
@@ -140,7 +148,7 @@ void			translate(t_fdf *fdf, double trans_x, double trans_y,
 				double trans_z);
 t_mat4			new_rotation_matrix(double ax, double ay, double az);
 t_mat4			new_translation_matrix(double trans_x, double trans_y, double trans_z);
-t_vec4			viewport_transform(t_fdf *fdf, t_vec4 *v);
+t_vec3			viewport_transform(t_fdf *fdf, t_vec4 *v);
 void			construct_matrices(t_fdf *fdf);
 void			build_mvp_matrix(t_fdf *fdf);
 void			multiply_vertices(t_fdf *fdf, t_mat4 *m);
