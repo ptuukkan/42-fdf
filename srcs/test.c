@@ -168,7 +168,7 @@ void	draw_sq(t_fdf *fdf)
 	if (!(fdf->mlx.img_ptr = mlx_new_image(fdf->mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT)))
 		ft_exiterror("Image creation failed", 8, 2);
 	fdf->img.img_data = mlx_get_data_addr(fdf->mlx.img_ptr, &fdf->img.bpp, &fdf->img.line_size, &fdf->img.endian);
-
+/*
 	plot_sq(fdf, -10, 10, 10, 10, 10, 10);
 	draw_line(fdf);
 	plot_sq(fdf, -10, 10, 10, -10, -10, 10);
@@ -196,7 +196,7 @@ void	draw_sq(t_fdf *fdf)
 	draw_line(fdf);
 	plot_sq(fdf, 10, -10, 10, 10, -10, 20);
 	draw_line(fdf);
-
+*/
 
 	mlx_put_image_to_window(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, fdf->mlx.img_ptr, 0, 0);
 	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 10, 0xFFFFFF, "x degrees:");

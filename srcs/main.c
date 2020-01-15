@@ -12,6 +12,27 @@
 
 #include "fdf.h"
 
+void	print_vertices(t_fdf *fdf)
+{
+	int	i;
+	int	j;
+	t_vec4 **v;
+
+	v = fdf->map.vertices;
+	j = 0;
+	while (j < fdf->map.height)
+	{
+		i = 0;
+		while (i < fdf->map.width)
+		{
+			printf("x: %f y: %f z: %f ", v[j][i].x, v[j][i].y, v[j][i].z);
+			i++;
+		}
+		j++;
+		printf("\n");
+	}
+}
+
 void	print_int_array(int **arr, int width, int height)
 {
 	int	h = 0;
@@ -49,10 +70,12 @@ void	reset_map(t_fdf *fdf)
 		fdf->map.zoom = WIN_WIDTH / fdf->map.width - fdf->map.width;
 	else
 		fdf->map.zoom = WIN_HEIGHT / fdf->map.height - fdf->map.height;
+	fdf->map.zoom = 30;
 	fdf->map.alt_mul = fdf->map.zoom / 20;
 	fdf->img.line_size = WIN_WIDTH * 4;
-	fdf->map.projection = 1;
-	set_angles(fdf, -54.736f, 0.0f, 45.0f);
+	fdf->map.view = 3;
+	//set_angles(fdf, -54.736f, 0.0f, 45.0f);
+	set_angles(fdf, 0.0f, 0.0f, 0.0f);
 	fdf->test = 0;
 	fdf->map.x_offset = 0;
 	fdf->map.y_offset = 0;
@@ -74,9 +97,19 @@ int	main(int argc, char **argv)
 	if (!(fdf.mlx.win_ptr = mlx_new_window(fdf.mlx.mlx_ptr, WIN_WIDTH,
 											WIN_HEIGHT, "FdF")))
 		ft_exiterror("Window creation failed", 7, 2);
-	translate(&fdf, fdf.map.width / 2.0, fdf.map.height / 2.0, 0);
+	translate(&fdf, (fdf.map.width - 1) / -2.0, (fdf.map.height - 1) / -2.0,
+				(-fdf.map.peak + -fdf.map.bottom) / 2);
+
 	reset_map(&fdf);
+	construct_matrices(&fdf);
+	//build_mvp_matrix(&fdf);
+	//multiply_vertices(&fdf, &fdf.map.mvp);
+	//print_vertices(&fdf);
+	//return (0);
+	//viewport_transform(&fdf);
+
 	draw_map(&fdf);
+
 	mlx_hook(fdf.mlx.win_ptr, 2, (1L<<0), key_events, &fdf);
 	mlx_loop(fdf.mlx.mlx_ptr);
 	return (0);

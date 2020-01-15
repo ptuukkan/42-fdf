@@ -16,7 +16,7 @@
 # include <mlx.h>
 # include <stdlib.h>
 # include <stdio.h>
-# include "keys_linux.h"
+# include "keys_mac.h"
 # include <stdint.h>
 # include <fcntl.h>
 # include "libft.h"
@@ -24,6 +24,13 @@
 
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
+
+typedef struct	s_color
+{
+	int	red;
+	int	green;
+	int	blue;
+}				t_color;
 
 typedef struct	s_vec4
 {
@@ -39,12 +46,7 @@ typedef struct	s_mat4
 	double	m[16];
 }				t_mat4;
 
-typedef struct	s_color
-{
-	int	red;
-	int	green;
-	int	blue;
-}				t_color;
+
 
 typedef struct	s_map
 {
@@ -56,9 +58,17 @@ typedef struct	s_map
 	int		bottom;
 	float	zoom;
 	float	alt_mul;
-	short	projection;
+	short	view;
 	int		x_offset;
 	int		y_offset;
+	double	x_angle;
+	double	y_angle;
+	double	z_angle;
+	t_mat4	rotation;
+	t_mat4	scaling;
+	t_mat4	moving;
+	t_mat4	projection;
+	t_mat4	mvp;
 }				t_map;
 
 typedef struct	s_quat
@@ -114,7 +124,7 @@ typedef struct	s_fdf
 
 void			read_file(char *file, t_fdf *fdf);
 void			draw_map(t_fdf *fdf);
-void			draw_line(t_fdf *fdf);
+void			draw_line(t_fdf *fdf, t_vec4 a, t_vec4 b);
 void			calculate_xy(t_fdf *fdf, int x, int y, int direction);
 int				key_events(int key, t_fdf *fdf);
 int				rotate_events(int key, t_fdf *fdf);
@@ -126,5 +136,15 @@ void			set_angles(t_fdf *fdf, float ax, float ay, float az);
 t_color			get_color(t_color color_start, t_color color_end, double perc);
 float			percent(int start, int current, int end);
 void			init_color(t_fdf *fdf);
+void			translate(t_fdf *fdf, double trans_x, double trans_y,
+				double trans_z);
+t_mat4			new_rotation_matrix(double ax, double ay, double az);
+t_mat4			new_translation_matrix(double trans_x, double trans_y, double trans_z);
+t_vec4			viewport_transform(t_fdf *fdf, t_vec4 *v);
+void			construct_matrices(t_fdf *fdf);
+void			build_mvp_matrix(t_fdf *fdf);
+void			multiply_vertices(t_fdf *fdf, t_mat4 *m);
+t_mat4			new_scaling_matrix(double scale_x, double scale_y, double scale_z);
+void			print_vertices(t_fdf *fdf);
 
 #endif

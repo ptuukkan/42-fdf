@@ -27,83 +27,83 @@ static void	img_pixel_put(t_fdf *fdf, int x, int y, int dir)
 			color = get_color(fdf->line.color_start, fdf->line.color_end,
 					percent(fdf->line.y0, y, fdf->line.y1));
 		//printf("color: r: %d g: %d b: %d\n", color.red, color.green, color.blue);
-		fdf->img.img_data[pos++] = color.blue;
-		fdf->img.img_data[pos++] = color.green;
-		fdf->img.img_data[pos++] = color.red;
+		fdf->img.img_data[pos++] = fdf->img.color_start.blue;
+		fdf->img.img_data[pos++] = fdf->img.color_start.green;
+		fdf->img.img_data[pos++] = fdf->img.color_start.red;
 		fdf->img.img_data[pos] = 0;
 	}
 }
 
-static void	draw_run_over_rise(t_fdf *fdf, int dx, int dy)
+static void	draw_run_over_rise(t_fdf *fdf, int dx, int dy, t_vec4 a, t_vec4 b)
 {
 	int	d;
 	int	sy;
 	int	sx;
 
 	sy = 0;
-	if (fdf->line.y1 > fdf->line.y0)
+	if (b.y > a.y)
 		sy = 1;
-	else if (fdf->line.y0 > fdf->line.y1)
+	else if (a.y > b.y)
 		sy = -1;
 	d = 2 * dy - dx;
 	sx = 1;
-	if (fdf->line.x1 < fdf->line.x0)
+	if (b.x < a.x)
 		sx = -1;
-	fdf->line.p = fdf->line.x0;
-	while (fdf->line.p != fdf->line.x1)
+	while (a.x != b.x)
 	{
-		img_pixel_put(fdf, fdf->line.p, fdf->line.y0, 1);
+		img_pixel_put(fdf, a.x, a.y, 1);
 		if (d > 0)
 		{
-			fdf->line.y0 += sy;
+			a.y += sy;
 			d = d - 2 * dx;
 		}
 		d = d + 2 * dy;
-		fdf->line.p += sx;
+		a.x += sx;
 	}
-	img_pixel_put(fdf, fdf->line.p, fdf->line.y0, 1);
+	img_pixel_put(fdf, a.x, a.y, 1);
 }
 
-static void	draw_rise_over_run(t_fdf *fdf, int dx, int dy)
+static void	draw_rise_over_run(t_fdf *fdf, int dx, int dy, t_vec4 a, t_vec4 b)
 {
 	int	d;
 	int	sy;
 	int	sx;
 
 	sx = 0;
-	if (fdf->line.x1 > fdf->line.x0)
+	if (b.x > a.x)
 		sx = 1;
-	else if (fdf->line.x0 > fdf->line.x1)
+	else if (a.x > b.x)
 		sx = -1;
 	d = 2 * dx - dy;
 	sy = 1;
-	if (fdf->line.y1 < fdf->line.y0)
+	if (b.y < a.y)
 		sy = -1;
-	fdf->line.p = fdf->line.y0;
-	while (fdf->line.p != fdf->line.y1)
+	while (a.y != b.y)
 	{
-		img_pixel_put(fdf, fdf->line.x0, fdf->line.p, 0);
+		img_pixel_put(fdf, a.x, a.y, 0);
 		if (d > 0)
 		{
-			fdf->line.x0 += sx;
+			a.x += sx;
 			d = d - 2 * dy;
 		}
 		d = d + 2 * dx;
-		fdf->line.p += sy;
+		a.y += sy;
 	}
-	img_pixel_put(fdf, fdf->line.x0, fdf->line.p, 0);
+	img_pixel_put(fdf, a.x, a.y, 0);
 }
 
-void		draw_line(t_fdf *fdf)
+void		draw_line(t_fdf *fdf, t_vec4 a, t_vec4 b)
 {
 	int	dx;
 	int	dy;
 
-	dx = ft_abs(fdf->line.x1 - fdf->line.x0);
-	dy = ft_abs(fdf->line.y1 - fdf->line.y0);
+	//printf("x: %f y: %f z: %f\n", a.x, a.y, a.z);
+	//printf("x: %f y: %f z: %f\n", b.x, b.y, b.z);
+	dx = ft_abs(b.x - a.x);
+	dy = ft_abs(b.y - a.y);
 	//printf("\n");
 	if (dx > dy)
-		draw_run_over_rise(fdf, dx ,dy);
+		draw_run_over_rise(fdf, dx ,dy, a, b);
 	else
-		draw_rise_over_run(fdf, dx, dy);
+		draw_rise_over_run(fdf, dx, dy, a, b);
 }

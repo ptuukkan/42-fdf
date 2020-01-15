@@ -121,7 +121,7 @@ void		read_file(char *file, t_fdf *fdf)
 	i = 0;
 	while (get_next_line(fd, &line))
 	{
-		if (!(fdf->map.vertices[i] = (int *)ft_memalloc(sizeof(t_vec4) *\
+		if (!(fdf->map.vertices[i] = (t_vec4 *)ft_memalloc(sizeof(t_vec4) *\
 			fdf->map.width)))
 			ft_exiterror("Memory allocation error", 5, 2);
 		read_vertices(fdf, fdf->map.vertices[i], line, i);

@@ -14,19 +14,19 @@
 
 static int	toggle_view(t_fdf *fdf)
 {
-	if (fdf->map.projection == 3)
+	if (fdf->map.view == 3)
 	{
-		fdf->map.projection = 1;
+		fdf->map.view = 1;
 		set_angles(fdf, -54.736f, 0.0f, 45.0f);
 	}
-	else if (fdf->map.projection == 2)
+	else if (fdf->map.view == 2)
 	{
-		fdf->map.projection = 3;
+		fdf->map.view = 3;
 		set_angles(fdf, -70.0f, 0.0f, 0.0f);
 	}
-	else if (fdf->map.projection == 1)
+	else if (fdf->map.view == 1)
 	{
-		fdf->map.projection = 2;
+		fdf->map.view = 2;
 		set_angles(fdf, 0.0f, 0.0f, 0.0f);
 	}
 	return (0);
@@ -50,6 +50,7 @@ static int	scale_events(int key, t_fdf *fdf)
 	}
 	else if (key == KEY_M)
 		fdf->map.alt_mul += 1;
+	fdf->map.scaling = new_scaling_matrix(fdf->map.zoom, fdf->map.zoom, fdf->map.zoom);
 	draw_map(fdf);
 	return (0);
 }
@@ -64,6 +65,7 @@ static int	move_events(int key, t_fdf *fdf)
 		fdf->map.x_offset -= 50;
 	else if (key == KEY_DOWN)
 		fdf->map.y_offset -= 50;
+	fdf->map.moving = new_translation_matrix(fdf->map.x_offset, fdf->map.y_offset, 0.0);
 	draw_map(fdf);
 	return (0);
 }
@@ -87,7 +89,7 @@ int			key_events(int key, t_fdf *fdf)
 		reset_map(fdf);
 	else if (key == 0x11 || key == 0x74)
 	{
-		fdf->map.projection = 4;
+		fdf->map.view = 4;
 		fdf->test = 1;
 		set_angles(fdf, 0.0f, 0.0f, 0.0f);
 	}

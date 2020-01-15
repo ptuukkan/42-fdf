@@ -34,19 +34,20 @@ t_color	get_color(t_color color_start, t_color color_end, double perc)
 
 void	init_color(t_fdf *fdf)
 {
-	/*
+
 	fdf->img.color_start.red = 0x57;
 	fdf->img.color_start.green = 0x34;
 	fdf->img.color_start.blue = 0x0;
 	fdf->img.color_end.red = 0xFF;
 	fdf->img.color_end.green = 0xE0;
 	fdf->img.color_end.blue = 0xC9;
-	*/
 
+	/*
 	fdf->img.color_start.red = 0x3a;
 	fdf->img.color_start.green = 0x00;
 	fdf->img.color_start.blue = 0x80;
 	fdf->img.color_end.red = 0x00;
 	fdf->img.color_end.green = 0xff;
 	fdf->img.color_end.blue = 0x2a;
+	*/
 }

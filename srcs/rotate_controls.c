@@ -50,9 +50,9 @@ static int	rotate_parallel(int key, t_fdf *fdf)
 
 int			rotate_events(int key, t_fdf *fdf)
 {
-	if (fdf->map.projection == 1)
+	if (fdf->map.view == 1)
 		return (rotate_isometric(key, fdf));
-	if (fdf->map.projection == 2)
+	if (fdf->map.view == 2)
 		return (rotate_parallel(key, fdf));
 	if (key == KEY_W)
 		fdf->line.x_angle += 1.0f;
@@ -72,6 +72,7 @@ int			rotate_events(int key, t_fdf *fdf)
 		fdf->line.y_angle = 0.0f;
 	if (fdf->line.z_angle == 360.0f || fdf->line.z_angle == -360.0f)
 		fdf->line.z_angle = 0.0f;
+	fdf->map.rotation = new_rotation_matrix(fdf->line.x_angle * (M_PI / 180), fdf->line.y_angle * (M_PI / 180), fdf->line.z_angle * (M_PI / 180));
 	draw_map(fdf);
 	return (0);
 }
