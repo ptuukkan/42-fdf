@@ -25,8 +25,8 @@ GCC = gcc -g
 all: $(NAME)
 
 $(NAME): $(OBJS) libft/$(LIB)
-	$(GCC) $(OBJS) -o $(NAME) libft/$(LIB) -lmlx -I $(INC) -I libft/$(INC) -framework OpenGL -framework AppKit
-#  -lXext -lX11 -lm
+	$(GCC) $(OBJS) -o $(NAME) libft/$(LIB) -lmlx -I $(INC) -I libft/$(INC) -lXext -lX11 -lm
+#  -framework OpenGL -framework AppKit
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INC)/fdf.h
 	@[ -d $(@D) ] || mkdir -p $(@D)

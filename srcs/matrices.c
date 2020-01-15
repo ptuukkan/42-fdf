@@ -17,7 +17,7 @@ void	print_matrix(t_mat4 m)
 	printf("%-20f%-20f%-20f%-20f\n", m.m[0], m.m[4], m.m[8], m.m[12]);
 	printf("%-20f%-20f%-20f%-20f\n", m.m[1], m.m[5], m.m[9], m.m[13]);
 	printf("%-20f%-20f%-20f%-20f\n", m.m[2], m.m[6], m.m[10], m.m[14]);
-	printf("%-20f%-20f%-20f%-20f\n", m.m[3], m.m[7], m.m[11], m.m[15]);
+	printf("%-20f%-20f%-20f%-20f\n\n", m.m[3], m.m[7], m.m[11], m.m[15]);
 }
 
 t_mat4	new_translation_matrix(double trans_x, double trans_y, double trans_z)
@@ -135,6 +135,7 @@ void			multiply_vertices(t_fdf *fdf, t_mat4 *m)
 t_mat4			multiply_matrix(t_mat4 *m1, t_mat4 *m2)
 {
 	t_mat4	new;
+
 	int		o1;
 	int		o2;
 	int		n;
@@ -144,6 +145,7 @@ t_mat4			multiply_matrix(t_mat4 *m1, t_mat4 *m2)
 	o2 = 0;
 	while (n < 16)
 	{
+		new.m[n] = 0;
 		while (o1 < 16)
 		{
 			new.m[n] += m1->m[o1] * m2->m[o2];
@@ -155,6 +157,26 @@ t_mat4			multiply_matrix(t_mat4 *m1, t_mat4 *m2)
 		o1 = n % 4;
 		o2 = (n / 4) * 4;
 	}
+	return (new);
+
+	/*
+	new.m[0] = m1->m[0] * m2->m[0] + m1->m[4] * m2->m[1] + m1->m[8] * m2->m[2] + m1->m[12] * m2->m[3];
+	new.m[1] = m1->m[1] * m2->m[0] + m1->m[5] * m2->m[1] + m1->m[9] * m2->m[2] + m1->m[13] * m2->m[3];
+	new.m[2] = m1->m[2] * m2->m[0] + m1->m[6] * m2->m[1] + m1->m[10] * m2->m[2] + m1->m[14] * m2->m[3];
+	new.m[3] = m1->m[3] * m2->m[0] + m1->m[7] * m2->m[1] + m1->m[11] * m2->m[2] + m1->m[15] * m2->m[3];
+	new.m[4] = m1->m[0] * m2->m[4] + m1->m[4] * m2->m[5] + m1->m[8] * m2->m[6] + m1->m[12] * m2->m[7];
+	new.m[5] = m1->m[1] * m2->m[4] + m1->m[5] * m2->m[5] + m1->m[9] * m2->m[6] + m1->m[13] * m2->m[7];
+	new.m[6] = m1->m[2] * m2->m[4] + m1->m[6] * m2->m[5] + m1->m[10] * m2->m[6] + m1->m[14] * m2->m[7];
+	new.m[7] = m1->m[3] * m2->m[4] + m1->m[7] * m2->m[5] + m1->m[11] * m2->m[6] + m1->m[15] * m2->m[7];
+	new.m[8] = m1->m[0] * m2->m[8] + m1->m[4] * m2->m[9] + m1->m[8] * m2->m[10] + m1->m[12] * m2->m[11];
+	new.m[9] = m1->m[1] * m2->m[8] + m1->m[5] * m2->m[9] + m1->m[9] * m2->m[10] + m1->m[13] * m2->m[11];
+	new.m[10] = m1->m[2] * m2->m[8] + m1->m[6] * m2->m[9] + m1->m[10] * m2->m[10] + m1->m[14] * m2->m[11];
+	new.m[11] = m1->m[3] * m2->m[8] + m1->m[7] * m2->m[9] + m1->m[11] * m2->m[10] + m1->m[15] * m2->m[11];
+	new.m[12] = m1->m[0] * m2->m[12] + m1->m[4] * m2->m[13] + m1->m[8] * m2->m[14] + m1->m[12] * m2->m[15];
+	new.m[13] = m1->m[1] * m2->m[12] + m1->m[5] * m2->m[13] + m1->m[9] * m2->m[14] + m1->m[13] * m2->m[15];
+	new.m[14] = m1->m[2] * m2->m[12] + m1->m[6] * m2->m[13] + m1->m[10] * m2->m[14] + m1->m[14] * m2->m[15];
+	new.m[15] = m1->m[3] * m2->m[12] + m1->m[7] * m2->m[13] + m1->m[11] * m2->m[14] + m1->m[15] * m2->m[15];
+	*/
 	return (new);
 }
 
@@ -234,9 +256,10 @@ t_vec4			viewport_transform(t_fdf *fdf, t_vec4 *v)
 	multiply_vertex(&fdf->map.mvp, &new);
 	multiply_vertex(&fdf->map.projection, &new);
 	ms = new_scaling_matrix(100, 100, 1);
+	print_matrix(ms);
 	//multiply_vertex(&m, &new);
 	mt = new_translation_matrix(WIN_WIDTH / 2.0, WIN_HEIGHT / 2.0, 0.0);
-
+	print_matrix(mt);
 	m = multiply_matrix(&mt, &ms);
 	print_matrix(m);
 	multiply_vertex(&m, &new);
