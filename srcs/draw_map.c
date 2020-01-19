@@ -65,12 +65,12 @@ void		viewport_transform(t_fdf *fdf, t_vec4 a, t_vec4 b)
 {
 	if (!clip(fdf, a, b))
 		return ;
+	multiply_vertex(&fdf->map.viewport, &a);
+	multiply_vertex(&fdf->map.viewport, &b);
 	a.x = (int)((a.x / a.w) + 0.5);
 	a.y = (int)((a.y / a.w) + 0.5);
 	b.x = (int)((b.x / b.w) + 0.5);
 	b.y = (int)((b.y / b.w) + 0.5);
-	multiply_vertex(&fdf->map.viewport, &a);
-	multiply_vertex(&fdf->map.viewport, &b);
 	draw_line(fdf, a, b);
 }
 
