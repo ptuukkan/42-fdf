@@ -24,6 +24,13 @@
 
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
+# define OC_IN 0
+# define OC_LEFT 1
+# define OC_RIGHT 2
+# define OC_BOTTOM 4
+# define OC_TOP 8
+# define OC_NEAR 16
+# define OC_FAR 32
 
 typedef struct	s_color
 {
@@ -38,22 +45,13 @@ typedef struct	s_vec4
 	double	y;
 	double	z;
 	double	w;
-}				t_vec4;
-
-typedef struct	s_vec3
-{
-	int		x;
-	int		y;
-	int		z;
 	t_color	color;
-}				t_vec3;
+}				t_vec4;
 
 typedef struct	s_mat4
 {
 	double	m[16];
 }				t_mat4;
-
-
 
 typedef struct	s_map
 {
@@ -142,16 +140,17 @@ void			draw_sq(t_fdf *fdf);
 void			quat_rotate(t_fdf *fdf);
 void			set_angles(t_fdf *fdf, float ax, float ay, float az);
 t_color			get_color(t_color color_start, t_color color_end, double perc);
-float			percent(int start, int current, int end);
+double			percent(int start, int current, int end);
 void			init_color(t_fdf *fdf);
 void			translate(t_fdf *fdf, double trans_x, double trans_y,
 				double trans_z);
 t_mat4			new_rotation_matrix(double ax, double ay, double az);
 t_mat4			new_translation_matrix(double trans_x, double trans_y, double trans_z);
-t_vec3			viewport_transform(t_fdf *fdf, t_vec4 *v);
+t_vec4			transform_vertex(t_fdf *fdf, t_vec4 *v);
 void			construct_matrices(t_fdf *fdf);
 void			build_mvp_matrix(t_fdf *fdf);
 void			multiply_vertices(t_fdf *fdf, t_mat4 *m);
+void			multiply_vertex(t_mat4 *m, t_vec4 *v);
 t_mat4			new_scaling_matrix(double scale_x, double scale_y, double scale_z);
 void			print_vertices(t_fdf *fdf);
 

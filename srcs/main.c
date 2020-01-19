@@ -98,7 +98,7 @@ int	main(int argc, char **argv)
 											WIN_HEIGHT, "FdF")))
 		ft_exiterror("Window creation failed", 7, 2);
 	translate(&fdf, (fdf.map.width - 1) / -2.0, (fdf.map.height - 1) / -2.0,
-				(-fdf.map.peak + -fdf.map.bottom) / 2);
+				0.0);
 
 	reset_map(&fdf);
 	construct_matrices(&fdf);

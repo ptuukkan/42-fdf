@@ -92,7 +92,7 @@ static void	draw_rise_over_run(t_fdf *fdf, int dx, t_vec3 a, t_vec3 b)
 	img_pixel_put(fdf, a.x, a.y, 0);
 }
 
-void		draw_line(t_fdf *fdf, t_vec3 a, t_vec3 b)
+void		draw_line(t_fdf *fdf, t_vec4 a, t_vec4 b)
 {
 	int	dx;
 	int	dy;

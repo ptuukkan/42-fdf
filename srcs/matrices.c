@@ -239,21 +239,23 @@ void			construct_matrices(t_fdf *fdf)
 	fdf->map.viewport = multiply_matrix(&mt, &ms);
 }
 
-t_vec3			viewport_transform(t_fdf *fdf, t_vec4 *v)
+t_vec4			transform_vertex(t_fdf *fdf, t_vec4 *v)
 {
 	t_vec4	new;
-	t_vec3	new_v3;
+	double	perc;
 
 	new.x = v->x;
 	new.y = v->y;
 	new.z = v->z;
 	new.w = v->w;
+	perc = percent(fdf->map.bottom, new.z, fdf->map.peak);
+	new.color = get_color(fdf->img.color_start, fdf->img.color_end, perc);
 	multiply_vertex(&fdf->map.mvp, &new);
 	multiply_vertex(&fdf->map.viewport, &new);
 	//printf("x: %f y: %f z: %f w: %f\n", new.x, new.y, new.z, new.w);
 
-	new_v3.x = (int)(new.x + 0.5);
-	new_v3.y = (int)(new.y + 0.5);
-	new_v3.z = (int)(new.z + 0.5);
-	return (new_v3);
+	new.x = (int)(new.x + 0.5);
+	new.y = (int)(new.y + 0.5);
+	new.z = (int)(new.z + 0.5);
+	return (new);
 }
