@@ -15,35 +15,35 @@
 static int	rotate_isometric(int key, t_fdf *fdf)
 {
 	if (key == KEY_D)
-		fdf->line.z_angle += 90.0f;
+		fdf->map.z_angle += 90.0f;
 	if (key == KEY_A)
-		fdf->line.z_angle -= 90.0f;
-	if (fdf->line.z_angle == 405.0f || fdf->line.z_angle == -405.0f)
-		fdf->line.z_angle = 45.0f;
+		fdf->map.z_angle -= 90.0f;
+	if (fdf->map.z_angle == 405.0f || fdf->map.z_angle == -405.0f)
+		fdf->map.z_angle = 45.0f;
 	draw_map(fdf);
 	return (0);
 }
 
 static int	rotate_parallel(int key, t_fdf *fdf)
 {
-	if (key == KEY_S && fdf->line.x_angle == 0.0f)
-		fdf->line.x_angle = -90.f;
-	else if (key == KEY_W && fdf->line.x_angle != 0.0f)
-		fdf->line.x_angle = 0.0f;
-	else if (key == KEY_D && fdf->line.x_angle != 0.0f)
-		fdf->line.z_angle += 90.0f;
-	else if (key == KEY_A && fdf->line.x_angle != 0.0f)
-		fdf->line.z_angle -= 90.0f;
-	else if (key == KEY_D && fdf->line.x_angle == 0.0f)
-		fdf->line.z_angle += 90.0f;
-	else if (key == KEY_A && fdf->line.x_angle == 0.0f)
-		fdf->line.z_angle -= 90.0f;
-	if (fdf->line.x_angle == 360.0f || fdf->line.x_angle == -360.0f)
-		fdf->line.x_angle = 0.0f;
-	if (fdf->line.y_angle == 360.0f || fdf->line.y_angle == -360.0f)
-		fdf->line.y_angle = 0.0f;
-	if (fdf->line.z_angle == 360.0f || fdf->line.z_angle == -360.0f)
-		fdf->line.z_angle = 0.0f;
+	if (key == KEY_S && fdf->map.x_angle == 0.0f)
+		fdf->map.x_angle = -90.f;
+	else if (key == KEY_W && fdf->map.x_angle != 0.0f)
+		fdf->map.x_angle = 0.0f;
+	else if (key == KEY_D && fdf->map.x_angle != 0.0f)
+		fdf->map.z_angle += 90.0f;
+	else if (key == KEY_A && fdf->map.x_angle != 0.0f)
+		fdf->map.z_angle -= 90.0f;
+	else if (key == KEY_D && fdf->map.x_angle == 0.0f)
+		fdf->map.z_angle += 90.0f;
+	else if (key == KEY_A && fdf->map.x_angle == 0.0f)
+		fdf->map.z_angle -= 90.0f;
+	if (fdf->map.x_angle == 360.0f || fdf->map.x_angle == -360.0f)
+		fdf->map.x_angle = 0.0f;
+	if (fdf->map.y_angle == 360.0f || fdf->map.y_angle == -360.0f)
+		fdf->map.y_angle = 0.0f;
+	if (fdf->map.z_angle == 360.0f || fdf->map.z_angle == -360.0f)
+		fdf->map.z_angle = 0.0f;
 	draw_map(fdf);
 	return (0);
 }
@@ -55,24 +55,24 @@ int			rotate_events(int key, t_fdf *fdf)
 	if (fdf->map.view == 2)
 		return (rotate_parallel(key, fdf));
 	if (key == KEY_W)
-		fdf->line.x_angle += 1.0f;
+		fdf->map.x_angle += 1.0f;
 	else if (key == KEY_S)
-		fdf->line.x_angle -= 1.0f;
+		fdf->map.x_angle -= 1.0f;
 	else if (key == KEY_D)
-		fdf->line.z_angle += 1.0f;
+		fdf->map.z_angle += 1.0f;
 	else if (key == KEY_A)
-		fdf->line.z_angle -= 1.0f;
+		fdf->map.z_angle -= 1.0f;
 	else if (key == KEY_E)
-		fdf->line.y_angle += 1.0f;
+		fdf->map.y_angle += 1.0f;
 	else if (key == KEY_Q)
-		fdf->line.y_angle -= 1.0f;
-	if (fdf->line.x_angle == 360.0f || fdf->line.x_angle == -360.0f)
-		fdf->line.x_angle = 0.0f;
-	if (fdf->line.y_angle == 360.0f || fdf->line.y_angle == -360.0f)
-		fdf->line.y_angle = 0.0f;
-	if (fdf->line.z_angle == 360.0f || fdf->line.z_angle == -360.0f)
-		fdf->line.z_angle = 0.0f;
-	fdf->map.rotation = new_rotation_matrix(fdf->line.x_angle * (M_PI / 180), fdf->line.y_angle * (M_PI / 180), fdf->line.z_angle * (M_PI / 180));
+		fdf->map.y_angle -= 1.0f;
+	if (fdf->map.x_angle == 360.0f || fdf->map.x_angle == -360.0f)
+		fdf->map.x_angle = 0.0f;
+	if (fdf->map.y_angle == 360.0f || fdf->map.y_angle == -360.0f)
+		fdf->map.y_angle = 0.0f;
+	if (fdf->map.z_angle == 360.0f || fdf->map.z_angle == -360.0f)
+		fdf->map.z_angle = 0.0f;
+	fdf->map.rotation = new_rotation_matrix(fdf->map.x_angle * (M_PI / 180), fdf->map.y_angle * (M_PI / 180), fdf->map.z_angle * (M_PI / 180));
 	draw_map(fdf);
 	return (0);
 }

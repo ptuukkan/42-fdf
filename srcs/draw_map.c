@@ -27,51 +27,29 @@ t_vec4			mvp_transform(t_fdf *fdf, t_vec4 *v)
 	return (new);
 }
 
-int			get_outcode(t_vec4 v)
-{
-	int	code;
-
-	code = OC_IN;
-	if (v.x > 1.0)
-		code |= OC_RIGHT;
-	else if (v.x < -1.0)
-		code |= OC_LEFT;
-	if (v.y > 1.0)
-		code |= OC_TOP;
-	else if (v.y < -1.0)
-		code |= OC_BOTTOM;
-	if (v.z > 1.0)
-		code |= OC_FAR;
-	else if (v.z < -1.0)
-		code |= OC_NEAR;
-	return (code);
-}
-
-int			clip(t_fdf *fdf, t_vec4 a, t_vec4 b)
-{
-	int	oc_a;
-	int	oc_b;
-
-	oc_a = get_outcode(a);
-	oc_b = get_outcode(b);
-	if (!(oc_a | oc_b))
-		return (1);
-	if (oc_a & oc_b)
-		return (0);
-
-}
-
 void		viewport_transform(t_fdf *fdf, t_vec4 a, t_vec4 b)
 {
-	if (!clip(fdf, a, b))
-		return ;
+	t_line	line;
+
+	a.x /= a.w;
+	a.y /= a.w;
+	a.z /= a.w;
+	b.x /= b.w;
+	b.y /= b.w;
+	b.z /= b.w;
 	multiply_vertex(&fdf->map.viewport, &a);
 	multiply_vertex(&fdf->map.viewport, &b);
-	a.x = (int)((a.x / a.w) + 0.5);
-	a.y = (int)((a.y / a.w) + 0.5);
-	b.x = (int)((b.x / b.w) + 0.5);
-	b.y = (int)((b.y / b.w) + 0.5);
-	draw_line(fdf, a, b);
+	line.x0 = (int)(a.x + 0.5);
+	line.y0 = (int)(a.y + 0.5);
+	line.x = line.x0;
+	line.y = line.y0;
+	line.x1 = (int)(b.x + 0.5);
+	line.y1 = (int)(b.y + 0.5);
+	line.color_start = a.color;
+	line.color_end = b.color;
+	if (!clip(fdf, a, b))
+		return ;
+	draw_line(fdf, &line);
 }
 
 static void	plot(t_fdf *fdf, int x, int y)
@@ -107,8 +85,9 @@ void		draw_map(t_fdf *fdf)
 	int	x;
 	int	y;
 
-	if (fdf->test)
-		return (draw_sq(fdf));
+//	if (fdf->test)
+//		return (draw_sq(fdf));
+	build_mvp_matrix(fdf);
 	create_new_image(fdf);
 	y = 0;
 	while (y < fdf->map.height)
@@ -123,11 +102,5 @@ void		draw_map(t_fdf *fdf)
 	}
 	mlx_put_image_to_window(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr,
 							fdf->mlx.img_ptr, 0, 0);
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 10, 0xFFFFFF, "x degrees:");
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 120, 10, 0xFFFFFF, ft_itoa(fdf->line.x_angle));
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 25, 0xFFFFFF, "y degrees:");
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 120, 25, 0xFFFFFF, ft_itoa(fdf->line.y_angle));
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 40, 0xFFFFFF, "z degrees:");
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 120, 40, 0xFFFFFF, ft_itoa(fdf->line.z_angle));
 	mlx_destroy_image(fdf->mlx.mlx_ptr, fdf->mlx.img_ptr);
 }

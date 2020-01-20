@@ -80,6 +80,9 @@ void	reset_map(t_fdf *fdf)
 	fdf->map.x_offset = 0;
 	fdf->map.y_offset = 0;
 	init_color(fdf);
+	fdf->viewport.width = 600;
+	fdf->viewport.height = 300;
+	construct_matrices(fdf);
 }
 
 int	main(int argc, char **argv)
@@ -99,17 +102,8 @@ int	main(int argc, char **argv)
 		ft_exiterror("Window creation failed", 7, 2);
 	translate(&fdf, (fdf.map.width - 1) / -2.0, (fdf.map.height - 1) / -2.0,
 				0.0);
-
 	reset_map(&fdf);
-	construct_matrices(&fdf);
-	//build_mvp_matrix(&fdf);
-	//multiply_vertices(&fdf, &fdf.map.mvp);
-	//print_vertices(&fdf);
-	//return (0);
-	//viewport_transform(&fdf);
-
 	draw_map(&fdf);
-
 	mlx_hook(fdf.mlx.win_ptr, 2, (1L<<0), key_events, &fdf);
 	mlx_loop(fdf.mlx.mlx_ptr);
 	return (0);

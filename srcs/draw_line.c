@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw_line.c                                        :+:      :+:    :+:   */
+/*   draw_line->c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ptuukkan <ptuukkan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,98 +12,91 @@
 
 #include "fdf.h"
 
-static void	img_pixel_put(t_fdf *fdf, int x, int y, int dir)
+static void	img_pixel_put(t_fdf *fdf, t_line *line, int dir)
 {
 	int		pos;
 	t_color	color;
+	double	perc;
 
-	pos = fdf->img.line_size * y + x * 4;
-	if (x >= 0 && y >= 0 && x < WIN_WIDTH && y < WIN_HEIGHT)
+	if (line->x < 0 || line->x >= WIN_WIDTH || line->y < 0 || line->y >= WIN_HEIGHT)
+		return ;
+	pos = fdf->img.line_size * line->y + line->x * 4;
+	if (dir == 1)
 	{
-		if (dir == 1)
-			color = get_color(fdf->line.color_start, fdf->line.color_end,
-					percent(fdf->line.x0, x, fdf->line.x1));
-		else
-			color = get_color(fdf->line.color_start, fdf->line.color_end,
-					percent(fdf->line.y0, y, fdf->line.y1));
-		//printf("color: r: %d g: %d b: %d\n", color.red, color.green, color.blue);
-		fdf->img.img_data[pos++] = fdf->img.color_start.blue;
-		fdf->img.img_data[pos++] = fdf->img.color_start.green;
-		fdf->img.img_data[pos++] = fdf->img.color_start.red;
-		fdf->img.img_data[pos] = 0;
+		perc = percent(line->x0, line->x, line->x1);
+		color = get_color(line->color_start, line->color_end, perc);
 	}
-}
-
-static void	draw_run_over_rise(t_fdf *fdf, int dx, t_vec3 a, t_vec3 b)
-{
-	int	d;
-	int	sy;
-	int	sx;
-	int	dy;
-
-	dy = b.y - a.y;
-	sy = (b.y > a.y);
-	if (a.y > b.y)
-		sy = -1;
-	d = 2 * dy - dx;
-	sx = 1;
-	if (b.x < a.x)
-		sx = -1;
-	while (a.x != b.x)
-	{
-		img_pixel_put(fdf, a.x, a.y, 1);
-		if (d > 0)
-		{
-			a.y += sy;
-			d = d - 2 * dx;
-		}
-		d = d + 2 * dy;
-		a.x += sx;
-	}
-	img_pixel_put(fdf, a.x, a.y, 1);
-}
-
-static void	draw_rise_over_run(t_fdf *fdf, int dx, t_vec3 a, t_vec3 b)
-{
-	int	d;
-	int	sy;
-	int	sx;
-	int	dy;
-
-	dy = b.y - a.y;
-	sx = (b.x > a.x);
-	if (a.x > b.x)
-		sx = -1;
-	d = 2 * dx - dy;
-	sy = 1;
-	if (b.y < a.y)
-		sy = -1;
-	while (a.y != b.y)
-	{
-		img_pixel_put(fdf, a.x, a.y, 0);
-		if (d > 0)
-		{
-			a.x += sx;
-			d = d - 2 * dy;
-		}
-		d = d + 2 * dx;
-		a.y += sy;
-	}
-	img_pixel_put(fdf, a.x, a.y, 0);
-}
-
-void		draw_line(t_fdf *fdf, t_vec4 a, t_vec4 b)
-{
-	int	dx;
-	int	dy;
-
-	//printf("x: %f y: %f z: %f\n", a.x, a.y, a.z);
-	//printf("x: %f y: %f z: %f\n", b.x, b.y, b.z);
-	dx = ft_abs(b.x - a.x);
-	dy = ft_abs(b.y - a.y);
-	//printf("\n");
-	if (dx > dy)
-		draw_run_over_rise(fdf, dx, a, b);
 	else
-		draw_rise_over_run(fdf, dx, a, b);
+	{
+		perc = percent(line->y0, line->y, line->y1);
+		color = get_color(line->color_start, line->color_end, perc);
+	}
+	fdf->img.img_data[pos++] = color.blue;
+	fdf->img.img_data[pos++] = color.green;
+	fdf->img.img_data[pos++] = color.red;
+	fdf->img.img_data[pos] = 0;
+}
+
+static void	draw_run_over_rise(t_fdf *fdf, t_line *line)
+{
+	int	d;
+	int	sy;
+	int	sx;
+
+	sy = (line->y1 > line->y0);
+	if (line->y0 > line->y1)
+		sy = -1;
+	d = 2 * line->dy - line->dx;
+	sx = 1;
+	if (line->x1 < line->x0)
+		sx = -1;
+	while (line->x != line->x1)
+	{
+		img_pixel_put(fdf, line, 1);
+		if (d > 0)
+		{
+			line->y += sy;
+			d = d - 2 * line->dx;
+		}
+		d = d + 2 * line->dy;
+		line->x += sx;
+	}
+	img_pixel_put(fdf, line, 1);
+}
+
+static void	draw_rise_over_run(t_fdf *fdf, t_line *line)
+{
+	int	d;
+	int	sy;
+	int	sx;
+
+	sx = (line->x1 > line->x0);
+	if (line->x0 > line->x1)
+		sx = -1;
+	d = 2 * line->dx - line->dy;
+	sy = 1;
+	if (line->y1 < line->y0)
+		sy = -1;
+	while (line->y != line->y1)
+	{
+		img_pixel_put(fdf, line, 0);
+		if (d > 0)
+		{
+			line->x += sx;
+			d = d - 2 * line->dy;
+		}
+		d = d + 2 * line->dx;
+		line->y += sy;
+	}
+	img_pixel_put(fdf, line, 0);
+}
+
+void		draw_line(t_fdf *fdf, t_line *line)
+{
+	line->dx = ft_abs(line->x1 - line->x0);
+	line->dy = ft_abs(line->y1 - line->y0);
+	if (line->dx > line->dy)
+		draw_run_over_rise(fdf, line);
+	else
+		draw_rise_over_run(fdf, line);
 }

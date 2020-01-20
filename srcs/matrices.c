@@ -62,7 +62,7 @@ t_mat4	new_rotation_matrix(double ax, double ay, double az)
 	m.m[6] = cx * sin(ay) * sin(az) + sin(ax) * cz;
 	m.m[7] = 0.0;
 	m.m[8] = sin(ay);
-	m.m[9] = -sin(ax) * cz;
+	m.m[9] = -sin(ax) * cy;
 	m.m[10] = cx * cy;
 	m.m[11] = 0.0;
 	m.m[12] = 0.0;
@@ -158,26 +158,6 @@ t_mat4			multiply_matrix(t_mat4 *m1, t_mat4 *m2)
 		o2 = (n / 4) * 4;
 	}
 	return (new);
-
-	/*
-	new.m[0] = m1->m[0] * m2->m[0] + m1->m[4] * m2->m[1] + m1->m[8] * m2->m[2] + m1->m[12] * m2->m[3];
-	new.m[1] = m1->m[1] * m2->m[0] + m1->m[5] * m2->m[1] + m1->m[9] * m2->m[2] + m1->m[13] * m2->m[3];
-	new.m[2] = m1->m[2] * m2->m[0] + m1->m[6] * m2->m[1] + m1->m[10] * m2->m[2] + m1->m[14] * m2->m[3];
-	new.m[3] = m1->m[3] * m2->m[0] + m1->m[7] * m2->m[1] + m1->m[11] * m2->m[2] + m1->m[15] * m2->m[3];
-	new.m[4] = m1->m[0] * m2->m[4] + m1->m[4] * m2->m[5] + m1->m[8] * m2->m[6] + m1->m[12] * m2->m[7];
-	new.m[5] = m1->m[1] * m2->m[4] + m1->m[5] * m2->m[5] + m1->m[9] * m2->m[6] + m1->m[13] * m2->m[7];
-	new.m[6] = m1->m[2] * m2->m[4] + m1->m[6] * m2->m[5] + m1->m[10] * m2->m[6] + m1->m[14] * m2->m[7];
-	new.m[7] = m1->m[3] * m2->m[4] + m1->m[7] * m2->m[5] + m1->m[11] * m2->m[6] + m1->m[15] * m2->m[7];
-	new.m[8] = m1->m[0] * m2->m[8] + m1->m[4] * m2->m[9] + m1->m[8] * m2->m[10] + m1->m[12] * m2->m[11];
-	new.m[9] = m1->m[1] * m2->m[8] + m1->m[5] * m2->m[9] + m1->m[9] * m2->m[10] + m1->m[13] * m2->m[11];
-	new.m[10] = m1->m[2] * m2->m[8] + m1->m[6] * m2->m[9] + m1->m[10] * m2->m[10] + m1->m[14] * m2->m[11];
-	new.m[11] = m1->m[3] * m2->m[8] + m1->m[7] * m2->m[9] + m1->m[11] * m2->m[10] + m1->m[15] * m2->m[11];
-	new.m[12] = m1->m[0] * m2->m[12] + m1->m[4] * m2->m[13] + m1->m[8] * m2->m[14] + m1->m[12] * m2->m[15];
-	new.m[13] = m1->m[1] * m2->m[12] + m1->m[5] * m2->m[13] + m1->m[9] * m2->m[14] + m1->m[13] * m2->m[15];
-	new.m[14] = m1->m[2] * m2->m[12] + m1->m[6] * m2->m[13] + m1->m[10] * m2->m[14] + m1->m[14] * m2->m[15];
-	new.m[15] = m1->m[3] * m2->m[12] + m1->m[7] * m2->m[13] + m1->m[11] * m2->m[14] + m1->m[15] * m2->m[15];
-	*/
-	return (new);
 }
 
 void			translate(t_fdf *fdf, double trans_x, double trans_y, double trans_z)
@@ -191,8 +171,8 @@ void			translate(t_fdf *fdf, double trans_x, double trans_y, double trans_z)
 void			build_mvp_matrix(t_fdf *fdf)
 {
 	fdf->map.mvp = multiply_matrix(&fdf->map.projection, &fdf->map.moving);
-	fdf->map.mvp = multiply_matrix(&fdf->map.mvp, &fdf->map.rotation);
 	fdf->map.mvp = multiply_matrix(&fdf->map.mvp, &fdf->map.scaling);
+	fdf->map.mvp = multiply_matrix(&fdf->map.mvp, &fdf->map.rotation);
 }
 
 t_mat4			new_ortho_matrix(t_fdf *fdf)
@@ -222,21 +202,26 @@ t_mat4			new_ortho_matrix(t_fdf *fdf)
 	return (m);
 }
 
-void			construct_matrices(t_fdf *fdf)
+t_mat4			new_viewport_matrix(t_fdf *fdf)
 {
 	t_mat4	mt;
 	t_mat4	ms;
 
-	mt = new_translation_matrix(WIN_WIDTH / 2.0, WIN_HEIGHT / 2.0, 0.0);
-	ms = new_scaling_matrix(100, 100, 1);
-	fdf->map.rotation = new_rotation_matrix(fdf->line.x_angle * (M_PI / 180),
-			fdf->line.y_angle * (M_PI / 180), fdf->line.z_angle * (M_PI / 180));
+	mt = new_translation_matrix(WIN_WIDTH / 2, WIN_HEIGHT / 2, 0.0);
+	ms = new_scaling_matrix(fdf->viewport.width / 2, fdf->viewport.height, 1);
+	return (multiply_matrix(&mt, &ms));
+}
+
+void			construct_matrices(t_fdf *fdf)
+{
+	fdf->map.rotation = new_rotation_matrix(fdf->map.x_angle * (M_PI / 180),
+			fdf->map.y_angle * (M_PI / 180), fdf->map.z_angle * (M_PI / 180));
 	fdf->map.moving = new_translation_matrix(fdf->map.x_offset,
 			fdf->map.y_offset, 0);
 	fdf->map.scaling = new_scaling_matrix(fdf->map.zoom, fdf->map.zoom,
 			fdf->map.zoom);
 	fdf->map.projection = new_ortho_matrix(fdf);
-	fdf->map.viewport = multiply_matrix(&mt, &ms);
+	fdf->map.viewport = new_viewport_matrix(fdf);
 }
 
 t_vec4			transform_vertex(t_fdf *fdf, t_vec4 *v)

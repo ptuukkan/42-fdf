@@ -16,7 +16,7 @@
 # include <mlx.h>
 # include <stdlib.h>
 # include <stdio.h>
-# include "keys_linux.h"
+# include "keys_mac.h"
 # include <stdint.h>
 # include <fcntl.h>
 # include "libft.h"
@@ -85,22 +85,6 @@ typedef struct	s_quat
 	float	z;
 }				t_quat;
 
-typedef struct	s_line
-{
-	int		x0;
-	int		y0;
-	int		z0;
-	int		x1;
-	int		y1;
-	int		z1;
-	int		p;
-	float	x_angle;
-	float	y_angle;
-	float	z_angle;
-	t_color	color_start;
-	t_color	color_end;
-}				t_line;
-
 typedef struct	s_mlx
 {
 	void	*mlx_ptr;
@@ -119,26 +103,49 @@ typedef struct	s_img
 	int		endian;
 }				t_img;
 
+typedef struct	s_line
+{
+	int		x0;
+	int		y0;
+	int		x;
+	int		y;
+	int		x1;
+	int		y1;
+	int		dy;
+	int		dx;
+	t_color	color_start;
+	t_color	color_end;
+}				t_line;
+
+typedef struct	s_viewport
+{
+	int		width;
+	int		height;
+	t_line	line;
+	t_mat4	matrix;
+}				t_viewport;
+
 typedef struct	s_fdf
 {
-	t_map	map;
-	t_mlx	mlx;
-	t_img	img;
-	t_line	line;
+	t_map		map;
+	t_mlx		mlx;
+	t_img		img;
+	t_line		line;
+	t_viewport	viewport;
 	int		test;
 }				t_fdf;
 
 void			read_file(char *file, t_fdf *fdf);
 void			draw_map(t_fdf *fdf);
-void			draw_line(t_fdf *fdf, t_vec4 a, t_vec4 b);
+void			draw_line(t_fdf *fdf, t_line *line);
 void			calculate_xy(t_fdf *fdf, int x, int y, int direction);
 int				key_events(int key, t_fdf *fdf);
 int				rotate_events(int key, t_fdf *fdf);
-void			rotate(t_fdf *fdf, float ax, float ay, float az);
+void			rotate(t_fdf *fdf, double ax, double ay, double az);
 void			reset_map(t_fdf *fdf);
 void			draw_sq(t_fdf *fdf);
 void			quat_rotate(t_fdf *fdf);
-void			set_angles(t_fdf *fdf, float ax, float ay, float az);
+void			set_angles(t_fdf *fdf, double ax, double ay, double az);
 t_color			get_color(t_color color_start, t_color color_end, double perc);
 double			percent(int start, int current, int end);
 void			init_color(t_fdf *fdf);
@@ -153,5 +160,6 @@ void			multiply_vertices(t_fdf *fdf, t_mat4 *m);
 void			multiply_vertex(t_mat4 *m, t_vec4 *v);
 t_mat4			new_scaling_matrix(double scale_x, double scale_y, double scale_z);
 void			print_vertices(t_fdf *fdf);
+int				clip(t_fdf *fdf, t_vec4 a, t_vec4 b);
 
 #endif
