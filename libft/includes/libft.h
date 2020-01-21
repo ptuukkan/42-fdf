@@ -104,5 +104,7 @@ t_list				*ft_lstchr(t_list *lst, int c);
 int					get_next_line(const int fd, char **line);
 void				ft_exiterror(char *err_msg, int exitcode, int fd);
 int					ft_abs(int a);
+double				ft_dmin(double a, double b);
+double				ft_dmax(double a, double b);
 
 #endif

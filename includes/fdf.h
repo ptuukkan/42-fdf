@@ -160,6 +160,6 @@ void			multiply_vertices(t_fdf *fdf, t_mat4 *m);
 void			multiply_vertex(t_mat4 *m, t_vec4 *v);
 t_mat4			new_scaling_matrix(double scale_x, double scale_y, double scale_z);
 void			print_vertices(t_fdf *fdf);
-int				clip(t_fdf *fdf, t_vec4 a, t_vec4 b);
+int				clip(t_fdf *fdf, t_vec4 *a, t_vec4 *b);
 
 #endif

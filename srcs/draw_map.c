@@ -31,6 +31,8 @@ void		viewport_transform(t_fdf *fdf, t_vec4 a, t_vec4 b)
 {
 	t_line	line;
 
+	if (!clip(fdf, &a, &b))
+		return ;
 	a.x /= a.w;
 	a.y /= a.w;
 	a.z /= a.w;
@@ -47,8 +49,7 @@ void		viewport_transform(t_fdf *fdf, t_vec4 a, t_vec4 b)
 	line.y1 = (int)(b.y + 0.5);
 	line.color_start = a.color;
 	line.color_end = b.color;
-	if (!clip(fdf, a, b))
-		return ;
+
 	draw_line(fdf, &line);
 }
 

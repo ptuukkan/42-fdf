@@ -12,71 +12,94 @@
 
 #include "fdf.h"
 
-static int	get_outcode(t_vec4 v)
+static int	calc_outcode(double (*bc)[6])
 {
-	int	code;
+	int	outcode;
 
-	code = OC_IN;
-	if (v.x > 1.0)
-		code |= OC_RIGHT;
-	else if (v.x < -1.0)
-		code |= OC_LEFT;
-	if (v.y > 1.0)
-		code |= OC_TOP;
-	else if (v.y < -1.0)
-		code |= OC_BOTTOM;
-	return (code);
+	outcode = OC_IN;
+	if (*bc[0] < 0.0)
+		outcode |= OC_LEFT;
+	else if (*bc[1] < 0.0)
+		outcode |= OC_RIGHT;
+	if (*bc[2] < 0.0)
+		outcode |= OC_BOTTOM;
+	else if (*bc[3] < 0.0)
+		outcode |= OC_TOP;
+	if (*bc[4] < 0.0)
+		outcode |= OC_NEAR;
+	else if (*bc[5] < 0.0)
+		outcode |= OC_FAR;
+	return (outcode);
 }
 
-static void	cut(t_fdf *fdf, int oc, t_vec4 *v1, t_vec4 *v2)
+static void	calc_boundary(double (*bc)[2][6], t_vec4 *a, t_vec4 *b)
 {
-	if (oc & OC_TOP)
-	{
-		v1->x = v1->x + (v2->x - v1->x) * (0 - v1->y) / (v2->y - v1->y);
-		v1->y = 1;
-	}
-	if (oc & OC_BOTTOM)
-	{
-		v1->x = v1->x + (v2->x - v1->x) * (fdf->viewport.height - v1->y) /
-				(v2->y - v1->y);
-		v1->y = -1;
-	}
-	if (oc & OC_RIGHT)
-	{
-		v1->y = v1->y + (v2->y - v1->y) * (fdf->viewport.width - v1->x) /
-				(v2->x - v1->x);
-		v1->x = 1;
-	}
-	if (oc & OC_LEFT)
-	{
-		v1->y = v1->y + (v2->y - v1->y) * (0 - v1->x) / (v2->x - v1->x);
-		v1->x = -1;
-	}
+	*bc[0][0] = a->w + a->x;
+	*bc[0][1] = a->w - a->x;
+	*bc[0][2] = a->w + a->y;
+	*bc[0][3] = a->w - a->y;
+	*bc[0][4] = a->w + a->z;
+	*bc[0][5] = a->w - a->z;
+	*bc[1][0] = b->w + b->x;
+	*bc[1][1] = b->w - b->x;
+	*bc[1][2] = b->w + b->y;
+	*bc[1][3] = b->w - b->y;
+	*bc[1][4] = b->w + b->z;
+	*bc[1][5] = b->w - b->z;
 }
 
-int			clip(t_fdf *fdf, t_vec4 a, t_vec4 b)
+static void	cut(t_vec4 *a, t_vec4 *b, int (*oc)[2], double (*bc)[2][6])
 {
-	int	oc_a;
-	int	oc_b;
-	int	out;
-	return (1);
+	int				i;
+	double			t_out;
+	double			t_in;
+	static t_vec4	tmp;
+
+	t_out = 1.0;
+	t_in = 0.0;
+	i = 0;
+	while (i < 6)
+	{
+		if (*bc[0][i] < 0.0)
+			t_in = ft_dmax(t_in, *bc[0][i] / (*bc[0][i] - *bc[1][i]));
+		if (*bc[1][i] < 0.0)
+			t_out = ft_dmin(t_out, *bc[0][i] / (*bc[0][i] - *bc[1][i]));
+		if (t_in > t_out)
+			return ;
+		i++;
+	}
+	if (*oc[0] != 0)
+	{
+		tmp.x = a->x + t_in * (b->x - a->x);
+		tmp.y = a->y + t_in * (b->y - a->y);
+		tmp.z = a->z + t_in * (b->z - a->z);
+		tmp.w = a->w + t_in * (b->w - a->w);
+	}
+	if (*oc[1] != 0)
+	{
+		b->x = a->x + t_out * (b->x - a->x);
+		b->y = a->y + t_out * (b->y - a->y);
+		b->z = a->z + t_out * (b->z - a->z);
+		b->w = a->w + t_out * (b->w - a->w);
+	}
+	a = &tmp;
+}
+
+int			clip(t_fdf *fdf, t_vec4 *a, t_vec4 *b)
+{
+	int		oc[2];
+	double	bc[2][6];
+
 	while (1)
 	{
-		oc_a = get_outcode(a);
-		oc_b = get_outcode(b);
-		if (!(oc_a | oc_b))
+		calc_boundary(&bc, a, b);
+		oc[0] = calc_outcode(&bc[0]);
+		oc[1] = calc_outcode(&bc[1]);
+		if (!(oc[0] | oc[1]))
 			return (1);
-		if (oc_a & oc_b)
+		if (oc[0] & oc[1])
 			return (0);
-		if (oc_a)
-		{
-			cut(fdf, oc_a, &a, &b);
-			oc_a = get_outcode(a);
-		}
-		else
-		{
-			cut(fdf, oc_b, &b, &a);
-			oc_b = get_outcode(b);
-		}
+		cut(a, b, &oc, &bc);
+
 	}
 }
