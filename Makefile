@@ -32,6 +32,8 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INC)/fdf.h
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(GCC) -c $< -o $@ -I $(INC) -I libft/$(INC)
 
+lib: libft/$(LIB)
+
 libft/$(LIB):
 	make -C libft/
 
@@ -46,4 +48,4 @@ fclean : clean
 
 re: fclean all
 
-.PHONY: clean fclean all
+.PHONY: clean fclean all lib

@@ -37,12 +37,12 @@ static int	scale_events(int key, t_fdf *fdf)
 	if (key == KEY_J)
 	{
 		fdf->map.zoom *= 0.9;
-		fdf->map.alt_mul *= 0.9;
+		//fdf->map.alt_mul *= 0.9;
 	}
 	else if (key == KEY_K)
 	{
 		fdf->map.zoom *= 1.1;
-		fdf->map.alt_mul *= 1.1;
+		//fdf->map.alt_mul *= 1.1;
 	}
 	else if (key == KEY_N)
 	{
@@ -50,7 +50,8 @@ static int	scale_events(int key, t_fdf *fdf)
 	}
 	else if (key == KEY_M)
 		fdf->map.alt_mul += 1;
-	fdf->map.scaling = new_scaling_matrix(fdf->map.zoom, fdf->map.zoom, fdf->map.zoom);
+	fdf->map.scaling = new_scaling_matrix(fdf->map.zoom, fdf->map.zoom,
+			fdf->map.zoom);
 	draw_map(fdf);
 	return (0);
 }
@@ -58,13 +59,13 @@ static int	scale_events(int key, t_fdf *fdf)
 static int	move_events(int key, t_fdf *fdf)
 {
 	if (key == KEY_LEFT)
-		fdf->map.x_offset += 50;
+		fdf->map.x_offset += 10;
 	else if (key == KEY_UP)
-		fdf->map.y_offset += 50;
+		fdf->map.y_offset += 10;
 	else if (key == KEY_RIGHT)
-		fdf->map.x_offset -= 50;
+		fdf->map.x_offset -= 10;
 	else if (key == KEY_DOWN)
-		fdf->map.y_offset -= 50;
+		fdf->map.y_offset -= 10;
 	fdf->map.moving = new_translation_matrix(fdf->map.x_offset, fdf->map.y_offset, 0.0);
 	draw_map(fdf);
 	return (0);
@@ -72,7 +73,7 @@ static int	move_events(int key, t_fdf *fdf)
 
 int			key_events(int key, t_fdf *fdf)
 {
-	printf("%x\n", key);
+	//printf("%x\n", key);
 	if (key == KEY_ESC)
 		exit(0);
 	if (key == KEY_J || key == KEY_K || key == KEY_N || key == KEY_M)

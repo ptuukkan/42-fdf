@@ -70,8 +70,8 @@ void	reset_map(t_fdf *fdf)
 		fdf->map.zoom = WIN_WIDTH / fdf->map.width - fdf->map.width;
 	else
 		fdf->map.zoom = WIN_HEIGHT / fdf->map.height - fdf->map.height;
-	fdf->map.zoom = 30;
-	fdf->map.alt_mul = fdf->map.zoom / 20;
+	fdf->map.zoom = 60;
+	fdf->map.alt_mul = 0;
 	fdf->img.line_size = WIN_WIDTH * 4;
 	fdf->map.view = 3;
 	//set_angles(fdf, -54.736f, 0.0f, 45.0f);
@@ -80,8 +80,11 @@ void	reset_map(t_fdf *fdf)
 	fdf->map.x_offset = 0;
 	fdf->map.y_offset = 0;
 	init_color(fdf);
-	fdf->viewport.width = 600;
-	fdf->viewport.height = 300;
+	fdf->viewport.width = 896;
+	fdf->viewport.height = 504;
+	fdf->camera.x = 0;
+	fdf->camera.y = 0;
+	fdf->camera.z = -30;
 	construct_matrices(fdf);
 }
 

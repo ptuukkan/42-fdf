@@ -31,14 +31,17 @@ void		viewport_transform(t_fdf *fdf, t_vec4 a, t_vec4 b)
 {
 	t_line	line;
 
-	if (!clip(fdf, &a, &b))
+	if (clip(fdf, &a, &b) == 0)
 		return ;
 	a.x /= a.w;
 	a.y /= a.w;
 	a.z /= a.w;
+	a.w /= a.w;
 	b.x /= b.w;
 	b.y /= b.w;
 	b.z /= b.w;
+	b.w /= b.w;
+	//printf("%f\n", a.z);
 	multiply_vertex(&fdf->map.viewport, &a);
 	multiply_vertex(&fdf->map.viewport, &b);
 	line.x0 = (int)(a.x + 0.5);
@@ -59,6 +62,7 @@ static void	plot(t_fdf *fdf, int x, int y)
 	t_vec4	b;
 	t_vec4	c;
 
+	//multiply_vertex(&fdf->map.scaling, &fdf->map.vertices[y][x]);
 	a = mvp_transform(fdf, &fdf->map.vertices[y][x]);
 	if (x < fdf->map.width - 1)
 	{
@@ -79,6 +83,20 @@ static void	create_new_image(t_fdf *fdf)
 		ft_exiterror("Image creation failed", 8, 2);
 	fdf->img.img_data = mlx_get_data_addr(fdf->mlx.img_ptr, &fdf->img.bpp,
 									&fdf->img.line_size, &fdf->img.endian);
+}
+
+void		print_help(t_fdf *fdf)
+{
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 500, 40, 0xFFFFFF, "Projection: isometric");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 40, 0xFFFFFF, "Rotate x-axis: [w][s]");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 60, 0xFFFFFF, "Rotate z-axis: [a][d]");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 80, 0xFFFFFF, "Rotate y-axis: [q][e]");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 100, 0xFFFFFF, "Move object: [up][left][down][right]");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 120, 0xFFFFFF, "Zoom: [j][k]");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 140, 0xFFFFFF, "Reset: [r]");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 160, 0xFFFFFF, "Toggle projection: [space]");
+
+
 }
 
 void		draw_map(t_fdf *fdf)
@@ -103,5 +121,7 @@ void		draw_map(t_fdf *fdf)
 	}
 	mlx_put_image_to_window(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr,
 							fdf->mlx.img_ptr, 0, 0);
+
+	print_help(fdf);
 	mlx_destroy_image(fdf->mlx.mlx_ptr, fdf->mlx.img_ptr);
 }

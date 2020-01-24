@@ -125,6 +125,14 @@ typedef struct	s_viewport
 	t_mat4	matrix;
 }				t_viewport;
 
+typedef struct	s_camera
+{
+	int		x;
+	int		y;
+	int		z;
+	t_mat4	matrix;
+}				t_camera;
+
 typedef struct	s_fdf
 {
 	t_map		map;
@@ -132,6 +140,7 @@ typedef struct	s_fdf
 	t_img		img;
 	t_line		line;
 	t_viewport	viewport;
+	t_camera	camera;
 	int		test;
 }				t_fdf;
 
