@@ -12,13 +12,19 @@
 
 #include "fdf.h"
 
+static int	check_depth(t_fdf *fdf, t_line *line, int dir)
+{
+	if (line->x < 0 || line->x >= WIN_WIDTH || line->y < 0 || line->y >= WIN_HEIGHT)
+		return (0);
+}
+
 static void	img_pixel_put(t_fdf *fdf, t_line *line, int dir)
 {
 	int		pos;
 	t_color	color;
 	double	perc;
 
-	if (line->x < 0 || line->x >= WIN_WIDTH || line->y < 0 || line->y >= WIN_HEIGHT)
+	if (!check_depth(fdf, line, dir))
 		return ;
 	pos = fdf->img.line_size * line->y + line->x * 4;
 	if (dir == 1)

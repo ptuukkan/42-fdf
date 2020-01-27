@@ -83,6 +83,9 @@ static void	create_new_image(t_fdf *fdf)
 		ft_exiterror("Image creation failed", 8, 2);
 	fdf->img.img_data = mlx_get_data_addr(fdf->mlx.img_ptr, &fdf->img.bpp,
 									&fdf->img.line_size, &fdf->img.endian);
+	if (!(fdf->map.z_buf = (double *)ft_memalloc(sizeof(double)
+							* WIN_WIDTH * WIN_HEIGHT)))
+		ft_exiterror("Memory allocation failed", 2, 2);
 }
 
 void		print_help(t_fdf *fdf)
@@ -124,4 +127,5 @@ void		draw_map(t_fdf *fdf)
 
 	print_help(fdf);
 	mlx_destroy_image(fdf->mlx.mlx_ptr, fdf->mlx.img_ptr);
+	free(fdf->map.z_buf);
 }

@@ -59,6 +59,7 @@ typedef struct	s_map
 	int		height;
 	int		**altitude;
 	t_vec4	**vertices;
+	double	*z_buf;
 	int		peak;
 	int		bottom;
 	float	zoom;
@@ -76,14 +77,6 @@ typedef struct	s_map
 	t_mat4	mvp;
 	t_mat4	viewport;
 }				t_map;
-
-typedef struct	s_quat
-{
-	float	w;
-	float	x;
-	float	y;
-	float	z;
-}				t_quat;
 
 typedef struct	s_mlx
 {
@@ -107,10 +100,13 @@ typedef struct	s_line
 {
 	int		x0;
 	int		y0;
+	double	z0;
 	int		x;
 	int		y;
+	double	z;
 	int		x1;
 	int		y1;
+	double	z1;
 	int		dy;
 	int		dx;
 	t_color	color_start;
