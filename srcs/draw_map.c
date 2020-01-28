@@ -101,6 +101,9 @@ void		print_help(t_fdf *fdf)
 	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 120, 0xFFFFFF, "Zoom: [j][k]");
 	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 140, 0xFFFFFF, "Reset: [r]");
 	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 160, 0xFFFFFF, "Toggle projection: [space]");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 180, 0xFFFFFF, ft_strjoin("near: ", ft_itoa((int)fdf->viewport.near)));
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 200, 0xFFFFFF, ft_strjoin("far: ", ft_itoa((int)fdf->viewport.far)));
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 220, 0xFFFFFF, ft_strjoin("Camera distance: ", ft_itoa(fdf->camera.z)));
 
 
 }

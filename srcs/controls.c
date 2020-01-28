@@ -71,6 +71,26 @@ static int	move_events(int key, t_fdf *fdf)
 	return (0);
 }
 
+int	camera_events(int key, t_fdf *fdf)
+{
+	if (key == KEY_NPP)
+		fdf->camera.z += 5;
+	else if (key == KEY_NPM)
+		fdf->camera.z -= 5;
+	if (key == KEY_NP4)
+		fdf->camera.x += 10;
+	if (key == KEY_NP6)
+		fdf->camera.x -= 10;
+	if (key == KEY_NP8)
+		fdf->camera.y -= 10;
+	if (key == KEY_NP5)
+		fdf->camera.y += 10;
+	fdf->camera.matrix = new_translation_matrix(fdf->camera.x, fdf->camera.y,
+			fdf->camera.z);
+	draw_map(fdf);
+	return (0);
+}
+
 int			key_events(int key, t_fdf *fdf)
 {
 	printf("%x\n", key);
@@ -86,6 +106,8 @@ int			key_events(int key, t_fdf *fdf)
 		return (move_events(key, fdf));
 	else if (key == KEY_SPACE)
 		toggle_view(fdf);
+	else if (key >= KEY_NPP && key <= KEY_NP9)
+		return (camera_events(key, fdf));
 	else if (key == KEY_R)
 		reset_map(fdf);
 	else if (key == KEY_Y)

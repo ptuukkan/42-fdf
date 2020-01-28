@@ -34,5 +34,16 @@
 # define KEY_M 0x2e
 # define KEY_N 0x2d
 # define KEY_SPACE 0x31
+# define KEY_NP1 0x53
+# define KEY_NP2 0x54
+# define KEY_NP3 0x55
+# define KEY_NP4 0x56
+# define KEY_NP5 0x57
+# define KEY_NP6 0x58
+# define KEY_NP7 0x59
+# define KEY_NP8 0x5b
+# define KEY_NP9 0x5c
+# define KEY_NPM 0x4e
+# define KEY_NPP 0x45
 
 #endif

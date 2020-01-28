@@ -77,10 +77,10 @@ void	reset_map(t_fdf *fdf)
 	fdf->viewport.width = 896;
 	fdf->viewport.height = 504;
 	fdf->viewport.near = 1;
-	fdf->viewport.far = 100;
+	fdf->viewport.far = fdf->viewport.width;
 	fdf->camera.x = 0;
 	fdf->camera.y = 0;
-	fdf->camera.z = -30;
+	fdf->camera.z = fdf->viewport.width / -2;
 	if (fdf->map.width >= fdf->map.height)
 		fdf->map.zoom = fdf->viewport.width / fdf->map.width;
 	else
