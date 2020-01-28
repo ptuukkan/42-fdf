@@ -109,15 +109,18 @@ typedef struct	s_line
 	double	z1;
 	int		dy;
 	int		dx;
+	double	mz;
 	t_color	color_start;
 	t_color	color_end;
 }				t_line;
 
 typedef struct	s_viewport
 {
-	int		width;
-	int		height;
-	t_line	line;
+	double	width;
+	double	height;
+	double	near;
+	double	far;
+	//t_line	line;
 	t_mat4	matrix;
 }				t_viewport;
 
@@ -134,7 +137,7 @@ typedef struct	s_fdf
 	t_map		map;
 	t_mlx		mlx;
 	t_img		img;
-	t_line		line;
+//	t_line		line;
 	t_viewport	viewport;
 	t_camera	camera;
 	int		test;

@@ -46,13 +46,15 @@ void		viewport_transform(t_fdf *fdf, t_vec4 a, t_vec4 b)
 	multiply_vertex(&fdf->map.viewport, &b);
 	line.x0 = (int)(a.x + 0.5);
 	line.y0 = (int)(a.y + 0.5);
+	line.z0 = a.z;
 	line.x = line.x0;
 	line.y = line.y0;
+	line.z = line.z0;
 	line.x1 = (int)(b.x + 0.5);
 	line.y1 = (int)(b.y + 0.5);
+	line.z1 = b.z;
 	line.color_start = a.color;
 	line.color_end = b.color;
-
 	draw_line(fdf, &line);
 }
 
@@ -86,6 +88,7 @@ static void	create_new_image(t_fdf *fdf)
 	if (!(fdf->map.z_buf = (double *)ft_memalloc(sizeof(double)
 							* WIN_WIDTH * WIN_HEIGHT)))
 		ft_exiterror("Memory allocation failed", 2, 2);
+	ft_memset(fdf->map.z_buf, 127, sizeof(double) * WIN_WIDTH * WIN_HEIGHT);
 }
 
 void		print_help(t_fdf *fdf)
@@ -107,8 +110,6 @@ void		draw_map(t_fdf *fdf)
 	int	x;
 	int	y;
 
-//	if (fdf->test)
-//		return (draw_sq(fdf));
 	build_mvp_matrix(fdf);
 	create_new_image(fdf);
 	y = 0;

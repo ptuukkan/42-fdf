@@ -66,12 +66,6 @@ int	get_endian(void)
 
 void	reset_map(t_fdf *fdf)
 {
-	if (fdf->map.width > fdf->map.height)
-		fdf->map.zoom = WIN_WIDTH / fdf->map.width - fdf->map.width;
-	else
-		fdf->map.zoom = WIN_HEIGHT / fdf->map.height - fdf->map.height;
-	fdf->map.zoom = 60;
-	fdf->map.alt_mul = 0;
 	fdf->img.line_size = WIN_WIDTH * 4;
 	fdf->map.view = 3;
 	//set_angles(fdf, -54.736f, 0.0f, 45.0f);
@@ -82,9 +76,16 @@ void	reset_map(t_fdf *fdf)
 	init_color(fdf);
 	fdf->viewport.width = 896;
 	fdf->viewport.height = 504;
+	fdf->viewport.near = 1;
+	fdf->viewport.far = 100;
 	fdf->camera.x = 0;
 	fdf->camera.y = 0;
 	fdf->camera.z = -30;
+	if (fdf->map.width >= fdf->map.height)
+		fdf->map.zoom = fdf->viewport.width / fdf->map.width;
+	else
+		fdf->map.zoom = fdf->viewport.height / fdf->map.height;
+	fdf->map.alt_mul = 0.05;
 	construct_matrices(fdf);
 }
 

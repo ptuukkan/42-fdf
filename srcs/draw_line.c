@@ -14,8 +14,20 @@
 
 static int	check_depth(t_fdf *fdf, t_line *line, int dir)
 {
-	if (line->x < 0 || line->x >= WIN_WIDTH || line->y < 0 || line->y >= WIN_HEIGHT)
+	int	pos;
+
+	if (line->x < 0 || line->x >= WIN_WIDTH || line->y < 0 ||
+		line->y >= WIN_HEIGHT)
 		return (0);
+	pos = WIN_WIDTH * line->y + line->x;
+	if (line->z < fdf->map.z_buf[pos])
+	{
+		fdf->map.z_buf[pos] = line->z;
+		line->z += line->mz;
+		return (1);
+	}
+	line->z += line->mz;
+	return (0);
 }
 
 static void	img_pixel_put(t_fdf *fdf, t_line *line, int dir)
@@ -102,7 +114,13 @@ void		draw_line(t_fdf *fdf, t_line *line)
 	line->dx = ft_abs(line->x1 - line->x0);
 	line->dy = ft_abs(line->y1 - line->y0);
 	if (line->dx > line->dy)
+	{
 		draw_run_over_rise(fdf, line);
+		line->mz = (line->z1 - line->z0) / line->dx;
+	}
 	else
+	{
 		draw_rise_over_run(fdf, line);
+		line->mz = (line->z1 - line->z0) / line->dy;
+	}
 }

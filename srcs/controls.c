@@ -46,12 +46,12 @@ static int	scale_events(int key, t_fdf *fdf)
 	}
 	else if (key == KEY_N)
 	{
-		fdf->map.alt_mul -= 1;
+		fdf->map.alt_mul -= 0.01;
 	}
 	else if (key == KEY_M)
-		fdf->map.alt_mul += 1;
+		fdf->map.alt_mul += 0.01;
 	fdf->map.scaling = new_scaling_matrix(fdf->map.zoom, fdf->map.zoom,
-			fdf->map.zoom);
+			fdf->map.alt_mul * fdf->map.zoom);
 	draw_map(fdf);
 	return (0);
 }
@@ -73,7 +73,7 @@ static int	move_events(int key, t_fdf *fdf)
 
 int			key_events(int key, t_fdf *fdf)
 {
-	//printf("%x\n", key);
+	printf("%x\n", key);
 	if (key == KEY_ESC)
 		exit(0);
 	if (key == KEY_J || key == KEY_K || key == KEY_N || key == KEY_M)
@@ -88,11 +88,28 @@ int			key_events(int key, t_fdf *fdf)
 		toggle_view(fdf);
 	else if (key == KEY_R)
 		reset_map(fdf);
-	else if (key == 0x11 || key == 0x74)
+	else if (key == KEY_Y)
 	{
-		fdf->map.view = 4;
-		fdf->test = 1;
-		set_angles(fdf, 0.0f, 0.0f, 0.0f);
+		if (fdf->viewport.near > 1)
+		{
+			fdf->viewport.near -= 1;
+			construct_matrices(fdf);
+		}
+	}
+	else if (key == KEY_U)
+	{
+		fdf->viewport.near += 1;
+		construct_matrices(fdf);
+	}
+	else if (key == KEY_G)
+	{
+		fdf->viewport.far -= 10;
+		construct_matrices(fdf);
+	}
+	else if (key == KEY_H)
+	{
+		fdf->viewport.far += 10;
+		construct_matrices(fdf);
 	}
 	draw_map(fdf);
 	return (0);
