@@ -12,6 +12,32 @@
 
 #include "fdf.h"
 
+static int	check_hex(char *line, int *i)
+{
+	int	n;
+
+	n = 0;
+	if (line[*i] == ' ' || line[*i] == '\0')
+		return (0);
+	if (ft_strncmp(line + *i, ",0x", 3) == 0 ||
+		ft_strncmp(line + *i, ",0X", 3) == 0)
+	{
+		*i += 3;
+		while (n < 6)
+		{
+			if (!(line[*i] >= 'A' && line[*i] <= 'F') &&
+				!(line[*i] >= 'a' && line[*i] <= 'f') &&
+				!(line[*i] >= '0' && line[*i] <= '9'))
+				return (0);
+			*i += 1;
+			n++;
+		}
+		return (1);
+	}
+	else
+		return (0);
+}
+
 static int	count_numbers(char *line)
 {
 	int	numbers;
@@ -26,12 +52,13 @@ static int	count_numbers(char *line)
 		else if (line[i] == '-')
 		{
 			if (!ft_isdigit(line[++i]))
-				ft_exiterror("Invalid characters in map", 4, 2);
+				ft_exiterror("Invalid characters in file", 4, 2);
 		}
 		else if (ft_isdigit(line[i]))
 		{
 			while (ft_isdigit(line[i]))
 				i++;
+			check_hex(line, &i);
 			numbers++;
 		}
 		else
@@ -66,27 +93,10 @@ static void	read_map_info(t_map *map, char *file)
 	close(fd);
 }
 
-static int	get_next_number(char **line, int *number)
-{
-	int	found;
-
-	found = 0;
-	*number = ft_atoi(*line);
-	while (**line != '\0' && ft_isdigit(**line) == 0)
-		(*line)++;
-	while (ft_isdigit(**line))
-	{
-		(*line)++;
-		found = 1;
-	}
-	if (found)
-		return (1);
-	return (0);
-}
-
 static void	read_vertices(t_fdf *fdf, t_vec4 *vertices, char *line, int y)
 {
 	int		i;
+	int		n;
 	int		number;
 
 	i = 0;
@@ -100,6 +110,10 @@ static void	read_vertices(t_fdf *fdf, t_vec4 *vertices, char *line, int y)
 			fdf->map.peak = number;
 		if (number < fdf->map.bottom)
 			fdf->map.bottom = number;
+		n = 0;
+		vertices[i].color.set = 0;
+		if (check_hex(line, &n))
+			vertices[i].color = read_color(&line);
 		i++;
 	}
 }
@@ -110,8 +124,8 @@ void		read_file(char *file, t_fdf *fdf)
 	char	*line;
 	int		i;
 
-	fdf->map.peak = 0;
-	fdf->map.bottom = 0;
+	fdf->map.peak = INT32_MIN;
+	fdf->map.bottom = INT32_MAX;
 	read_map_info(&fdf->map, file);
 	if (!(fdf->map.vertices = (t_vec4 **)ft_memalloc(sizeof(t_vec4 *) *\
 		fdf->map.height)))

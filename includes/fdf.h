@@ -34,9 +34,10 @@
 
 typedef struct	s_color
 {
-	int	red;
-	int	green;
-	int	blue;
+	unsigned char	red;
+	unsigned char	green;
+	unsigned char	blue;
+	unsigned char	set;
 }				t_color;
 
 typedef struct	s_vec4
@@ -57,7 +58,6 @@ typedef struct	s_map
 {
 	int		width;
 	int		height;
-	int		**altitude;
 	t_vec4	**vertices;
 	double	*z_buf;
 	int		peak;
@@ -91,7 +91,6 @@ typedef struct	s_img
 	t_color	color_end;
 	char	*img_data;
 	int		line_size;
-	int		total_size;
 	int		bpp;
 	int		endian;
 }				t_img;
@@ -120,7 +119,6 @@ typedef struct	s_viewport
 	double	height;
 	double	near;
 	double	far;
-	//t_line	line;
 	t_mat4	matrix;
 }				t_viewport;
 
@@ -137,37 +135,38 @@ typedef struct	s_fdf
 	t_map		map;
 	t_mlx		mlx;
 	t_img		img;
-//	t_line		line;
 	t_viewport	viewport;
 	t_camera	camera;
-	int		test;
 }				t_fdf;
 
 void			read_file(char *file, t_fdf *fdf);
 void			draw_map(t_fdf *fdf);
 void			draw_line(t_fdf *fdf, t_line *line);
-void			calculate_xy(t_fdf *fdf, int x, int y, int direction);
 int				key_events(int key, t_fdf *fdf);
 int				rotate_events(int key, t_fdf *fdf);
-void			rotate(t_fdf *fdf, double ax, double ay, double az);
 void			reset_map(t_fdf *fdf);
-void			draw_sq(t_fdf *fdf);
-void			quat_rotate(t_fdf *fdf);
 void			set_angles(t_fdf *fdf, double ax, double ay, double az);
-t_color			get_color(t_color color_start, t_color color_end, double perc);
+
 double			percent(int start, int current, int end);
 void			init_color(t_fdf *fdf);
 void			translate(t_fdf *fdf, double trans_x, double trans_y,
 				double trans_z);
-t_mat4			new_rotation_matrix(double ax, double ay, double az);
-t_mat4			new_translation_matrix(double trans_x, double trans_y, double trans_z);
-t_vec4			transform_vertex(t_fdf *fdf, t_vec4 *v);
+
 void			construct_matrices(t_fdf *fdf);
 void			build_mvp_matrix(t_fdf *fdf);
 void			multiply_vertices(t_fdf *fdf, t_mat4 *m);
 void			multiply_vertex(t_mat4 *m, t_vec4 *v);
-t_mat4			new_scaling_matrix(double scale_x, double scale_y, double scale_z);
+t_mat4			new_scaling_matrix(double scale_x, double scale_y,
+				double scale_z);
 void			print_vertices(t_fdf *fdf);
 int				clip(t_fdf *fdf, t_vec4 *a, t_vec4 *b);
+t_color			read_color(char **line);
+t_color			get_color(t_color color_start, t_color color_end, double perc);
+t_mat4			multiply_matrix(t_mat4 *m1, t_mat4 *m2);
+t_mat4			new_rotation_matrix(double ax, double ay, double az);
+t_mat4			new_translation_matrix(double trans_x, double trans_y,
+				double trans_z);
+t_mat4			new_ortho_matrix(t_fdf *fdf);
+t_mat4			new_perspective_matrix(t_fdf *fdf);
 
 #endif

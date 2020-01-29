@@ -16,8 +16,8 @@ static int	check_depth(t_fdf *fdf, t_line *line, int dir)
 {
 	int	pos;
 
-	if (line->x < 0 || line->x >= WIN_WIDTH || line->y < 0 ||
-		line->y >= WIN_HEIGHT)
+	if (line->x <= 292 || line->x >= 1188 || line->y <= 138 ||
+		line->y >= 642)
 		return (0);
 	pos = WIN_WIDTH * line->y + line->x;
 	if (line->z < fdf->map.z_buf[pos])
@@ -115,12 +115,12 @@ void		draw_line(t_fdf *fdf, t_line *line)
 	line->dy = ft_abs(line->y1 - line->y0);
 	if (line->dx > line->dy)
 	{
-		draw_run_over_rise(fdf, line);
 		line->mz = (line->z1 - line->z0) / line->dx;
+		draw_run_over_rise(fdf, line);
 	}
 	else
 	{
-		draw_rise_over_run(fdf, line);
 		line->mz = (line->z1 - line->z0) / line->dy;
+		draw_rise_over_run(fdf, line);
 	}
 }

@@ -17,18 +17,23 @@ static int	toggle_view(t_fdf *fdf)
 	if (fdf->map.view == 3)
 	{
 		fdf->map.view = 1;
-		set_angles(fdf, -54.736f, 0.0f, 45.0f);
+		fdf->map.projection = new_ortho_matrix(fdf);
+		set_angles(fdf, 54.736f, 0.0f, 45.0f);
 	}
 	else if (fdf->map.view == 2)
 	{
 		fdf->map.view = 3;
-		set_angles(fdf, -70.0f, 0.0f, 0.0f);
+		fdf->map.projection = new_perspective_matrix(fdf);
+		set_angles(fdf, 54.736f, 0.0f, 45.0f);
 	}
 	else if (fdf->map.view == 1)
 	{
 		fdf->map.view = 2;
+		fdf->map.projection = new_ortho_matrix(fdf);
 		set_angles(fdf, 0.0f, 0.0f, 0.0f);
 	}
+	fdf->map.rotation = new_rotation_matrix(fdf->map.x_angle * (M_PI / 180),
+		fdf->map.y_angle * (M_PI / 180), fdf->map.z_angle * (M_PI / 180));
 	return (0);
 }
 

@@ -12,45 +12,6 @@
 
 #include "fdf.h"
 
-void	print_vertices(t_fdf *fdf)
-{
-	int	i;
-	int	j;
-	t_vec4 **v;
-
-	v = fdf->map.vertices;
-	j = 0;
-	while (j < fdf->map.height)
-	{
-		i = 0;
-		while (i < fdf->map.width)
-		{
-			printf("x: %f y: %f z: %f ", v[j][i].x, v[j][i].y, v[j][i].z);
-			i++;
-		}
-		j++;
-		printf("\n");
-	}
-}
-
-void	print_int_array(int **arr, int width, int height)
-{
-	int	h = 0;
-	int	w;
-
-	while (h < height)
-	{
-		w = 0;
-		while (w < width)
-		{
-			printf("%2d ", arr[h][w]);
-			w++;
-		}
-		printf("\n");
-		h++;
-	}
-}
-
 int	get_endian(void)
 {
 	unsigned int	i;
@@ -67,25 +28,21 @@ int	get_endian(void)
 void	reset_map(t_fdf *fdf)
 {
 	fdf->img.line_size = WIN_WIDTH * 4;
-	fdf->map.view = 3;
-	//set_angles(fdf, -54.736f, 0.0f, 45.0f);
-	set_angles(fdf, 0.0f, 0.0f, 0.0f);
-	fdf->test = 0;
+	fdf->map.view = 1;
+	set_angles(fdf, 54.736f, 0.0f, 45.0f);
 	fdf->map.x_offset = 0;
 	fdf->map.y_offset = 0;
 	init_color(fdf);
 	fdf->viewport.width = 896;
 	fdf->viewport.height = 504;
 	fdf->viewport.near = 1;
-	fdf->viewport.far = fdf->viewport.width;
+	fdf->viewport.far = 10000;
 	fdf->camera.x = 0;
 	fdf->camera.y = 0;
 	fdf->camera.z = fdf->viewport.width / -2;
-	if (fdf->map.width >= fdf->map.height)
-		fdf->map.zoom = fdf->viewport.width / fdf->map.width;
-	else
-		fdf->map.zoom = fdf->viewport.height / fdf->map.height;
-	fdf->map.alt_mul = 0.05;
+	fdf->map.zoom = fdf->viewport.height / ft_max(fdf->map.peak / 6 -
+		fdf->map.bottom / 6, ft_max(fdf->map.width, fdf->map.height));
+	fdf->map.alt_mul = 0.1;
 	construct_matrices(fdf);
 }
 
@@ -96,9 +53,8 @@ int	main(int argc, char **argv)
 	fdf.img.bpp = 4;
 	fdf.img.endian = get_endian();
 	if (argc != 2)
-		ft_exiterror("usaage.", 5, 1);
+		return (write(1, "usage: fdf <input file>\n", 25));
 	read_file(argv[1], &fdf);
-	//print_int_array(fdf.map.altitude, fdf.map.width, fdf.map.height);
 	if (!(fdf.mlx.mlx_ptr = mlx_init()))
 		ft_exiterror("MLX initialization failed", 6, 2);
 	if (!(fdf.mlx.win_ptr = mlx_new_window(fdf.mlx.mlx_ptr, WIN_WIDTH,

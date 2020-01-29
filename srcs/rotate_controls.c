@@ -20,6 +20,7 @@ static int	rotate_isometric(int key, t_fdf *fdf)
 		fdf->map.z_angle -= 90.0f;
 	if (fdf->map.z_angle == 405.0f || fdf->map.z_angle == -405.0f)
 		fdf->map.z_angle = 45.0f;
+	fdf->map.rotation = new_rotation_matrix(fdf->map.x_angle * (M_PI / 180), fdf->map.y_angle * (M_PI / 180), fdf->map.z_angle * (M_PI / 180));
 	draw_map(fdf);
 	return (0);
 }
@@ -27,7 +28,7 @@ static int	rotate_isometric(int key, t_fdf *fdf)
 static int	rotate_parallel(int key, t_fdf *fdf)
 {
 	if (key == KEY_S && fdf->map.x_angle == 0.0f)
-		fdf->map.x_angle = -90.f;
+		fdf->map.x_angle = 90.f;
 	else if (key == KEY_W && fdf->map.x_angle != 0.0f)
 		fdf->map.x_angle = 0.0f;
 	else if (key == KEY_D && fdf->map.x_angle != 0.0f)
@@ -44,6 +45,7 @@ static int	rotate_parallel(int key, t_fdf *fdf)
 		fdf->map.y_angle = 0.0f;
 	if (fdf->map.z_angle == 360.0f || fdf->map.z_angle == -360.0f)
 		fdf->map.z_angle = 0.0f;
+	fdf->map.rotation = new_rotation_matrix(fdf->map.x_angle * (M_PI / 180), fdf->map.y_angle * (M_PI / 180), fdf->map.z_angle * (M_PI / 180));
 	draw_map(fdf);
 	return (0);
 }
