@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   clipping.c                                         :+:      :+:    :+:   */
+/*   clip.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ptuukkan <ptuukkan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -75,12 +75,11 @@ static void	chop(t_vec4 *a, t_vec4 *b, double t_in, double t_out)
 	}
 }
 
-static int	calc_chop(t_vec4 *a, t_vec4 *b, int (*oc)[2], double (*bc)[2][6])
+static int	calc_chop(t_vec4 *a, t_vec4 *b, double (*bc)[2][6])
 {
 	int				i;
 	double			t_out;
 	double			t_in;
-	static t_vec4	tmp;
 
 	t_out = 1.0;
 	t_in = 0.0;
@@ -99,7 +98,7 @@ static int	calc_chop(t_vec4 *a, t_vec4 *b, int (*oc)[2], double (*bc)[2][6])
 	return (1);
 }
 
-int			clip(t_fdf *fdf, t_vec4 *a, t_vec4 *b)
+int			clip(t_vec4 *a, t_vec4 *b)
 {
 	int		oc[2];
 	double	bc[2][6];
@@ -111,5 +110,5 @@ int			clip(t_fdf *fdf, t_vec4 *a, t_vec4 *b)
 		return (1);
 	if (oc[0] & oc[1])
 		return (0);
-	return (calc_chop(a, b, &oc, &bc));
+	return (calc_chop(a, b, &bc));
 }

@@ -66,7 +66,7 @@ static int	move_events(int key, t_fdf *fdf)
 	else if (key == KEY_DOWN)
 		fdf->mvp.y_offset -= 10;
 	fdf->mvp.move = new_translation_matrix(fdf->mvp.x_offset,
-		fdf->mvp.y_offset, 0.0);
+		fdf->mvp.y_offset, 0);
 	draw_map(fdf);
 	return (0);
 }

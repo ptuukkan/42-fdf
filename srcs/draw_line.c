@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-static int	check_depth(t_fdf *fdf, t_line *line, int dir)
+static int	check_depth(t_fdf *fdf, t_line *line)
 {
 	int	pos;
 
@@ -36,7 +36,7 @@ static void	img_pixel_put(t_fdf *fdf, t_line *line, int dir)
 	t_color	color;
 	double	perc;
 
-	if (!check_depth(fdf, line, dir))
+	if (!check_depth(fdf, line))
 		return ;
 	pos = fdf->img.line_size * line->y + line->x * 4;
 	if (dir == 1)

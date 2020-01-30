@@ -15,7 +15,7 @@
 
 # include <mlx.h>
 # include <stdlib.h>
-# include "keys_mac.h"
+# include "keys_linux.h"
 # include <stdint.h>
 # include <fcntl.h>
 # include "libft.h"
@@ -130,6 +130,7 @@ typedef struct	s_mvp
 {
 	int		x_offset;
 	int		y_offset;
+	int		z_offset;
 	t_mat4	scale;
 	t_mat4	move;
 	t_mat4	projection;
@@ -162,7 +163,7 @@ void			translate(t_fdf *fdf, double trans_x, double trans_y,
 void			build_mvp_matrix(t_fdf *fdf);
 void			multiply_vertices(t_fdf *fdf, t_mat4 *m);
 void			multiply_vertex(t_mat4 *m, t_vec4 *v);
-int				clip(t_fdf *fdf, t_vec4 *a, t_vec4 *b);
+int				clip(t_vec4 *a, t_vec4 *b);
 t_color			read_color(char **line);
 t_color			get_color(t_color color_start, t_color color_end, double perc);
 t_mat4			multiply_matrix(t_mat4 *m1, t_mat4 *m2);

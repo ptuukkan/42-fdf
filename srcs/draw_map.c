@@ -36,7 +36,7 @@ static void		viewport_transform(t_fdf *fdf, t_vec4 a, t_vec4 b)
 {
 	t_line	line;
 
-	if (fdf->map.view == 3 && clip(fdf, &a, &b) == 0)
+	if (fdf->map.view == 3 && clip(&a, &b) == 0)
 		return ;
 	a.x /= a.w;
 	a.y /= a.w;
@@ -113,8 +113,10 @@ static void		print_help(t_fdf *fdf)
 	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 120, 0xFFFFFF,
 		"Zoom: [j][k]");
 	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 140, 0xFFFFFF,
-		"Reset: [r]");
+		"Altitude: [n][m]");
 	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 160, 0xFFFFFF,
+		"Reset: [r]");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 180, 0xFFFFFF,
 		"Toggle projection: [space]");
 }
 
