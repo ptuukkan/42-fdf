@@ -15,7 +15,6 @@
 
 # include <mlx.h>
 # include <stdlib.h>
-# include <stdio.h>
 # include "keys_mac.h"
 # include <stdint.h>
 # include <fcntl.h>
@@ -58,24 +57,13 @@ typedef struct	s_map
 {
 	int		width;
 	int		height;
-	t_vec4	**vertices;
-	double	*z_buf;
 	int		peak;
 	int		bottom;
+	t_vec4	**vertices;
+	double	*z_buf;
 	float	zoom;
 	float	alt_mul;
 	short	view;
-	int		x_offset;
-	int		y_offset;
-	double	x_angle;
-	double	y_angle;
-	double	z_angle;
-	t_mat4	rotation;
-	t_mat4	scaling;
-	t_mat4	moving;
-	t_mat4	projection;
-	t_mat4	mvp;
-	t_mat4	viewport;
 }				t_map;
 
 typedef struct	s_mlx
@@ -130,6 +118,25 @@ typedef struct	s_camera
 	t_mat4	matrix;
 }				t_camera;
 
+typedef struct	s_rot
+{
+	double	x;
+	double	y;
+	double	z;
+	t_mat4	matrix;
+}				t_rot;
+
+typedef struct	s_mvp
+{
+	int		x_offset;
+	int		y_offset;
+	t_mat4	scale;
+	t_mat4	move;
+	t_mat4	projection;
+	t_rot	rot;
+	t_mat4	matrix;
+}				t_mvp;
+
 typedef struct	s_fdf
 {
 	t_map		map;
@@ -137,6 +144,7 @@ typedef struct	s_fdf
 	t_img		img;
 	t_viewport	viewport;
 	t_camera	camera;
+	t_mvp		mvp;
 }				t_fdf;
 
 void			read_file(char *file, t_fdf *fdf);
@@ -151,14 +159,9 @@ double			percent(int start, int current, int end);
 void			init_color(t_fdf *fdf);
 void			translate(t_fdf *fdf, double trans_x, double trans_y,
 				double trans_z);
-
-void			construct_matrices(t_fdf *fdf);
 void			build_mvp_matrix(t_fdf *fdf);
 void			multiply_vertices(t_fdf *fdf, t_mat4 *m);
 void			multiply_vertex(t_mat4 *m, t_vec4 *v);
-t_mat4			new_scaling_matrix(double scale_x, double scale_y,
-				double scale_z);
-void			print_vertices(t_fdf *fdf);
 int				clip(t_fdf *fdf, t_vec4 *a, t_vec4 *b);
 t_color			read_color(char **line);
 t_color			get_color(t_color color_start, t_color color_end, double perc);
@@ -167,6 +170,9 @@ t_mat4			new_rotation_matrix(double ax, double ay, double az);
 t_mat4			new_translation_matrix(double trans_x, double trans_y,
 				double trans_z);
 t_mat4			new_ortho_matrix(t_fdf *fdf);
-t_mat4			new_perspective_matrix(t_fdf *fdf);
+t_mat4			new_perspective_matrix(t_fdf *fdf, double ar);
+t_mat4			new_viewport_matrix(t_fdf *fdf);
+t_mat4			new_scaling_matrix(double scale_x, double scale_y,
+				double scale_z);
 
 #endif

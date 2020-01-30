@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-t_vec4			mvp_transform(t_fdf *fdf, t_vec4 *v)
+static t_vec4	mvp_transform(t_fdf *fdf, t_vec4 *v)
 {
 	t_vec4	new;
 	double	perc;
@@ -28,11 +28,11 @@ t_vec4			mvp_transform(t_fdf *fdf, t_vec4 *v)
 	}
 	else
 		new.color = v->color;
-	multiply_vertex(&fdf->map.mvp, &new);
+	multiply_vertex(&fdf->mvp.matrix, &new);
 	return (new);
 }
 
-void		viewport_transform(t_fdf *fdf, t_vec4 a, t_vec4 b)
+static void		viewport_transform(t_fdf *fdf, t_vec4 a, t_vec4 b)
 {
 	t_line	line;
 
@@ -46,14 +46,11 @@ void		viewport_transform(t_fdf *fdf, t_vec4 a, t_vec4 b)
 	b.y /= b.w;
 	b.z /= b.w;
 	b.w /= b.w;
-	multiply_vertex(&fdf->map.viewport, &a);
-	multiply_vertex(&fdf->map.viewport, &b);
+	multiply_vertex(&fdf->viewport.matrix, &a);
+	multiply_vertex(&fdf->viewport.matrix, &b);
 	line.x0 = (int)(a.x + 0.5);
 	line.y0 = (int)(a.y + 0.5);
 	line.z0 = a.z;
-	line.x = line.x0;
-	line.y = line.y0;
-	line.z = line.z0;
 	line.x1 = (int)(b.x + 0.5);
 	line.y1 = (int)(b.y + 0.5);
 	line.z1 = b.z;
@@ -62,7 +59,7 @@ void		viewport_transform(t_fdf *fdf, t_vec4 a, t_vec4 b)
 	draw_line(fdf, &line);
 }
 
-static void	plot(t_fdf *fdf, int x, int y)
+static void		plot(t_fdf *fdf, int x, int y)
 {
 	t_vec4	a;
 	t_vec4	b;
@@ -81,7 +78,7 @@ static void	plot(t_fdf *fdf, int x, int y)
 	}
 }
 
-static void	create_new_image(t_fdf *fdf)
+static void		create_new_image(t_fdf *fdf)
 {
 	if (!(fdf->mlx.img_ptr = mlx_new_image(fdf->mlx.mlx_ptr, WIN_WIDTH,
 											WIN_HEIGHT)))
@@ -94,30 +91,34 @@ static void	create_new_image(t_fdf *fdf)
 	ft_memset(fdf->map.z_buf, 127, sizeof(double) * WIN_WIDTH * WIN_HEIGHT);
 }
 
-void		print_help(t_fdf *fdf)
+static void		print_help(t_fdf *fdf)
 {
 	if (fdf->map.view == 1)
-		mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 500, 40, 0xFFFFFF, "Projection: isometric");
+		mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 500, 40, 0xFFFFFF,
+			"Projection: isometric");
 	else if (fdf->map.view == 2)
-		mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 500, 40, 0xFFFFFF, "Projection: parallel");
+		mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 500, 40, 0xFFFFFF,
+			"Projection: parallel");
 	else
-		mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 500, 40, 0xFFFFFF, "Projection: perspective");
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 750, 40, 0xFFFFFF, ft_strjoin("x angle: ",
-						ft_itoa((int)fdf->map.x_angle)));
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 900, 40, 0xFFFFFF, ft_strjoin("y angle: ",
-						ft_itoa((int)fdf->map.y_angle)));
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 1050, 40, 0xFFFFFF, ft_strjoin("z angle: ",
-						ft_itoa((int)fdf->map.z_angle)));
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 40, 0xFFFFFF, "Rotate x-axis: [w][s]");
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 60, 0xFFFFFF, "Rotate z-axis: [a][d]");
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 80, 0xFFFFFF, "Rotate y-axis: [q][e]");
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 100, 0xFFFFFF, "Move camera: [up][left][down][right]");
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 120, 0xFFFFFF, "Zoom: [j][k]");
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 140, 0xFFFFFF, "Reset: [r]");
-	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 160, 0xFFFFFF, "Toggle projection: [space]");
+		mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 500, 40, 0xFFFFFF,
+			"Projection: perspective");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 60, 0xFFFFFF,
+		"Rotate x-axis: [w][s]");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 80, 0xFFFFFF,
+		"Rotate z-axis: [a][d]");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 100, 0xFFFFFF,
+		"Rotate y-axis: [q][e]");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 40, 0xFFFFFF,
+		"Move camera: [up][left][down][right]");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 120, 0xFFFFFF,
+		"Zoom: [j][k]");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 140, 0xFFFFFF,
+		"Reset: [r]");
+	mlx_string_put(fdf->mlx.mlx_ptr, fdf->mlx.win_ptr, 10, 160, 0xFFFFFF,
+		"Toggle projection: [space]");
 }
 
-void		draw_map(t_fdf *fdf)
+void			draw_map(t_fdf *fdf)
 {
 	int	x;
 	int	y;

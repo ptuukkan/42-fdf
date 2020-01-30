@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   matrices.c                                         :+:      :+:    :+:   */
+/*   mv_matrices.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ptuukkan <ptuukkan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -87,75 +87,6 @@ t_mat4	new_scaling_matrix(double scale_x, double scale_y, double scale_z)
 	return (m);
 }
 
-void			translate(t_fdf *fdf, double trans_x, double trans_y, double trans_z)
-{
-	t_mat4	m;
-
-	m = new_translation_matrix(trans_x, trans_y, trans_z);
-	multiply_vertices(fdf, &m);
-}
-
-void			build_mvp_matrix(t_fdf *fdf)
-{
-	fdf->map.mvp = multiply_matrix(&fdf->map.projection, &fdf->map.moving);
-	fdf->map.mvp = multiply_matrix(&fdf->map.mvp, &fdf->camera.matrix);
-	fdf->map.mvp = multiply_matrix(&fdf->map.mvp, &fdf->map.rotation);
-	fdf->map.mvp = multiply_matrix(&fdf->map.mvp, &fdf->map.scaling);
-
-}
-
-t_mat4			new_ortho_matrix(t_fdf *fdf)
-{
-	t_mat4	m;
-
-	m.m[0] = 2 / fdf->viewport.width;
-	m.m[1] = 0.0;
-	m.m[2] = 0.0;
-	m.m[3] = 0.0;
-	m.m[4] = 0.0;
-	m.m[5] = 2 / fdf->viewport.height;
-	m.m[6] = 0.0;
-	m.m[7] = 0.0;
-	m.m[8] = 0.0;
-	m.m[9] = 0.0;
-	m.m[10] = -2 / (fdf->viewport.far - fdf->viewport.near);
-	m.m[11] = 0.0;
-	m.m[12] = 0.0;
-	m.m[13] = 0.0;
-	m.m[14] = -(fdf->viewport.far + fdf->viewport.near) /
-				(fdf->viewport.far - fdf->viewport.near);
-	m.m[15] = 1.0;
-	return (m);
-}
-
-t_mat4			new_perspective_matrix(t_fdf *fdf)
-{
-	double	tanhf = tan(45.0 * 0.5 * (M_PI / 180));
-	double	height = fdf->viewport.near * tanhf;
-	double	width = height * (WIN_WIDTH / WIN_HEIGHT);
-	double	far = fdf->viewport.far;
-	double	near = fdf->viewport.near;
-	t_mat4	m;
-
-	m.m[0] = 1.0 / width;
-	m.m[1] = 0.0;
-	m.m[2] = 0.0;
-	m.m[3] = 0.0;
-	m.m[4] = 0.0;
-	m.m[5] = 1.0 / height;
-	m.m[6] = 0.0;
-	m.m[7] = 0.0;
-	m.m[8] = 0.0;
-	m.m[9] = 0.0;
-	m.m[10] = -(far + near) / (far - near);
-	m.m[11] = -1.0;
-	m.m[12] = 0.0;
-	m.m[13] = 0.0;
-	m.m[14] = -(2 * far * near) / (far - near);
-	m.m[15] = 0.0;
-	return (m);
-}
-
 t_mat4			new_viewport_matrix(t_fdf *fdf)
 {
 	t_mat4	mt;
@@ -165,18 +96,4 @@ t_mat4			new_viewport_matrix(t_fdf *fdf)
 	ms = new_scaling_matrix(fdf->viewport.width / 2, fdf->viewport.height / 2,
 			(fdf->viewport.far - fdf->viewport.near) / 2);
 	return (multiply_matrix(&mt, &ms));
-}
-
-void			construct_matrices(t_fdf *fdf)
-{
-	fdf->camera.matrix = new_translation_matrix(fdf->camera.x, fdf->camera.y,
-			fdf->camera.z);
-	fdf->map.rotation = new_rotation_matrix(fdf->map.x_angle * (M_PI / 180),
-			fdf->map.y_angle * (M_PI / 180), fdf->map.z_angle * (M_PI / 180));
-	fdf->map.moving = new_translation_matrix(fdf->map.x_offset,
-			fdf->map.y_offset, 0);
-	fdf->map.scaling = new_scaling_matrix(fdf->map.zoom, fdf->map.zoom,
-			fdf->map.alt_mul * fdf->map.zoom);
-	fdf->map.projection = new_ortho_matrix(fdf);
-	fdf->map.viewport = new_viewport_matrix(fdf);
 }

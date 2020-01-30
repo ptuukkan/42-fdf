@@ -73,3 +73,19 @@ t_mat4			multiply_matrix(t_mat4 *m1, t_mat4 *m2)
 	}
 	return (new);
 }
+
+void			translate(t_fdf *fdf, double trans_x, double trans_y, double trans_z)
+{
+	t_mat4	m;
+
+	m = new_translation_matrix(trans_x, trans_y, trans_z);
+	multiply_vertices(fdf, &m);
+}
+
+void			build_mvp_matrix(t_fdf *fdf)
+{
+	fdf->mvp.matrix = multiply_matrix(&fdf->mvp.projection, &fdf->mvp.move);
+	fdf->mvp.matrix = multiply_matrix(&fdf->mvp.matrix, &fdf->camera.matrix);
+	fdf->mvp.matrix = multiply_matrix(&fdf->mvp.matrix, &fdf->mvp.rot.matrix);
+	fdf->mvp.matrix = multiply_matrix(&fdf->mvp.matrix, &fdf->mvp.scale);
+}

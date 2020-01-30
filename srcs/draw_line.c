@@ -113,6 +113,9 @@ void		draw_line(t_fdf *fdf, t_line *line)
 {
 	line->dx = ft_abs(line->x1 - line->x0);
 	line->dy = ft_abs(line->y1 - line->y0);
+	line->x = line->x0;
+	line->y = line->y0;
+	line->z = line->z0;
 	if (line->dx > line->dy)
 	{
 		line->mz = (line->z1 - line->z0) / line->dx;
