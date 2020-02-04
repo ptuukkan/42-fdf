@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef KEYS_H
-# define KEYS_H
+#ifndef KEYS_LINUX_H
+# define KEYS_LINUX_H
 
 # define KEY_ESC 0xff1b
 # define KEY_LEFT 0xff51

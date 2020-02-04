@@ -50,7 +50,6 @@ void			multiply_vertices(t_fdf *fdf, t_mat4 *m)
 t_mat4			multiply_matrix(t_mat4 *m1, t_mat4 *m2)
 {
 	t_mat4	new;
-
 	int		o1;
 	int		o2;
 	int		n;
@@ -74,11 +73,11 @@ t_mat4			multiply_matrix(t_mat4 *m1, t_mat4 *m2)
 	return (new);
 }
 
-void			translate(t_fdf *fdf, double trans_x, double trans_y, double trans_z)
+void			translate(t_fdf *fdf, double x, double y, double z)
 {
 	t_mat4	m;
 
-	m = new_translation_matrix(trans_x, trans_y, trans_z);
+	m = new_translation_matrix(x, y, z);
 	multiply_vertices(fdf, &m);
 }
 

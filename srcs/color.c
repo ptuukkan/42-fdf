@@ -15,11 +15,12 @@
 double	percent(int start, int current, int end)
 {
 	double perc;
+
 	if (current == end)
 		return (1.0f);
 	else
 		perc = ((float)current - (float)start) / ((float)end - (float)start);
-	return(perc);
+	return (perc);
 }
 
 t_color	get_color(t_color color_start, t_color color_end, double perc)
@@ -27,7 +28,8 @@ t_color	get_color(t_color color_start, t_color color_end, double perc)
 	t_color	new;
 
 	new.red = color_start.red + perc * (color_end.red - color_start.red);
-	new.green = color_start.green + perc * (color_end.green - color_start.green);
+	new.green = color_start.green + perc *
+		(color_end.green - color_start.green);
 	new.blue = color_start.blue + perc * (color_end.blue - color_start.blue);
 	return (new);
 }

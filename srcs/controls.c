@@ -23,8 +23,7 @@ static int	toggle_view(t_fdf *fdf)
 	else if (fdf->map.view == 2)
 	{
 		fdf->map.view = 3;
-		fdf->mvp.projection = new_perspective_matrix(fdf, WIN_WIDTH /
-			WIN_HEIGHT);
+		fdf->mvp.projection = new_perspective_matrix(fdf, 16.0 / 9.0);
 		set_angles(fdf, 54.736f, 0.0f, 45.0f);
 	}
 	else if (fdf->map.view == 1)

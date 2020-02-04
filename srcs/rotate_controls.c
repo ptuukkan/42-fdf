@@ -73,14 +73,8 @@ int			rotate_events(int key, t_fdf *fdf)
 		fdf->mvp.rot.z += 1.0f;
 	else if (key == KEY_A)
 		fdf->mvp.rot.z -= 1.0f;
-	else if (key == KEY_E)
-		fdf->mvp.rot.y += 1.0f;
-	else if (key == KEY_Q)
-		fdf->mvp.rot.y -= 1.0f;
 	if (fdf->mvp.rot.x == 360.0f || fdf->mvp.rot.x == -360.0f)
 		fdf->mvp.rot.x = 0.0f;
-	if (fdf->mvp.rot.y == 360.0f || fdf->mvp.rot.y == -360.0f)
-		fdf->mvp.rot.y = 0.0f;
 	if (fdf->mvp.rot.z == 360.0f || fdf->mvp.rot.z == -360.0f)
 		fdf->mvp.rot.z = 0.0f;
 	fdf->mvp.rot.matrix = new_rotation_matrix(fdf->mvp.rot.x * (M_PI / 180),

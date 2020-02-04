@@ -25,6 +25,19 @@ static int	get_endian(void)
 		return (1);
 }
 
+void		create_new_image(t_fdf *fdf)
+{
+	if (!(fdf->mlx.img_ptr = mlx_new_image(fdf->mlx.mlx_ptr, WIN_WIDTH,
+											WIN_HEIGHT)))
+		ft_exiterror("Image creation failed", 8, 2);
+	fdf->img.img_data = mlx_get_data_addr(fdf->mlx.img_ptr, &fdf->img.bpp,
+									&fdf->img.line_size, &fdf->img.endian);
+	if (!(fdf->map.z_buf = (double *)ft_memalloc(sizeof(double)
+							* WIN_WIDTH * WIN_HEIGHT)))
+		ft_exiterror("Memory allocation failed", 2, 2);
+	ft_memset(fdf->map.z_buf, 127, sizeof(double) * WIN_WIDTH * WIN_HEIGHT);
+}
+
 static void	construct_matrices(t_fdf *fdf)
 {
 	fdf->camera.matrix = new_translation_matrix(fdf->camera.x, fdf->camera.y,
@@ -39,7 +52,7 @@ static void	construct_matrices(t_fdf *fdf)
 	fdf->viewport.matrix = new_viewport_matrix(fdf);
 }
 
-void	reset_map(t_fdf *fdf)
+void		reset_map(t_fdf *fdf)
 {
 	fdf->img.line_size = WIN_WIDTH * 4;
 	fdf->map.view = 1;
@@ -60,7 +73,7 @@ void	reset_map(t_fdf *fdf)
 	construct_matrices(fdf);
 }
 
-int	main(int argc, char **argv)
+int			main(int argc, char **argv)
 {
 	t_fdf	fdf;
 
@@ -78,7 +91,7 @@ int	main(int argc, char **argv)
 				0.0);
 	reset_map(&fdf);
 	draw_map(&fdf);
-	mlx_hook(fdf.mlx.win_ptr, 2, (1L<<0), key_events, &fdf);
+	mlx_hook(fdf.mlx.win_ptr, 2, (1L << 0), key_events, &fdf);
 	mlx_loop(fdf.mlx.mlx_ptr);
 	return (0);
 }

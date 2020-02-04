@@ -15,7 +15,7 @@
 
 # include <mlx.h>
 # include <stdlib.h>
-# include "keys_mac.h"
+# include "keys.h"
 # include <stdint.h>
 # include <fcntl.h>
 # include "libft.h"
@@ -155,11 +155,10 @@ int				key_events(int key, t_fdf *fdf);
 int				rotate_events(int key, t_fdf *fdf);
 void			reset_map(t_fdf *fdf);
 void			set_angles(t_fdf *fdf, double ax, double ay, double az);
-
+void			create_new_image(t_fdf *fdf);
 double			percent(int start, int current, int end);
 void			init_color(t_fdf *fdf);
-void			translate(t_fdf *fdf, double trans_x, double trans_y,
-				double trans_z);
+void			translate(t_fdf *fdf, double x, double y, double z);
 void			build_mvp_matrix(t_fdf *fdf);
 void			multiply_vertices(t_fdf *fdf, t_mat4 *m);
 void			multiply_vertex(t_mat4 *m, t_vec4 *v);

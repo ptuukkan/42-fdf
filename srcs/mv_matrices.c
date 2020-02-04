@@ -87,7 +87,7 @@ t_mat4	new_scaling_matrix(double scale_x, double scale_y, double scale_z)
 	return (m);
 }
 
-t_mat4			new_viewport_matrix(t_fdf *fdf)
+t_mat4	new_viewport_matrix(t_fdf *fdf)
 {
 	t_mat4	mt;
 	t_mat4	ms;
