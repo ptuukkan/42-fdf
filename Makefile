@@ -21,19 +21,21 @@ OBJDIR = objects
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 INC = includes/
 
-GCC = gcc -g -Werror -Wextra -Wall
+GCC = gcc -Werror -Wextra -Wall
 
 all: $(NAME)
 
 $(NAME): $(OBJS) libft/$(LIB)
-	$(GCC) $(OBJS) -o $(NAME) libft/$(LIB) -lmlx -I $(INC) -I libft/$(INC) -framework OpenGL -framework AppKit
+	$(GCC) $(OBJS) -o $(NAME) libft/$(LIB) -lmlx -I $(INC) -I libft/$(INC) \
+	-framework OpenGL -framework AppKit
 #  -lXext -lX11 -lm
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INC)/fdf.h
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(GCC) -c $< -o $@ -I $(INC) -I libft/$(INC)
 
-lib: libft/$(LIB)
+lib:
+	make -C libft/
 
 libft/$(LIB):
 	make -C libft/
