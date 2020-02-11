@@ -95,9 +95,9 @@ static void	read_map_info(t_map *map, char *file)
 
 static void	read_vertices(t_fdf *fdf, t_vec4 *vertices, char *line, int y)
 {
-	int		i;
-	int		n;
-	int		number;
+	int			i;
+	int			n;
+	intmax_t	number;
 
 	i = 0;
 	while (get_next_number(&line, &number))

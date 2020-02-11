@@ -55,15 +55,15 @@ typedef struct	s_mat4
 
 typedef struct	s_map
 {
-	int		width;
-	int		height;
-	int		peak;
-	int		bottom;
-	t_vec4	**vertices;
-	double	*z_buf;
-	float	zoom;
-	float	alt_mul;
-	short	view;
+	int			width;
+	int			height;
+	intmax_t	peak;
+	intmax_t	bottom;
+	t_vec4		**vertices;
+	double		*z_buf;
+	float		zoom;
+	float		alt_mul;
+	short		view;
 }				t_map;
 
 typedef struct	s_mlx
@@ -156,13 +156,14 @@ int				rotate_events(int key, t_fdf *fdf);
 void			reset_map(t_fdf *fdf);
 void			set_angles(t_fdf *fdf, double ax, double ay, double az);
 void			create_new_image(t_fdf *fdf);
-double			percent(int start, int current, int end);
+double			percent(double start, double current, double end);
 void			init_color(t_fdf *fdf);
 void			translate(t_fdf *fdf, double x, double y, double z);
 void			build_mvp_matrix(t_fdf *fdf);
 void			multiply_vertices(t_fdf *fdf, t_mat4 *m);
 void			multiply_vertex(t_mat4 *m, t_vec4 *v);
-int				clip(t_vec4 *a, t_vec4 *b);
+int				clip2d(t_vec4 *a, t_vec4 *b);
+int				clip3d(t_vec4 *a, t_vec4 *b);
 t_color			read_color(char **line);
 t_color			get_color(t_color color_start, t_color color_end, double perc);
 t_mat4			multiply_matrix(t_mat4 *m1, t_mat4 *m2);

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ptuukkan <ptuukkan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -23,11 +23,11 @@ static int	ft_continue(char c)
 	return (0);
 }
 
-int			ft_atoi(const char *str)
+intmax_t	ft_atol(const char *str)
 {
-	int		i;
-	int		result;
-	int		neg;
+	int			i;
+	intmax_t	result;
+	int			neg;
 
 	i = 0;
 	result = 0;

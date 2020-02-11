@@ -12,12 +12,12 @@
 
 #include "libft.h"
 
-int	get_next_number(char **line, int *number)
+int	get_next_number(char **line, intmax_t *number)
 {
 	int	found;
 
 	found = 0;
-	*number = ft_atoi(*line);
+	*number = ft_atol(*line);
 	while (**line != '\0' && ft_isdigit(**line) == 0)
 		(*line)++;
 	while (ft_isdigit(**line))

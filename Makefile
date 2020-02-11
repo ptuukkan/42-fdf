@@ -13,9 +13,9 @@
 NAME = fdf
 LIB = libft.a
 SRCDIR = srcs
-SRCS = read_file.c draw_map.c draw_line.c controls.c clip.c \
+SRCS = read_file.c draw_map.c draw_line.c controls.c clip3d.c \
 		main.c rotate_controls.c color.c mv_matrices.c \
-		projection_matrices.c matrix_operations.c
+		projection_matrices.c matrix_operations.c clip2d.c
 
 OBJDIR = objects
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)

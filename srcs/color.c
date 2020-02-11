@@ -12,14 +12,14 @@
 
 #include "fdf.h"
 
-double	percent(int start, int current, int end)
+double	percent(double start, double current, double end)
 {
 	double perc;
 
 	if (current == end)
 		return (1.0f);
 	else
-		perc = ((float)current - (float)start) / ((float)end - (float)start);
+		perc = (current - start) / (end - start);
 	return (perc);
 }
 

@@ -36,7 +36,9 @@ static void		viewport_transform(t_fdf *fdf, t_vec4 a, t_vec4 b)
 {
 	t_line	line;
 
-	if (fdf->map.view == 3 && clip(&a, &b) == 0)
+	if (fdf->map.view == 3 && clip3d(&a, &b) == 0)
+		return ;
+	if (fdf->map.view != 3 && clip2d(&a, &b) == 0)
 		return ;
 	a.x /= a.w;
 	a.y /= a.w;

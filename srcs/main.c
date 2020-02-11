@@ -67,8 +67,8 @@ void		reset_map(t_fdf *fdf)
 	fdf->camera.x = 0;
 	fdf->camera.y = 0;
 	fdf->camera.z = -500;
-	fdf->map.zoom = fdf->viewport.height / ft_max(fdf->map.peak / 6 -
-		fdf->map.bottom / 6, ft_max(fdf->map.width, fdf->map.height));
+	fdf->map.zoom = fdf->viewport.height /
+	ft_max(fdf->map.width, fdf->map.height);
 	fdf->map.alt_mul = 0.1;
 	construct_matrices(fdf);
 }

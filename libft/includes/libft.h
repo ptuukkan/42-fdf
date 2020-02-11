@@ -107,7 +107,8 @@ int					ft_abs(int a);
 double				ft_dmin(double a, double b);
 double				ft_dmax(double a, double b);
 int					ft_max(int a, int b);
-int					get_next_number(char **line, int *number);
+int					get_next_number(char **line, intmax_t *number);
 int					ft_atoi_base(const char *nbr, unsigned int base);
+intmax_t			ft_atol(const char *str);
 
 #endif

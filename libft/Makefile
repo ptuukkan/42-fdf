@@ -31,7 +31,7 @@ SRCS = ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c \
 		ft_strnstr.c ft_strrchr.c ft_strsplit.c ft_strstr.c ft_strsub.c \
 		ft_strtolower.c ft_strtoupper.c ft_strtrim.c ft_tolower.c ft_toupper.c \
 		get_next_line.c ft_exiterror.c ft_abs.c ft_dmin.c ft_dmax.c ft_max.c \
-		get_next_number.c ft_atoi_base.c
+		get_next_number.c ft_atoi_base.c ft_atol.c
 
 OBJDIR = objects
 
