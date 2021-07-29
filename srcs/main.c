@@ -6,7 +6,7 @@
 /*   By: ptuukkan <ptuukkan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 10:52:34 by ptuukkan          #+#    #+#             */
-/*   Updated: 2019/12/17 10:52:36 by ptuukkan         ###   ########.fr       */
+/*   Updated: 2021/07/29 17:48:10 by ptuukkan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int			main(int argc, char **argv)
 				0.0);
 	reset_map(&fdf);
 	draw_map(&fdf);
-	mlx_hook(fdf.mlx.win_ptr, 2, 0, key_events, &fdf);
+	mlx_hook(fdf.mlx.win_ptr, 2, (1L << 0), key_events, &fdf);
 	mlx_hook(fdf.mlx.win_ptr, 17, 0, close_program, &fdf);
 	mlx_loop(fdf.mlx.mlx_ptr);
 	return (0);

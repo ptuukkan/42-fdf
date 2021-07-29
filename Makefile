@@ -6,7 +6,7 @@
 #    By: ptuukkan <ptuukkan@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/18 12:36:17 by ptuukkan          #+#    #+#              #
-#    Updated: 2021/07/29 16:11:27 by ptuukkan         ###   ########.fr        #
+#    Updated: 2021/07/29 17:49:09 by ptuukkan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,10 +25,16 @@ GCC = gcc -Werror -Wextra -Wall -O3
 
 all: $(NAME)
 
+
+# Uncomment below for MAC
+# $(NAME): $(OBJS) libft/$(LIB)
+# 	$(GCC) $(OBJS) -o $(NAME) libft/$(LIB) -lmlx -I $(INC) -I libft/$(INC) \
+# 	-framework OpenGL -framework AppKit
+
+# Uncomment below for Linux
 $(NAME): $(OBJS) libft/$(LIB)
-	$(GCC) $(OBJS) -o $(NAME) libft/$(LIB) -lmlx -I $(INC) -I libft/$(INC)
-# -framework OpenGL -framework AppKit // MAC
-# -lXext -lX11 -lm // Linux
+	$(GCC) $(OBJS) -o $(NAME) libft/$(LIB) -lmlx -I $(INC) -I libft/$(INC) \
+	-lXext -lX11 -lm
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INC)/fdf.h
 	@[ -d $(@D) ] || mkdir -p $(@D)
