@@ -70,6 +70,12 @@ static int	move_events(int key, t_fdf *fdf)
 	return (0);
 }
 
+int			close_program(t_fdf *fdf)
+{
+	(void)fdf;
+	exit(0);
+}
+
 int			key_events(int key, t_fdf *fdf)
 {
 	if (key == KEY_ESC)

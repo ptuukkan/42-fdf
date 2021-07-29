@@ -45,7 +45,8 @@ t_color	read_color(char **line)
 	new.green = u >> 8;
 	new.blue = u;
 	new.set = 1;
-	*line += 6;
+	while (ft_ishex(**line))
+		*line += 1;
 	return (new);
 }
 

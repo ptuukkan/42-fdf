@@ -82,6 +82,8 @@ int			main(int argc, char **argv)
 	if (argc != 2)
 		return (write(1, "usage: fdf <input file>\n", 25));
 	read_file(argv[1], &fdf);
+	if (fdf.map.height + fdf.map.width <= 2)
+		ft_exiterror("Nothing to draw!", 9, 2);
 	if (!(fdf.mlx.mlx_ptr = mlx_init()))
 		ft_exiterror("MLX initialization failed", 6, 2);
 	if (!(fdf.mlx.win_ptr = mlx_new_window(fdf.mlx.mlx_ptr, WIN_WIDTH,
@@ -91,7 +93,8 @@ int			main(int argc, char **argv)
 				0.0);
 	reset_map(&fdf);
 	draw_map(&fdf);
-	mlx_hook(fdf.mlx.win_ptr, 2, (1L << 0), key_events, &fdf);
+	mlx_hook(fdf.mlx.win_ptr, 2, 0, key_events, &fdf);
+	mlx_hook(fdf.mlx.win_ptr, 17, 0, close_program, &fdf);
 	mlx_loop(fdf.mlx.mlx_ptr);
 	return (0);
 }

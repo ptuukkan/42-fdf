@@ -6,7 +6,7 @@
 /*   By: ptuukkan <ptuukkan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 10:54:27 by ptuukkan          #+#    #+#             */
-/*   Updated: 2021/07/29 16:10:31 by ptuukkan         ###   ########.fr       */
+/*   Updated: 2021/07/29 16:50:42 by ptuukkan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ void			read_file(char *file, t_fdf *fdf);
 void			draw_map(t_fdf *fdf);
 void			draw_line(t_fdf *fdf, t_line *line);
 int				key_events(int key, t_fdf *fdf);
+int				close_program(t_fdf *fdf);
 int				rotate_events(int key, t_fdf *fdf);
 void			reset_map(t_fdf *fdf);
 void			set_angles(t_fdf *fdf, double ax, double ay, double az);

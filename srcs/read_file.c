@@ -6,33 +6,33 @@
 /*   By: ptuukkan <ptuukkan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/19 12:00:53 by ptuukkan          #+#    #+#             */
-/*   Updated: 2021/07/29 16:17:55 by ptuukkan         ###   ########.fr       */
+/*   Updated: 2019/12/19 12:00:54 by ptuukkan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static int	check_hex(char *line, int *i)
+static int	check_hex(char **line, int *i)
 {
 	int	n;
 
 	n = 0;
-	if (line[*i] == ' ' || line[*i] == '\0')
+	if ((*line)[*i] == ' ' || (*line)[*i] == '\0')
 		return (0);
-	if (ft_strncmp(line + *i, ",0x", 3) == 0 ||
-		ft_strncmp(line + *i, ",0X", 3) == 0)
+	if (ft_strncmp(*line + *i, ",0x", 3) == 0 ||
+		ft_strncmp(*line + *i, ",0X", 3) == 0)
 	{
 		*i += 3;
-		while (n < 6)
+		while (ft_ishex((*line)[*i]))
 		{
-			if (!(line[*i] >= 'A' && line[*i] <= 'F') &&
-				!(line[*i] >= 'a' && line[*i] <= 'f') &&
-				!(line[*i] >= '0' && line[*i] <= '9'))
-				return (0);
 			*i += 1;
 			n++;
 		}
-		return (1);
+		if (((*line)[*i] == '\0' || (*line)[*i] == ' ') && n > 0 && n <= 6)
+			return (1);
+		*line = *line + n + 4;
+		*i = *i - n - 4;
+		return (0);
 	}
 	else
 		return (0);
@@ -58,7 +58,7 @@ static int	count_numbers(char *line)
 		{
 			while (ft_isdigit(line[i]))
 				i++;
-			check_hex(line, &i);
+			check_hex(&line, &i);
 			numbers++;
 		}
 		else
@@ -113,7 +113,7 @@ static void	read_vertices(t_fdf *fdf, t_vec4 *vertices, char *line, int y)
 			fdf->map.bottom = number;
 		n = 0;
 		vertices[i].color.set = 0;
-		if (check_hex(line, &n))
+		if (check_hex(&line, &n))
 			vertices[i].color = read_color(&line);
 		i++;
 	}
@@ -125,8 +125,8 @@ void		read_file(char *file, t_fdf *fdf)
 	char	*line;
 	int		i;
 
-	fdf->map.peak = INT32_MIN;
-	fdf->map.bottom = INT32_MAX;
+	fdf->map.peak = INT64_MIN;
+	fdf->map.bottom = INT64_MAX;
 	read_map_info(&fdf->map, file);
 	if (!(fdf->map.vertices = (t_vec4 **)ft_memalloc(sizeof(t_vec4 *) *\
 		fdf->map.height)))
