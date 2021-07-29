@@ -13,3 +13,4 @@ This wireframe then must be presented with two different projections such as iso
 ## Solution
 I was really interested in this project so I wanted to also handle perspective projection and smooth rotations. I used matrices to accomplish this. I created matrices for every transformation, multiplied them, and transformed each vertex before connecting them with lines.
 This web page by Song Ho Ahn was invaluable for me in this project: http://www.songho.ca/opengl/gl_transform.html
+## Screenshots
