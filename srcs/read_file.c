@@ -6,7 +6,7 @@
 /*   By: ptuukkan <ptuukkan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/19 12:00:53 by ptuukkan          #+#    #+#             */
-/*   Updated: 2019/12/19 12:00:54 by ptuukkan         ###   ########.fr       */
+/*   Updated: 2021/07/29 16:17:55 by ptuukkan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ static void	read_map_info(t_map *map, char *file)
 	if ((fd = open(file, O_RDONLY)) == -1)
 		ft_exiterror("Cannot open file", 2, 2);
 	lines = 0;
+	line_length = 0;
 	while (get_next_line(fd, &line))
 	{
 		if (line == NULL)
