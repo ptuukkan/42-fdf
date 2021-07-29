@@ -6,7 +6,7 @@
 /*   By: ptuukkan <ptuukkan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 10:54:27 by ptuukkan          #+#    #+#             */
-/*   Updated: 2019/12/18 10:54:29 by ptuukkan         ###   ########.fr       */
+/*   Updated: 2021/07/29 16:10:31 by ptuukkan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 # include <mlx.h>
 # include <stdlib.h>
-# include "keys.h"
+// # include "keys.h" // MAC
+# include "keys_linux.h" // Linux
 # include <stdint.h>
 # include <fcntl.h>
 # include "libft.h"

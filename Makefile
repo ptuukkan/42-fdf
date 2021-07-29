@@ -6,7 +6,7 @@
 #    By: ptuukkan <ptuukkan@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/18 12:36:17 by ptuukkan          #+#    #+#              #
-#    Updated: 2019/12/12 13:25:52 by ptuukkan         ###   ########.fr        #
+#    Updated: 2021/07/29 16:11:27 by ptuukkan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,14 +21,14 @@ OBJDIR = objects
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 INC = includes/
 
-GCC = gcc -Werror -Wextra -Wall
+GCC = gcc -Werror -Wextra -Wall -O3
 
 all: $(NAME)
 
 $(NAME): $(OBJS) libft/$(LIB)
-	$(GCC) $(OBJS) -o $(NAME) libft/$(LIB) -lmlx -I $(INC) -I libft/$(INC) \
-	-framework OpenGL -framework AppKit
-#  -lXext -lX11 -lm
+	$(GCC) $(OBJS) -o $(NAME) libft/$(LIB) -lmlx -I $(INC) -I libft/$(INC)
+# -framework OpenGL -framework AppKit // MAC
+# -lXext -lX11 -lm // Linux
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INC)/fdf.h
 	@[ -d $(@D) ] || mkdir -p $(@D)
